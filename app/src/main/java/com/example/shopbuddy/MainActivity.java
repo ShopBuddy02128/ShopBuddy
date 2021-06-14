@@ -7,16 +7,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.shopbuddy.services.ToastService;
-import com.example.shopbuddy.ui.mainScreen.LoginScreenActivity;
-import com.example.shopbuddy.ui.mainScreen.RegisterScreenActivity;
 import com.example.shopbuddy.ui.navigation.NavigationActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.shopbuddy.ui.startScreen.LoginScreenActivity;
+import com.example.shopbuddy.ui.startScreen.RegisterScreenActivity;
+
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import com.example.shopbuddy.databinding.ActivityMainBinding;
 

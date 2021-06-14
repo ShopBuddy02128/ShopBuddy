@@ -1,4 +1,4 @@
-package com.example.shopbuddy.ui.mainScreen;
+package com.example.shopbuddy.ui.startScreen;
 
 import android.app.Activity;
 import android.content.Intent;
