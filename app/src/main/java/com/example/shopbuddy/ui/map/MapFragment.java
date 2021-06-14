@@ -1,23 +1,42 @@
 package com.example.shopbuddy.ui.map;
 
+import android.Manifest;
+
+import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+
 import androidx.lifecycle.ViewModelProvider;
 
 
+import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.FragmentMapBinding;
 
-public class MapFragment extends Fragment {
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+
+
+import org.jetbrains.annotations.NotNull;
+
+public class MapFragment extends Fragment implements OnMapReadyCallback {
     private MapViewModel mapViewModel;
     private FragmentMapBinding binding;
+    private GoogleMap map;
+    private MapView mapView;
+
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -27,14 +46,22 @@ public class MapFragment extends Fragment {
         binding = FragmentMapBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textMap;
-        mapViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
         return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mapView = view.findViewById(R.id.mapView);
+
+        if (mapView != null) {
+            mapView.onCreate(null);
+            mapView.onResume();
+            mapView.getMapAsync(this);
+
+        }
+
+
     }
 
     @Override
@@ -42,4 +69,17 @@ public class MapFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onMapReady(@NonNull @NotNull GoogleMap googleMap) {
+        MapsInitializer.initialize(getContext());
+        map = googleMap;
+        //map.setMyLocationEnabled(true);
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+    }
+
+
+
 }
