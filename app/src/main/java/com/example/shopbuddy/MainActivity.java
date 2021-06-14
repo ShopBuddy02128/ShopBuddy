@@ -11,10 +11,7 @@ import com.example.shopbuddy.ui.navigation.NavigationActivity;
 import com.example.shopbuddy.ui.startScreen.LoginScreenActivity;
 import com.example.shopbuddy.ui.startScreen.RegisterScreenActivity;
 
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.shopbuddy.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
