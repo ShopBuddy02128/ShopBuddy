@@ -20,6 +20,7 @@
         </activity>
         <activity android:name=".ui.mainScreen.LoginScreenActivity" />
         <activity android:name=".ui.mainScreen.RegisterScreenActivity" />
+        <activity android:name=".ui.navigation.NavigationActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

@@ -71,6 +71,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:background="@drawable/textview_border"
+        android:fontFamily="@font/roboto_medium"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/login_password_editText"
         app:layout_constraintEnd_toEndOf="parent"
