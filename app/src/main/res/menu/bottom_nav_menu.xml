@@ -7,12 +7,12 @@
         android:title="Shopping" />
 
     <item
-        android:id="@+id/navigation_tilbud"
+        android:id="@+id/navigation_offers"
         android:icon="@drawable/ic_tilbudsavis"
         android:title="Tilbudsavis" />
 
     <item
-        android:id="@+id/navigation_liste"
+        android:id="@+id/navigation_shoplist"
         android:icon="@drawable/ic_liste"
         android:title="Indkøbsliste" />
 

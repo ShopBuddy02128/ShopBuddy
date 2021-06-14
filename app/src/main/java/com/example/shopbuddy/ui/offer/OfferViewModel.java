@@ -1,14 +1,14 @@
-package com.example.shopbuddy.ui.tilbud;
+package com.example.shopbuddy.ui.offer;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class TilbudViewModel extends ViewModel {
+public class OfferViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public TilbudViewModel() {
+    public OfferViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("Tilbudsavis");
     }

@@ -1,4 +1,4 @@
-package com.example.shopbuddy.ui.tilbud;
+package com.example.shopbuddy.ui.shoplist;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,23 +12,23 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.shopbuddy.databinding.FragmentTilbudBinding;
+import com.example.shopbuddy.databinding.FragmentShoplistBinding;
 
-public class TilbudFragment extends Fragment {
+public class ShopListFragment extends Fragment {
 
-    private TilbudViewModel tilbudViewModel;
-    private FragmentTilbudBinding binding;
+    private ShopListViewModel shopListViewModel;
+    private FragmentShoplistBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        tilbudViewModel =
-                new ViewModelProvider(this).get(TilbudViewModel.class);
+        shopListViewModel =
+                new ViewModelProvider(this).get(ShopListViewModel.class);
 
-        binding = FragmentTilbudBinding.inflate(inflater, container, false);
+        binding = FragmentShoplistBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textTilbud;
-        tilbudViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        final TextView textView = binding.textListe;
+        shopListViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
