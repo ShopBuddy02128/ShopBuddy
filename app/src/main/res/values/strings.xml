@@ -5,4 +5,6 @@
     <string name="title_notifications">Notifications</string>
     <string name="title">ShopBuddy</string>
     <string name="loginScreen_register_text"><b><u>Opret Bruger</u></b></string>
+    <string name="loginScreen_userName_hint">Username</string>
+    <string name="loginScreen_password_hint">Password</string>
 </resources>

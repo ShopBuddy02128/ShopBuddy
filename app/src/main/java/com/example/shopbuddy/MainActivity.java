@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if(true) {
-            setContentView(R.layout.startscreen_activity);
+            setContentView(R.layout.login_activity);
             getSupportActionBar().hide();
         } else {
             binding = ActivityMainBinding.inflate(getLayoutInflater());
