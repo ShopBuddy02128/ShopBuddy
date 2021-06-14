@@ -48,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/startScreen_titel" />
 
     <TextView
-        android:id="@+id/loginScreen_registerBtn"
+        android:id="@+id/mainScreen_registerBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -70,7 +70,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginScreen_registerBtn"
+        app:layout_constraintTop_toBottomOf="@+id/mainScreen_registerBtn"
         app:srcCompat="@drawable/shopbuddy_logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

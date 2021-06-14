@@ -1,8 +1,13 @@
 package com.example.shopbuddy;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Window;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
+import com.example.shopbuddy.ui.mainScreen.LoginScreenActivity;
+import com.example.shopbuddy.ui.mainScreen.RegisterScreenActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,8 +27,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if(true) {
-            setContentView(R.layout.login_activity);
+            setContentView(R.layout.startscreen_activity);
             getSupportActionBar().hide();
+            setupMainMenuScreen();
+
         } else {
             binding = ActivityMainBinding.inflate(getLayoutInflater());
             setContentView(binding.getRoot());
@@ -38,5 +45,25 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
             NavigationUI.setupWithNavController(binding.navView, navController);
         }
+    }
+
+    private void setupMainMenuScreen() {
+        Button loginBtn = (Button) findViewById(R.id.startScreen_loginBtn);
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent openLoginScreen = new Intent(MainActivity.this, LoginScreenActivity.class);
+                startActivity(openLoginScreen);
+            }
+        });
+
+        TextView registerBtn = (TextView) findViewById(R.id.mainScreen_registerBtn);
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent openRegisterScreen = new Intent(MainActivity.this, RegisterScreenActivity.class);
+                startActivity(openRegisterScreen);
+            }
+        });
     }
 }
