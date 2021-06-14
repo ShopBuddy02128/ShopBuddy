@@ -12,16 +12,16 @@
         tools:layout="@layout/fragment_map" />
 
     <fragment
-        android:id="@+id/navigation_tilbud"
-        android:name="com.example.shopbuddy.ui.tilbud.TilbudFragment"
+        android:id="@+id/navigation_offers"
+        android:name="com.example.shopbuddy.ui.offer.OfferFragment"
         android:label="Tilbud"
-        tools:layout="@layout/fragment_tilbud" />
+        tools:layout="@layout/fragment_offers" />
 
     <fragment
-        android:id="@+id/navigation_liste"
-        android:name="com.example.shopbuddy.ui.liste.ListeFragment"
+        android:id="@+id/navigation_shoplist"
+        android:name="com.example.shopbuddy.ui.shoplist.ShopListFragment"
         android:label="Indkøbsliste"
-        tools:layout="@layout/fragment_liste" />
+        tools:layout="@layout/fragment_shoplist" />
 
     <fragment
         android:id="@+id/navigation_notifications"
