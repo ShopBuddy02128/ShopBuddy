@@ -1,4 +1,4 @@
-package com.example.shopbuddy.ui.dashboard;
+package com.example.shopbuddy.ui.tilbud;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,24 +12,23 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.shopbuddy.R;
-import com.example.shopbuddy.databinding.FragmentDashboardBinding;
+import com.example.shopbuddy.databinding.FragmentTilbudBinding;
 
-public class DashboardFragment extends Fragment {
+public class TilbudFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
-    private FragmentDashboardBinding binding;
+    private TilbudViewModel tilbudViewModel;
+    private FragmentTilbudBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
+        tilbudViewModel =
+                new ViewModelProvider(this).get(TilbudViewModel.class);
 
-        binding = FragmentDashboardBinding.inflate(inflater, container, false);
+        binding = FragmentTilbudBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textDashboard;
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        final TextView textView = binding.textTilbud;
+        tilbudViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

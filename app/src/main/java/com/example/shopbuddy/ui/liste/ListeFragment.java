@@ -1,4 +1,4 @@
-package com.example.shopbuddy.ui.home;
+package com.example.shopbuddy.ui.liste;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,23 +13,23 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.shopbuddy.R;
-import com.example.shopbuddy.databinding.FragmentHomeBinding;
+import com.example.shopbuddy.databinding.FragmentListeBinding;
 
-public class HomeFragment extends Fragment {
+public class ListeFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
-    private FragmentHomeBinding binding;
+    private ListeViewModel listeViewModel;
+    private FragmentListeBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+        listeViewModel =
+                new ViewModelProvider(this).get(ListeViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentListeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        final TextView textView = binding.textListe;
+        listeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

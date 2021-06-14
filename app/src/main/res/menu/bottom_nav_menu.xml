@@ -2,18 +2,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_home" />
+        android:id="@+id/navigation_map"
+        android:icon="@drawable/ic_shopping_map"
+        android:title="Shopping" />
 
     <item
-        android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
+        android:id="@+id/navigation_tilbud"
+        android:icon="@drawable/ic_tilbudsavis"
+        android:title="Tilbudsavis" />
+
+    <item
+        android:id="@+id/navigation_liste"
+        android:icon="@drawable/ic_liste"
+        android:title="Indkøbsliste" />
 
     <item
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:title="Tilbudssagent" />
+
+
 
 </menu>
