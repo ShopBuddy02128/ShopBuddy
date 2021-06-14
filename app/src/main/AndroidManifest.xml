@@ -18,8 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.mainScreen.LoginScreenActivity" />
-        <activity android:name=".ui.mainScreen.RegisterScreenActivity" />
+        <activity android:name=".ui.startScreen.LoginScreenActivity" />
+        <activity android:name=".ui.startScreen.RegisterScreenActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

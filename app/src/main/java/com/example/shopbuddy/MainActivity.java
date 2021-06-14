@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.shopbuddy.ui.mainScreen.LoginScreenActivity;
-import com.example.shopbuddy.ui.mainScreen.RegisterScreenActivity;
+import com.example.shopbuddy.ui.startScreen.LoginScreenActivity;
+import com.example.shopbuddy.ui.startScreen.RegisterScreenActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
