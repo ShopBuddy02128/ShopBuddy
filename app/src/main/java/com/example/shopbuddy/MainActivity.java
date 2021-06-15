@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ToastService.setmContext(getApplicationContext());
 
+
         if(false) {
             setContentView(R.layout.startscreen_activity);
             getSupportActionBar().hide();
