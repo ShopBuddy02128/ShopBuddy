@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "677807100417",
+    "project_id": "shopbuddy-11747",
+    "storage_bucket": "shopbuddy-11747.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677807100417:android:dfae4801e8b374446e6600",
+        "android_client_info": {
+          "package_name": "com.example.shopbuddy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "677807100417-pflc00nqhb7u066nr17d2dh211b7m0s7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbimGM94B-KeE2-KLPwZ5EpYwgWmAxuZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677807100417-pflc00nqhb7u066nr17d2dh211b7m0s7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
