@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.models.Item;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ListAdapter extends ArrayAdapter<Item> {
@@ -38,6 +39,7 @@ public class ListAdapter extends ArrayAdapter<Item> {
         TextView qty= convertView.findViewById(R.id.item_qty);
 
         imageView.setImageResource(R.drawable.haha);
+
         name.setText(item.name);
         brand.setText(item.brand);
         price.setText(item.price);
