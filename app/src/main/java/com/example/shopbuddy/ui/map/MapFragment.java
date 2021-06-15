@@ -96,7 +96,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if(ContextCompat.checkSelfPermission(this.getContext(),Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED){
             map.setMyLocationEnabled(true);
             locationTask = fusedLocationProviderClient.getLastLocation();
-            zoomToUserLocation();
+            //zoomToUserLocation();
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this.getActivity(),Manifest.permission.ACCESS_FINE_LOCATION)){
                 requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION);

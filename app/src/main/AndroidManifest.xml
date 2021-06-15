@@ -28,6 +28,8 @@
         <activity android:name=".ui.startScreen.RegisterScreenActivity" />
         <activity android:name=".ui.navigation.NavigationActivity" />
 
+        <activity android:name=".ui.shoplist.ItemActivity" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
