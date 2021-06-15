@@ -1,6 +1,7 @@
 package com.example.shopbuddy.ui.shoplist;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,16 @@ import androidx.annotation.Nullable;
 
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.models.Item;
+import com.example.shopbuddy.services.ImageLoadTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ListAdapter extends ArrayAdapter<Item> {
+
+    private static final String TAG = "ListAdapter";
 
     public ListAdapter(@NonNull Context context, @NonNull ArrayList<Item> items) {
         super(context, R.layout.list_item, items);
@@ -38,7 +44,9 @@ public class ListAdapter extends ArrayAdapter<Item> {
         TextView price = convertView.findViewById(R.id.item_price);
         TextView qty= convertView.findViewById(R.id.item_qty);
 
-        imageView.setImageResource(R.drawable.haha);
+        ImageLoadTask task = new ImageLoadTask((CircleImageView) imageView);
+        Log.i(TAG, position + "Url = " + item.imageUrl);
+        task.execute(item.imageUrl);
 
         name.setText(item.name);
         brand.setText(item.brand);

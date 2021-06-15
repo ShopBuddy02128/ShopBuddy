@@ -42,7 +42,6 @@ public class ItemActivity extends AppCompatActivity {
             binding.itemviewQty.setText(qty);
 
 
-            Bitmap bmp = null;
             ImageLoadTask task = new ImageLoadTask(binding.itemviewImage);
             Log.i(TAG, "Url = " + imageUrl);
             task.execute(imageUrl);
