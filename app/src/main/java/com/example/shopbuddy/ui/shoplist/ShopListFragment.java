@@ -44,12 +44,12 @@ public class ShopListFragment extends Fragment {
 
         ArrayList<Item> itemArrayList = new ArrayList<>();
 
-        for (int i = 0; i < DummyData.imageIds.length; i++) {
+        for (int i = 0; i < DummyData.imageUrls.length; i++) {
             Item item = new Item(DummyData.names[i],
                     DummyData.brands[i],
                     DummyData.prices[i],
                     DummyData.qtys[i],
-                    DummyData.imageIds[i]);
+                    DummyData.imageUrls[i]);
             itemArrayList.add(item);
         }
 
@@ -65,6 +65,7 @@ public class ShopListFragment extends Fragment {
             i.putExtra("brand", DummyData.brands[position]);
             i.putExtra("price", DummyData.prices[position]);
             i.putExtra("qty", DummyData.qtys[position]);
+            i.putExtra("imageUrl", DummyData.imageUrls[position]);
             startActivity(i);
         });
 

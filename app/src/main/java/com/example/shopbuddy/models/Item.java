@@ -1,14 +1,13 @@
 package com.example.shopbuddy.models;
 
 public class Item {
-    public String name, brand, price, qty;
-    public int imageId;
+    public String name, brand, price, qty, imageUrl;
 
-    public Item(String name, String brand, String price, String qty, int imageId) {
+    public Item(String name, String brand, String price, String qty, String imageUrl) {
         this.name = name;
         this.brand = brand;
         this.price = price;
         this.qty = qty;
-        this.imageId = imageId;
+        this.imageUrl = imageUrl;
     }
 }

@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.shopbuddy.databinding.ActivityMainBinding;
+import com.example.shopbuddy.services.AuthService;
 import com.example.shopbuddy.services.ToastService;
 import com.example.shopbuddy.ui.navigation.NavigationActivity;
 import com.example.shopbuddy.ui.startScreen.LoginScreenActivity;
@@ -24,8 +25,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ToastService.setmContext(getApplicationContext());
+        AuthService.initializeFirebase();
 
-        if(false) {
+        if(!AuthService.isLoggedIn()) {
             setContentView(R.layout.startscreen_activity);
             getSupportActionBar().hide();
             setupMainMenuScreen();
