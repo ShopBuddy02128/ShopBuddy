@@ -28,8 +28,7 @@
                     android:layout_height="64dp"
                     app:civ_border_width="1dp"
                     app:civ_border_color="#FF000000"
-                    android:src="@drawable/haha"/>
-
+                    android:src="@drawable/ic_baseline_hourglass_top_24"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -92,6 +91,7 @@
                     android:text="69,95 kr"
                     android:textSize="20sp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
                     android:textColor="@color/black" />
 
 

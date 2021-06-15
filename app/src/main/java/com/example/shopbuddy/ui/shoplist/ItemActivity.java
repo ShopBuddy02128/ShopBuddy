@@ -1,18 +1,14 @@
 package com.example.shopbuddy.ui.shoplist;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.ActivityItemViewBinding;
-import com.example.shopbuddy.services.ImageLoadTask;
-
-import java.io.IOException;
+import com.example.shopbuddy.utils.ImageLoadTask;
 
 
 public class ItemActivity extends AppCompatActivity {

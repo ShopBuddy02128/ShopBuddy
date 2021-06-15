@@ -1,4 +1,4 @@
-package com.example.shopbuddy.services;
+package com.example.shopbuddy.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -35,7 +35,15 @@ public class ImageLoadTask extends AsyncTask<String, Void, Bitmap> {
 
         try {
             assert url != null;
-            return BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+            Bitmap bmp = ImageCache.loadImage(urlString);
+            if (bmp == null) {
+                Log.i("Bruh","bmp is null");
+                bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                ImageCache.updateCache(urlString, bmp);
+            }
+
+            return bmp;
         } catch (IOException e) {
             e.printStackTrace();
         }

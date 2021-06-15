@@ -14,9 +14,8 @@ import androidx.annotation.Nullable;
 
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.models.Item;
-import com.example.shopbuddy.services.ImageLoadTask;
+import com.example.shopbuddy.utils.ImageLoadTask;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
