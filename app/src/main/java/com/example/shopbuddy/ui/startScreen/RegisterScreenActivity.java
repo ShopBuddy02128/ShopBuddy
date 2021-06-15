@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -17,9 +18,15 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.ActivityMainBinding;
+import com.example.shopbuddy.services.AuthService;
 import com.example.shopbuddy.services.ToastService;
 import com.example.shopbuddy.ui.navigation.NavigationActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.AuthResult;
+
+import org.jetbrains.annotations.NotNull;
 
 public class RegisterScreenActivity extends Activity {
     private final String errorStringMissing = "Error: Password or username missing";
@@ -36,23 +43,37 @@ public class RegisterScreenActivity extends Activity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = usernameInput.getText().toString();
+                String email = usernameInput.getText().toString();
                 String password = passwordInput.getText().toString();
-                if (username.equals("") || password.equals("")) {
+                if (email.equals("") || password.equals("")) {
                     ToastService.makeToast(errorStringMissing, Toast.LENGTH_SHORT);
                     return;
                 }
-                ToastService.makeToast("Registered and logged in", Toast.LENGTH_LONG);
-                loginSuccessful();
+                registerUser(email, password);
             }
         });
     }
 
-    private void loginSuccessful() {
+    private void registerUser(String email, String password) {
+        AuthService.getmAuth().createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
+                if(task.isSuccessful()) {
+                    ToastService.makeToast("Successfully created user and logged in", Toast.LENGTH_SHORT);
+                    registerSuccessful();
+                } else {
+                    ToastService.makeToast("Failed to create user!", Toast.LENGTH_SHORT);
+                }
+            }
+        });
+    }
+
+    private void registerSuccessful() {
         Intent createNavigationActivity = new Intent(RegisterScreenActivity.this, NavigationActivity.class);
         // The following flags clear the activity stack, meaning you cant go back to the startScreen / loginScreen / registerScreen withouth logging out.
         createNavigationActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(createNavigationActivity);
     }
+
 
 }

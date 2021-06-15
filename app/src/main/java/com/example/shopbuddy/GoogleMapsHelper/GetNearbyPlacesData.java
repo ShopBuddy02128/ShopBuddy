@@ -3,6 +3,7 @@ package com.example.shopbuddy.GoogleMapsHelper;
 import android.os.AsyncTask;
 
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -66,7 +67,7 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
 
             mMap.addMarker(markerOptions);
             //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            //mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
 
 
         }

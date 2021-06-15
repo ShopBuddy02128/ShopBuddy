@@ -4,6 +4,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,6 +30,8 @@
         <activity android:name=".ui.startScreen.LoginScreenActivity" />
         <activity android:name=".ui.startScreen.RegisterScreenActivity" />
         <activity android:name=".ui.navigation.NavigationActivity" />
+
+        <activity android:name=".ui.shoplist.ItemActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
