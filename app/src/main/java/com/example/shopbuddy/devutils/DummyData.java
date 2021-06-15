@@ -8,4 +8,6 @@ public abstract class DummyData {
     public static String[] brands = {"Arla", "Naturli", "Il Fornaio", "Ben & Jerry's", "Beluga"};
     public static String[] prices = {"11,95 kr", "13,95 kr","19,95 kr","64,95 kr","2691,90 kr"};
     public static String[] qtys = {"2","3","1","1337","69"};
+
+    public static String[] listNames = {"Magnus' liste", "Emilies liste", "Amalies liste", "Niels liste", "Massimos liste"};
 }
