@@ -26,9 +26,6 @@ public class MainActivity extends AppCompatActivity {
         ToastService.setmContext(getApplicationContext());
         AuthService.initializeFirebase();
 
-
-
-
         if(AuthService.isLoggedIn()) {
             setContentView(R.layout.startscreen_activity);
             getSupportActionBar().hide();

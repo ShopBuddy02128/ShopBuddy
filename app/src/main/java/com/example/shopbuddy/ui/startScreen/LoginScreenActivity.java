@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.services.AuthService;
+import com.example.shopbuddy.services.DiscountSearchService;
 import com.example.shopbuddy.services.ToastService;
 import com.example.shopbuddy.ui.navigation.NavigationActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,6 +38,8 @@ public class LoginScreenActivity extends Activity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 String email = usernameInput.getText().toString();
                 String password = passwordInput.getText().toString();
                 if (email.equals("") || password.equals("")) {

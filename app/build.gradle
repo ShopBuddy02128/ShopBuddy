@@ -53,6 +53,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-auth'
 
-    // For API services - Volley
-    implementation 'com.android.volley:volley:1.2.0'
+    // For API services - okHttp
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
 }
