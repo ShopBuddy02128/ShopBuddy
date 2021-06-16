@@ -2,17 +2,14 @@ package com.example.shopbuddy.ui.map;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
 public class MapViewModel extends ViewModel {
-    private MutableLiveData<String> mText;
+    private SavedStateHandle state;
 
-    public MapViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("Kort her");
+    public MapViewModel(SavedStateHandle savedStateHandle) {
+        state = savedStateHandle;
     }
 
-    public LiveData<String> getText() {
-        return mText;
-    }
 }
