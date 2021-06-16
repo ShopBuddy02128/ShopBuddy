@@ -2,21 +2,25 @@ package com.example.shopbuddy.GoogleMapsHelper;
 
 import android.os.AsyncTask;
 
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+
 import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.List;
+
 
 public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
     String googlePlacesData;
     GoogleMap mMap;
     String url;
+    HashMap<String, Marker> markerList = new HashMap<>();
 
 
     @Override
@@ -42,11 +46,15 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
         DataParser parser = new DataParser();
         nearByPlaceList = parser.parse(s);
         showNearbyPlaces(nearByPlaceList);
+
+
+
+
+
     }
 
     //Method to show all the places in the list
     private void showNearbyPlaces(List<HashMap<String,String>> nearbyPlaceList){
-
         for (int i = 0; i < nearbyPlaceList.size(); i++ ){
 
             MarkerOptions markerOptions = new MarkerOptions();
@@ -54,22 +62,36 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
             HashMap<String,String> googlePlace = nearbyPlaceList.get(i);
 
             String placeName = googlePlace.get("place_name");
-            String vicinity = googlePlace.get("vicinity");
+            System.out.println(placeName);
+
             double lat = Double.parseDouble(googlePlace.get("lat"));
             double lng = Double.parseDouble(googlePlace.get("lng"));
+            String id = googlePlace.get("reference");
 
+
+            //Create marker
             LatLng latLng = new LatLng(lat,lng);
             markerOptions.position(latLng);
-            markerOptions.title(placeName+":"+vicinity);
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
+            //Depending on the store name
+            if (placeName.toLowerCase().contains("netto")){
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+            } else if(placeName.toLowerCase().contains("føtex")){
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            } else if(placeName.toLowerCase().contains("bilka")){
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            }
 
-
-            mMap.addMarker(markerOptions);
-            //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            Marker mMarker = mMap.addMarker(markerOptions);
+            mMarker.setTag(id);
+            markerList.put(id,mMarker);
             mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
 
 
         }
+    }
+
+    public HashMap<String, Marker> getMarkerList() {
+        return markerList;
     }
 }

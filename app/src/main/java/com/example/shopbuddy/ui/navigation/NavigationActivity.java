@@ -1,7 +1,6 @@
 package com.example.shopbuddy.ui.navigation;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,12 +20,13 @@ import com.example.shopbuddy.ui.offer.OfferFragment;
 import com.example.shopbuddy.ui.shoplist.ListsListFragment;
 import com.example.shopbuddy.ui.shoplist.ShoppingListFragment;
 
+
 public class NavigationActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     private ListsListFragment listsListFragment;
     private ShoppingListFragment shoppingListFragment;
-    private MapFragmentPlaceholder mapFragment;
+    private MapFragment mapFragment;
     private NotificationsFragment notificationsFragment;
     private OfferFragment offerFragment;
 
@@ -49,7 +49,7 @@ public class NavigationActivity extends AppCompatActivity {
         listsListFragment = new ListsListFragment();
         listsListFragment.setNavigationActivity(this);
         shoppingListFragment = new ShoppingListFragment();
-        mapFragment = new MapFragmentPlaceholder();
+        mapFragment = new MapFragment();
         notificationsFragment = new NotificationsFragment();
         offerFragment = new OfferFragment();
 

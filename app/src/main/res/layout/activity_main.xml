@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:layout_weight="9"
         android:orientation="horizontal"
-        android:background="@color/teal_700">
+        android:background="@color/ShopLightBuddyBlue">
 
         <LinearLayout
             android:id="@+id/menu_button_1_layout"
@@ -28,20 +28,22 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center">
+
             <ImageView
                 android:id="@+id/menu_button_1"
                 android:layout_width="120px"
                 android:layout_height="120px"
                 android:background="@drawable/ic_shopping_map"
-                android:backgroundTint="@color/white"
-                />
+                android:backgroundTint="@color/ShopDarkBuddyBlue" />
+
             <TextView
                 android:id="@+id/menu_button_1_text"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/menu_button_1"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:text="@string/menu_button_1"/>
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -51,19 +53,22 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center">
+
             <ImageView
                 android:id="@+id/menu_button_2"
                 android:layout_width="120px"
                 android:layout_height="120px"
                 android:background="@drawable/ic_tilbudsavis"
-                />
+                android:backgroundTint="@color/ShopDarkBuddyBlue" />
+
             <TextView
                 android:id="@+id/menu_button_2_text"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/menu_button_2"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:text="@string/menu_button_2"/>
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -73,19 +78,22 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center">
+
             <ImageView
                 android:id="@+id/menu_button_3"
                 android:layout_width="120px"
                 android:layout_height="120px"
                 android:background="@drawable/ic_liste"
-                />
+                android:backgroundTint="@color/ShopDarkBuddyBlue" />
+
             <TextView
                 android:id="@+id/menu_button_3_text"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/menu_button_3"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:text="@string/menu_button_3"/>
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -95,19 +103,22 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center">
+
             <ImageView
                 android:id="@+id/menu_button_4"
                 android:layout_width="120px"
                 android:layout_height="120px"
                 android:background="@drawable/ic_notifications_black_24dp"
-                />
+                android:backgroundTint="@color/ShopDarkBuddyBlue" />
+
             <TextView
                 android:id="@+id/menu_button_4_text"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/menu_button_4"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:text="@string/menu_button_4"/>
+                android:textSize="12sp" />
         </LinearLayout>
 
 
