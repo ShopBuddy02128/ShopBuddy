@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import androidx.core.app.NotificationManagerCompat;
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.services.AuthService;
 import com.example.shopbuddy.services.DiscountSearchService;
+import com.example.shopbuddy.services.NotificationService;
 import com.example.shopbuddy.services.ToastService;
 import com.example.shopbuddy.ui.navigation.NavigationActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,11 +46,7 @@ public class LoginScreenActivity extends Activity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createNotification();
-                if(true) return;
-
                 String email = usernameInput.getText().toString();
-                new DiscountSearchService(email).start();
                 String password = passwordInput.getText().toString();
                 if (email.equals("") || password.equals("")) {
                     ToastService.makeToast(errorStringMissing, Toast.LENGTH_SHORT);
@@ -83,24 +81,5 @@ public class LoginScreenActivity extends Activity {
         startActivity(createNavigationActivity);
     }
 
-    private void createNotification() {
-        Intent mNotificationIntent = new Intent(LoginScreenActivity.this,
-                RegisterScreenActivity.class);
-        mNotificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent mContentIntent = PendingIntent.getActivity(this, 0,
-                mNotificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(android.R.drawable.stat_sys_warning)
-                .setContentTitle("Discount found!")
-                .setContentText("We have found a discount for u!")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(mContentIntent);
-
-        // Pass the Notification to the NotificationManager:
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, builder.build());
-    }
 
 }
