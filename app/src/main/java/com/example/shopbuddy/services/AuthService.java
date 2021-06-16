@@ -1,7 +1,5 @@
 package com.example.shopbuddy.services;
 
-import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
 
 public abstract class AuthService {

@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
     
     public static final String TAG = "MainActivity";
-    
     ActivityMainBinding binding;
 
     @Override
