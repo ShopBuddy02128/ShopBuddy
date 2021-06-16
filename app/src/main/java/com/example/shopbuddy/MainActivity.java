@@ -26,11 +26,13 @@ public class MainActivity extends AppCompatActivity {
         ToastService.setmContext(getApplicationContext());
         AuthService.initializeFirebase();
 
-        if(!AuthService.isLoggedIn()) {
+
+
+
+        if(AuthService.isLoggedIn()) {
             setContentView(R.layout.startscreen_activity);
             getSupportActionBar().hide();
             setupMainMenuScreen();
-
         } else {
             Intent createNavigationActivity = new Intent(MainActivity.this, NavigationActivity.class);
             startActivity(createNavigationActivity);

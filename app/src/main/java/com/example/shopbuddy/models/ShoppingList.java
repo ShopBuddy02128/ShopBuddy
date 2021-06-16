@@ -5,13 +5,24 @@ import java.util.GregorianCalendar;
 
 public class ShoppingList {
     private String title;
+    private String createdByUserId;
     GregorianCalendar creationDate;
     ArrayList<Item> items;
+    double price;
 
     public ShoppingList(String title){
         this.title = title;
         items = new ArrayList<>();
         creationDate = new GregorianCalendar();
+        price = 0;
+    }
+
+    public ShoppingList(String title, ArrayList<Item> items, String createdByUserId, double price) {
+        this.title = title;
+        this.createdByUserId = createdByUserId;
+        this.creationDate = new GregorianCalendar();
+        this.items = items;
+        this.price = price;
     }
 
     public String getTitle(){

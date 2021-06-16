@@ -1,6 +1,4 @@
-package com.example.shopbuddy.devutils;
-
-import com.example.shopbuddy.R;
+package com.example.shopbuddy.utils;
 
 public abstract class DummyData {
     public static String[] imageUrls = {"https://dsdam.imgix.net/services/assets.img/id/6e19999e-aea3-45b5-93f6-755cff2adf9c/size/FULLSCALE.jpg?w=500&auto=format&q=60&h=500&fit=fill&fill=solid&fill-color=ffffff&trim=color&&trim-tol=10",
