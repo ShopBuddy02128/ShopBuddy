@@ -8,4 +8,6 @@
     <string name="loginScreen_userName_hint">Email</string>
     <string name="loginScreen_password_hint">Password</string>
     <string name="google_map_key">AIzaSyB5XfRLJLSH2HRD6HX9oj8BcAkAv_QcoE8</string>
+
+    <string name="enter_product">Indtast en vare</string>
 </resources>
