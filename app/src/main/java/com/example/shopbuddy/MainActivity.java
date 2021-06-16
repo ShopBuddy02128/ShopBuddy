@@ -18,8 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
     
     public static final String TAG = "MainActivity";
-    
-    ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         AuthService.initializeFirebase();
 
         if(!AuthService.isLoggedIn()) {
+
             setContentView(R.layout.startscreen_activity);
             getSupportActionBar().hide();
             setupMainMenuScreen();

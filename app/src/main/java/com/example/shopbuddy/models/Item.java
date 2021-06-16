@@ -10,4 +10,12 @@ public class Item {
         this.qty = qty;
         this.imageUrl = imageUrl;
     }
+
+    public String getTitle(){
+        return this.name;
+    }
+
+    public String getPrice(){
+        return this.price;
+    }
 }
