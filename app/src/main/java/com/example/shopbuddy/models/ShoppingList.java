@@ -54,4 +54,8 @@ public class ShoppingList {
         output += creationDate.get(GregorianCalendar.MINUTE) + ":";
         return output + creationDate.get(GregorianCalendar.SECOND);
     }
+
+    public String getPrice(){
+        return "10";
+    }
 }

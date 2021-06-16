@@ -1,40 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center_horizontal"
-    android:paddingTop="?attr/actionBarSize">
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="@color/ShopLightBuddyBlue"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/bottom_nav_menu"
-        />
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_weight="1">
+    </FrameLayout>
 
-    <fragment
-        android:id="@+id/nav_host_fragment_activity_main"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toTopOf="@id/nav_view"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/mobile_navigation"
+        android:layout_weight="9"
+        android:orientation="horizontal"
+        android:background="@color/teal_700">
+
+        <LinearLayout
+            android:id="@+id/menu_button_1_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/menu_button_1"
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:background="@drawable/ic_shopping_map"
+                android:backgroundTint="@color/white"
+                />
+            <TextView
+                android:id="@+id/menu_button_1_text"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:text="@string/menu_button_1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/menu_button_2_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/menu_button_2"
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:background="@drawable/ic_tilbudsavis"
+                />
+            <TextView
+                android:id="@+id/menu_button_2_text"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:text="@string/menu_button_2"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/menu_button_3_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/menu_button_3"
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:background="@drawable/ic_liste"
+                />
+            <TextView
+                android:id="@+id/menu_button_3_text"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:text="@string/menu_button_3"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/menu_button_4_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/menu_button_4"
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:background="@drawable/ic_notifications_black_24dp"
+                />
+            <TextView
+                android:id="@+id/menu_button_4_text"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:text="@string/menu_button_4"/>
+        </LinearLayout>
 
 
-        />
+    </LinearLayout>
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
