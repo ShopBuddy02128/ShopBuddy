@@ -143,15 +143,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
             private void zoomToUserLocation () {
-                locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                        latitude = userLatLng.latitude;
-                        longitude = userLatLng.longitude;
-                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
-                    }
-                });
+
+                    locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            try {
+                                userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                                latitude = userLatLng.latitude;
+                                longitude = userLatLng.longitude;
+                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
+                            }catch(Exception e){
+
+                            }
+                        }
+                    });
 
             }
 
