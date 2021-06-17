@@ -7,21 +7,21 @@ public class ShoppingList {
     private String title;
     private String createdByUserId;
     GregorianCalendar creationDate;
-    ArrayList<ShopListItem> shopListItems;
+    ArrayList<String> itemIds;
     double price;
 
     public ShoppingList(String title){
         this.title = title;
-        shopListItems = new ArrayList<>();
+        itemIds = new ArrayList<>();
         creationDate = new GregorianCalendar();
         price = 0;
     }
 
-    public ShoppingList(String title, ArrayList<ShopListItem> shopListItems, String createdByUserId, double price) {
+    public ShoppingList(String title, String createdByUserId, double price) {
         this.title = title;
         this.createdByUserId = createdByUserId;
         this.creationDate = new GregorianCalendar();
-        this.shopListItems = shopListItems;
+        this.itemIds = new ArrayList<>();
         this.price = price;
     }
 
@@ -29,16 +29,16 @@ public class ShoppingList {
         return title;
     }
 
-    public void addItem(ShopListItem shopListItem){
-        shopListItems.add(shopListItem);
+    public void addItem(String id){
+        itemIds.add(id);
     }
 
     public int getSize(){
-        return shopListItems.size();
+        return itemIds.size();
     }
 
-    public ArrayList<ShopListItem> getItems(){
-        return shopListItems;
+    public ArrayList<String> getItems(){
+        return itemIds;
     }
 
     public GregorianCalendar getCreationDate(){

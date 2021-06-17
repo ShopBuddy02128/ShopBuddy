@@ -50,7 +50,7 @@ public class ListsListFragment extends Fragment {
         for(int i=0; i<names.length; i++){
             ShoppingList current = new ShoppingList(names[i]);
             for(int k=0; k<names.length; k++) {
-                current.addItem(new ShopListItem(names[k], brands[k], prices[k], qtys[k], imageUrls[k]));
+                current.addItem("xJ7eYN13B3MBz22AWOO0"); // tilføjer kun lasagneplader
             }
             lists.add(current);
         }

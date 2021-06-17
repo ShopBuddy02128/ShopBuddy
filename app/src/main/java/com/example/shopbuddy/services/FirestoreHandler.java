@@ -1,17 +1,19 @@
 package com.example.shopbuddy.services;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.shopbuddy.models.ShopListItem;
+import com.example.shopbuddy.models.ShoppingList;
 import com.example.shopbuddy.ui.shoplist.AutocompleteAdapter;
+import com.example.shopbuddy.ui.shoplist.ListAdapter;
 import com.example.shopbuddy.ui.shoplist.ShopListFragment;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 public class FirestoreHandler {
     FirebaseFirestore db;
@@ -34,7 +36,7 @@ public class FirestoreHandler {
         if (queryString.length() == 0)
             return;
 
-//        Log.e("bruh", "Firebase query");
+        queryString = queryString.toLowerCase();
         db.collection("items")
                 .whereGreaterThanOrEqualTo("name", queryString)
                 .whereLessThan("name", queryString + '\uf8ff')
@@ -46,11 +48,9 @@ public class FirestoreHandler {
                                 doc.getString("brand"),
                                 doc.getString("price"),
                                 "0",
-                                doc.getString("imageUrl"));
+                                doc.getString("imageUrl"),
+                                doc.getId());
                         list.add(shopListItem);
-//                        Log.e("bruh", "List length: " + list.size());
-//                        Log.e("bruh", list.get(0).toString());
-                        Log.i("bruh", "Firestore returns: " + list.toString());
 
                         // update the adapter
                         AutocompleteAdapter newAdapter = new AutocompleteAdapter(frag.requireActivity(), list);
@@ -59,6 +59,32 @@ public class FirestoreHandler {
                     }
                 })
                 .addOnFailureListener(e -> Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_SHORT).show());
-        Log.i("bruh", "return value: " +list.toString());
+    }
+
+    public void getShopListContents(ShoppingList shoppingList) {
+        ArrayList<ShopListItem> list = new ArrayList<>();
+        for (String id : shoppingList.getItems()) {
+            db.collection("items")
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        for (DocumentSnapshot doc : Objects.requireNonNull(task.getResult())) {
+                            ShopListItem shopListItem = new ShopListItem(
+                                    doc.getString("name"),
+                                    doc.getString("brand"),
+                                    doc.getString("price"),
+                                    "0",
+                                    doc.getString("imageUrl"),
+                                    doc.getId());
+                            list.add(shopListItem);
+                        }
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_SHORT).show());
+        }
+
+        // update the adapter
+        ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), list);
+
+        frag.binding.listview.setAdapter(newAdapter);
+
     }
 }

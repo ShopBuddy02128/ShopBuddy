@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.models.ShopListItem;
+import com.example.shopbuddy.utils.TextFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,15 +43,13 @@ public class AutocompleteAdapter extends ArrayAdapter<ShopListItem> {
             ShopListItem objectShopListItem = data.get(position);
 
             TextView textViewItem = convertView.findViewById(R.id.textViewItem);
-            String concatString = objectShopListItem.name + ", " + objectShopListItem.brand;
+            String concatString = TextFormatter.toNameFormat(objectShopListItem.name) + ", " + TextFormatter.toNameFormat(objectShopListItem.brand);
             textViewItem.setText(concatString);
 
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        Log.e("bruh", "ac.getView called -> " + convertView);
         return convertView;
     }
 
