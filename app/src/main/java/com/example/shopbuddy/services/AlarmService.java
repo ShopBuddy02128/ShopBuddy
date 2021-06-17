@@ -11,8 +11,10 @@ import java.util.Calendar;
 
 public abstract class AlarmService {
     private static Context mContext;
+    private static AlarmManager alarmManager;
     public static void setmContext(Context mContext) {
         AlarmService.mContext = mContext;
+        AlarmService.alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
     }
 
     public static void createAlarm(Intent intent) {
@@ -21,13 +23,12 @@ public abstract class AlarmService {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        //calendar.add(Calendar.SECOND, 20);
+        calendar.add(Calendar.SECOND, 20);
 
-        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setInexactRepeating(
+        alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY,
+                30*1000,
                 pendingIntent);
         System.out.println("Alarm Created");
     }
@@ -36,5 +37,11 @@ public abstract class AlarmService {
         return (PendingIntent.getBroadcast(mContext, 0,
                 intent,
                 PendingIntent.FLAG_NO_CREATE) != null);
+    }
+
+    public static void removeAlarm(Intent intent) {
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0,
+                intent, PendingIntent.FLAG_NO_CREATE);
+        alarmManager.cancel(pendingIntent);
     }
 }

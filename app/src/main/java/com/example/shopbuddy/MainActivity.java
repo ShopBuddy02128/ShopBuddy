@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.shopbuddy.databinding.ActivityMainBinding;
 import com.example.shopbuddy.services.AlarmReceiver;
@@ -45,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
             Intent createNavigationActivity = new Intent(MainActivity.this, NavigationActivity.class);
             startActivity(createNavigationActivity);
         }
-
     }
 
     private void setupMainMenuScreen() {
@@ -54,10 +54,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //alarmCreator();
-
-
+                createAlarm();
+                /*
                 Intent openLoginScreen = new Intent(MainActivity.this, LoginScreenActivity.class);
-                startActivity(openLoginScreen);
+                startActivity(openLoginScreen); */
             }
         });
 
@@ -65,10 +65,11 @@ public class MainActivity extends AppCompatActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                alarmRemove();
                 //createAlarm();
-
+                /*
                 Intent openRegisterScreen = new Intent(MainActivity.this, RegisterScreenActivity.class);
-                startActivity(openRegisterScreen);
+                startActivity(openRegisterScreen); */
             }
         });
     }
@@ -112,16 +113,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void alarmCreator() {
-        Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
+        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
         if(AlarmService.alarmExists(intent)) {
-            System.out.println("Alarm Exists");
+            ToastService.makeToast("Alarm Exists", Toast.LENGTH_SHORT);
         } else {
-            System.out.println("Alarm Doesnt exist");
+            ToastService.makeToast("Alarm Doesnt exist", Toast.LENGTH_SHORT);
         }
     }
 
     public void createAlarm() {
-        Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
+        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
         AlarmService.createAlarm(intent);
+    }
+
+    public void alarmRemove() {
+        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+        AlarmService.removeAlarm(intent);
     }
 }
