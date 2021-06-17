@@ -73,8 +73,8 @@ public class ShopListFragment extends Fragment {
         });
 
         // TODO autocomplete
-        dbHandler = new FirestoreHandler(this.requireContext());
-        ac = (ShoplistAutocomplete) binding.shoplistAutocomplete;
+        dbHandler = new FirestoreHandler(this.requireContext(), this);
+        ac = binding.shoplistAutocomplete;
 
         ac.setOnItemClickListener((parent, view, position, id) -> {
             Log.i(TAG, "ShopListItem #" + position + " clicked");
@@ -84,12 +84,12 @@ public class ShopListFragment extends Fragment {
         });
 
         ArrayList<ShopListItem> objectItemData = new ArrayList<>();
-        objectItemData.add(new ShopListItem("test", "test", "test", "test", "test"));
 
         ac.addTextChangedListener(new AutocompleteTextChangedListener(this));
         acAdapter = new AutocompleteAdapter(this.requireActivity(),  objectItemData);
         ac.setAdapter(acAdapter);
         Log.e(TAG,""+acAdapter);
+
         // TODO end autocomplete
         return root;
     }

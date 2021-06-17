@@ -34,6 +34,8 @@ public class ListAdapter extends ArrayAdapter<ShopListItem> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ShopListItem shopListItem = getItem(position);
 
+        Log.i("bruh", "getView called");
+
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
 
