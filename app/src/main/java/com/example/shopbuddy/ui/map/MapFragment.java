@@ -9,6 +9,7 @@ import android.location.Location;
 
 
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -17,10 +18,13 @@ import android.view.ViewGroup;
 
 import android.view.inputmethod.InputMethodManager;
 
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 
 
+import android.widget.Spinner;
 import android.widget.Toast;
 
 
@@ -69,17 +73,20 @@ import java.util.List;
 import static android.content.ContentValues.TAG;
 
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, View.OnClickListener {
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, AdapterView.OnItemSelectedListener {
     private FragmentMapBinding binding;
     private MapViewModel mapViewModel;
+
     private GoogleMap map;
     private MapView mapView;
     private Button btFind;
+    String[] shopNames = {"Netto", "Føtex", "Bilka"};
+
     private LatLng userLatLng;
-    private int PROXIMITY_RADIUS = 5000;
     double latitude;
     double longitude;
 
+    private int PROXIMITY_RADIUS = 5000;
     private final static int LOCATION_PERMISSION = 1;
 
     Task<Location> locationTask;
@@ -95,15 +102,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
 
 
+
+
+
+
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentMapBinding.inflate(inflater, container, false);
-        btFind = binding.btFind;
 
-        btFind.setOnClickListener(this);
+        //Getting the instance of Spinner and applying OnItemSelectedListener on it
+        Spinner shopSpinner = binding.spinner;
+        shopSpinner.setOnItemSelectedListener(this);
+
+        //Creating the ArrayAdapter instance having the shop name list
+        ArrayAdapter spinnerAdapter = new ArrayAdapter(this.getContext(), R.layout.support_simple_spinner_dropdown_item, shopNames);
+        shopSpinner.setAdapter(spinnerAdapter);
 
         View root = binding.getRoot();
         return root;
@@ -178,6 +194,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             map.setMyLocationEnabled(true);
         }
         map.setOnMarkerClickListener(this);
+        InfoWindowAdapter markerInfoWindowAdapter = new InfoWindowAdapter(this.getContext());
+        map.setInfoWindowAdapter(markerInfoWindowAdapter);
 
         locationTask = fusedLocationProviderClient.getLastLocation();
         zoomToUserLocation();
@@ -207,7 +225,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
            String address = place.getAddress();
             String placeName = place.getName();
-           marker.setTitle(placeName+": " + address);
+           marker.setTitle(placeName+"\n" + address);
 
            if(place.getOpeningHours() != null){
                List<String> openingHours = place.getOpeningHours().getWeekdayText();
@@ -224,65 +242,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
             marker.showInfoWindow();
             map.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
-            map.animateCamera(CameraUpdateFactory.zoomTo(15));
+            map.animateCamera(CameraUpdateFactory.zoomTo(13));
 
-
-        }).addOnFailureListener((exception) -> {
-            if (exception instanceof ApiException) {
-                final ApiException apiException = (ApiException) exception;
-                Log.e(TAG, "Place not found: " + exception.getMessage());
-                final int statusCode = apiException.getStatusCode();
-                // TODO: Handle error with given status code.
-            }
         });
-
-
-
-
-
-
-
         return true;
     }
 
-    @Override
-    public void onClick (View v) {
-        Object dataTransfer[] = new Object[2];
-        GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
-
-        EditText tf_location = (EditText) binding.TFLocation;
-        String location = tf_location.getText().toString();
-
-
-        switch (location) {
-            case "Netto":
-                map.clear();
-                String url = getUrl(latitude, longitude, location);
-                dataTransfer[0] = map;
-                dataTransfer[1] = url;
-                getNearbyPlacesData.execute(dataTransfer);
-                Toast.makeText(this.getContext(), "showing nearby Netto", Toast.LENGTH_LONG).show();
-                break;
-            case "Føtex":
-                map.clear();
-                url = getUrl(latitude, longitude, location);
-                dataTransfer[0] = map;
-                dataTransfer[1] = url;
-                getNearbyPlacesData.execute(dataTransfer);
-                Toast.makeText(this.getContext(), "showing nearby Føtex", Toast.LENGTH_LONG).show();
-                break;
-            case "Bilka":
-                map.clear();
-                url = getUrl(latitude, longitude, location);
-                dataTransfer[0] = map;
-                dataTransfer[1] = url;
-                getNearbyPlacesData.execute(dataTransfer);
-                Toast.makeText(this.getContext(), "showing nearby Bilka", Toast.LENGTH_LONG).show();
-                break;
-     }
-
-
-    }
 
     private String getUrl (double latitude, double longitude, String nearbyPlace){
         StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/textsearch/json?");
@@ -297,7 +262,46 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Object dataTransfer[] = new Object[2];
+        GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+        String shopName = shopNames[position];;
+
+        switch (shopName) {
+            case "Netto":
+                map.clear();
+                String url = getUrl(latitude, longitude, shopName);
+                dataTransfer[0] = map;
+                dataTransfer[1] = url;
+                getNearbyPlacesData.execute(dataTransfer);
+                Toast.makeText(this.getContext(), "showing nearby Netto", Toast.LENGTH_LONG).show();
+                break;
+            case "Føtex":
+                map.clear();
+                url = getUrl(latitude, longitude, shopName);
+                dataTransfer[0] = map;
+                dataTransfer[1] = url;
+                getNearbyPlacesData.execute(dataTransfer);
+                Toast.makeText(this.getContext(), "showing nearby Føtex", Toast.LENGTH_LONG).show();
+                break;
+            case "Bilka":
+                map.clear();
+                url = getUrl(latitude, longitude, shopName);
+                dataTransfer[0] = map;
+                dataTransfer[1] = url;
+                getNearbyPlacesData.execute(dataTransfer);
+                Toast.makeText(this.getContext(), "showing nearby Bilka", Toast.LENGTH_LONG).show();
+                break;
+        }
 
 
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+    // TODO Auto-generated method stub
+
+    }
 }
 
