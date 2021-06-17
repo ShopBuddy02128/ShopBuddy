@@ -17,7 +17,8 @@ import okhttp3.Response;
 public class DiscountSearchService extends Thread{
     private final OkHttpClient client = new OkHttpClient();
     private String productName;
-    public DiscountSearchService(String productName) {
+    private AlarmReceiver alarmCaller;
+    public DiscountSearchService(AlarmReceiver caller, String productName) {
         this.productName = productName.replaceAll(" ", "%20"); // Replace all spaces with http %20 space
     }
 
@@ -36,7 +37,8 @@ public class DiscountSearchService extends Thread{
             }
 
             String resultString = response.body().string();
-            getItemsOnDiscountFromJSON(resultString);
+
+            AlarmService.finishRequest(productName, getItemsOnDiscountFromJSON(resultString));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

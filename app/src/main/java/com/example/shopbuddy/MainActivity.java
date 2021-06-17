@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         AlarmService.setmContext(getApplicationContext());
         AuthService.initializeFirebase();
 
-        if(!AuthService.isLoggedIn()) {
+        if(AuthService.isLoggedIn()) {
             setContentView(R.layout.startscreen_activity);
             getSupportActionBar().hide();
             setupMainMenuScreen();
@@ -54,10 +54,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //alarmCreator();
-                createAlarm();
-                /*
+                //createAlarm();
+
                 Intent openLoginScreen = new Intent(MainActivity.this, LoginScreenActivity.class);
-                startActivity(openLoginScreen); */
+                startActivity(openLoginScreen);
             }
         });
 
@@ -65,11 +65,11 @@ public class MainActivity extends AppCompatActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alarmRemove();
+                //alarmRemove();
                 //createAlarm();
-                /*
+
                 Intent openRegisterScreen = new Intent(MainActivity.this, RegisterScreenActivity.class);
-                startActivity(openRegisterScreen); */
+                startActivity(openRegisterScreen);
             }
         });
     }

@@ -1,17 +1,31 @@
 package com.example.shopbuddy.services;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import androidx.core.app.NotificationCompat;
+
 import com.example.shopbuddy.MainActivity;
+import com.example.shopbuddy.R;
+import com.example.shopbuddy.models.DiscountItem;
+import com.example.shopbuddy.ui.startScreen.RegisterScreenActivity;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class AlarmService {
     private static Context mContext;
     private static AlarmManager alarmManager;
+
+    private static int receivedCalls;
+    private static int callsToReceive;
+    private static HashMap<String, List<DiscountItem>> listOfItems;
+
     public static void setmContext(Context mContext) {
         AlarmService.mContext = mContext;
         AlarmService.alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
@@ -43,5 +57,66 @@ public abstract class AlarmService {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0,
                 intent, PendingIntent.FLAG_NO_CREATE);
         alarmManager.cancel(pendingIntent);
+    }
+
+
+
+    public static void setReceivedCalls(int receivedCalls) {
+        AlarmService.receivedCalls = receivedCalls;
+    }
+
+    public static void setCallsToReceive(int callsToReceive) {
+        AlarmService.callsToReceive = callsToReceive;
+    }
+
+    public static void resetListOfItems() {
+        AlarmService.listOfItems = new HashMap<String, List<DiscountItem>>();
+    }
+
+    public static void finishRequest(String item, List<DiscountItem> itemsOnDiscount) {
+        receivedCalls++;
+        listOfItems.put(item, itemsOnDiscount);
+        if(receivedCalls == callsToReceive) {
+            finishAlarmRequest();
+        }
+    }
+
+    private static void finishAlarmRequest() {
+        String message = "Found discounts for:";
+        boolean foundDiscount = false;
+        for (Map.Entry<String, List<DiscountItem>> entry : listOfItems.entrySet()) {
+            String itemName = entry.getKey();
+            List<DiscountItem> listOfDiscounts = entry.getValue();
+
+            if(listOfDiscounts.size() > 0) {
+                message += "\n- " + itemName;
+                foundDiscount = true;
+            }
+        }
+
+        if(foundDiscount) {
+            createDiscountNotification(message);
+        }
+    }
+
+    private static void createDiscountNotification(String message) {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(mContext.getApplicationContext(), "notify_001");
+        Intent ii = new Intent(mContext.getApplicationContext(), RegisterScreenActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, ii, 0);
+
+        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+        bigText.bigText(message);
+        bigText.setBigContentTitle("Discounts found!");
+        bigText.setSummaryText("Your discount alarm is going off!");
+
+        mBuilder.setContentIntent(pendingIntent);
+        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+        mBuilder.setContentTitle("Discounts found!");
+        mBuilder.setContentText("Click to view what you can save!");
+        mBuilder.setPriority(Notification.PRIORITY_MAX);
+        mBuilder.setStyle(bigText);
+
+        NotificationService.showNotification(mBuilder);
     }
 }
