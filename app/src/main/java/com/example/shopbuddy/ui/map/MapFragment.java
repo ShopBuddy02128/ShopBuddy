@@ -2,7 +2,7 @@ package com.example.shopbuddy.ui.map;
 
 import android.Manifest;
 
-
+/*
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -173,7 +173,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapReady (@NonNull @NotNull GoogleMap googleMap){
         MapsInitializer.initialize(getContext());
         map = googleMap;
-        private void zoomToUserLocation () {
+        private void zoomToUserLocation(){
             locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
@@ -309,4 +309,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
 
 }
+
+ */
 
