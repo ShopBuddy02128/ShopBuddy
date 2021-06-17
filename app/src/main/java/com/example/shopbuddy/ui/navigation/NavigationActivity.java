@@ -13,42 +13,31 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.ActivityMainBinding;
-//import com.example.shopbuddy.ui.map.MapFragment;
-import com.example.shopbuddy.ui.map.MapFragmentPlaceholder;
+import com.example.shopbuddy.ui.map.MapFragment;
 import com.example.shopbuddy.ui.notifications.NotificationsFragment;
 import com.example.shopbuddy.ui.offer.OfferFragment;
 import com.example.shopbuddy.ui.shoplist.ListsListFragment;
-import com.example.shopbuddy.ui.shoplist.ShoppingListFragment;
+import com.example.shopbuddy.ui.shoplist.ShopListFragment;
 
 
 public class NavigationActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     private ListsListFragment listsListFragment;
-    private ShoppingListFragment shoppingListFragment;
-    private MapFragmentPlaceholder mapFragment;
+    private ShopListFragment shopListFragment;
+    private MapFragment mapFragment;
     private NotificationsFragment notificationsFragment;
     private OfferFragment offerFragment;
-
-    private Fragment currentFragment;
 
     private ImageView menuButton1, menuButton2, menuButton3, menuButton4;
     private TextView menuButton1Text, menuButton2Text, menuButton3Text, menuButton4Text;
 
-    private final int MAP_FRAGMENT_ID = 1;
-    private final int OFFER_FRAGMENT_ID = 2;
-    private final int SHOPLIST_FRAGMENT_ID = 3;
-    private final int ALARM_FRAGMENT_ID = 4;
-    private final int BACK_BUTTON_ID = 5;
-
-    //Used to keep track of what to add to backstack
     boolean firstFragmentUsed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Classic
         super.onCreate(savedInstanceState);
-        int orientation = getResources().getConfiguration().orientation;
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -58,20 +47,14 @@ public class NavigationActivity extends AppCompatActivity {
         //Instantiate the fragments
         listsListFragment = new ListsListFragment();
         listsListFragment.setNavigationActivity(this);
-        shoppingListFragment = new ShoppingListFragment();
-        mapFragment = new MapFragmentPlaceholder();
+        shopListFragment = new ShopListFragment();
+        mapFragment = new MapFragment();
         notificationsFragment = new NotificationsFragment();
         offerFragment = new OfferFragment();
 
 
         //Start by going to first fragment
-        changePage(MAP_FRAGMENT_ID);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-
-        super.onSaveInstanceState(savedInstanceState);
+        changePage(1);
     }
 
 
@@ -113,19 +96,19 @@ public class NavigationActivity extends AppCompatActivity {
     public void changePage(int pagenumber){
         switch(pagenumber){
             case 1:
-                changeToFragment(mapFragment, MAP_FRAGMENT_ID);
+                changeToFragment(mapFragment, 1);
 
                 break;
             case 2:
-                changeToFragment(offerFragment, OFFER_FRAGMENT_ID);
+                changeToFragment(offerFragment, 2);
 
                 break;
             case 3:
-                changeToFragment(listsListFragment, SHOPLIST_FRAGMENT_ID);
+                changeToFragment(shopListFragment, 3);
 
                 break;
             case 4:
-                changeToFragment(notificationsFragment, ALARM_FRAGMENT_ID);
+                changeToFragment(notificationsFragment, 4);
 
                 break;
 
@@ -134,28 +117,28 @@ public class NavigationActivity extends AppCompatActivity {
 
     public void setButtonVisibilities(int pagenumber) {
         switch(pagenumber){
-            case MAP_FRAGMENT_ID:
+            case 1:
                 menuButton1Text.setVisibility(View.VISIBLE);
                 menuButton2Text.setVisibility(View.GONE);
                 menuButton3Text.setVisibility(View.GONE);
                 menuButton4Text.setVisibility(View.GONE);
                 break;
 
-            case OFFER_FRAGMENT_ID:
+            case 2:
                 menuButton1Text.setVisibility(View.GONE);
                 menuButton2Text.setVisibility(View.VISIBLE);
                 menuButton3Text.setVisibility(View.GONE);
                 menuButton4Text.setVisibility(View.GONE);
                 break;
 
-            case SHOPLIST_FRAGMENT_ID:
+            case 3:
                 menuButton1Text.setVisibility(View.GONE);
                 menuButton2Text.setVisibility(View.GONE);
                 menuButton3Text.setVisibility(View.VISIBLE);
                 menuButton4Text.setVisibility(View.GONE);
                 break;
 
-            case ALARM_FRAGMENT_ID:
+            case 4:
                 menuButton1Text.setVisibility(View.GONE);
                 menuButton2Text.setVisibility(View.GONE);
                 menuButton3Text.setVisibility(View.GONE);
@@ -175,7 +158,6 @@ public class NavigationActivity extends AppCompatActivity {
         }
         ft.commit();
 
-        currentFragment = fragment;
         updateMenuButtons(navButton);
     }
 
@@ -186,18 +168,18 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     public void updateMenuButtons(int navButton) {
-        //Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
-        //if (navButton == MAP_FRAGMENT_ID) setButtonVisibilities(MAP_FRAGMENT_ID);
-        //if (navButton == OFFER_FRAGMENT_ID) setButtonVisibilities(OFFER_FRAGMENT_ID);
-        //if (navButton == SHOPLIST_FRAGMENT_ID) setButtonVisibilities(SHOPLIST_FRAGMENT_ID);
-        //if (navButton == ALARM_FRAGMENT_ID) setButtonVisibilities(ALARM_FRAGMENT_ID);
-        //if (navButton == BACK_BUTTON_ID){
-            if (currentFragment == mapFragment) setButtonVisibilities(MAP_FRAGMENT_ID);
-            if (currentFragment == offerFragment) setButtonVisibilities(OFFER_FRAGMENT_ID);
-            if (currentFragment == listsListFragment || currentFragment == shoppingListFragment) setButtonVisibilities(SHOPLIST_FRAGMENT_ID);
-            if (currentFragment == notificationsFragment) setButtonVisibilities(ALARM_FRAGMENT_ID);
-        //}
+        if (navButton == 1) setButtonVisibilities(1);
+        if (navButton == 2) setButtonVisibilities(2);
+        if (navButton == 3) setButtonVisibilities(3);
+        if (navButton == 4) setButtonVisibilities(4);
+        if (navButton == 5){
+            if (f == mapFragment) setButtonVisibilities(1);
+            if (f == offerFragment) setButtonVisibilities(2);
+            if (f == listsListFragment || f == shopListFragment) setButtonVisibilities(3);
+            if (f == notificationsFragment) setButtonVisibilities(4);
+        }
     }
 
 }
