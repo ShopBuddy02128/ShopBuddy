@@ -29,9 +29,6 @@ public class NotificationsFragment extends Fragment {
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        String[] items = {"Øko smør", "Havredrik"};
-        alarmItemArrayList.addAll(Arrays.asList(items));
-
         AlarmAdapter alarmAdapter = new AlarmAdapter(requireActivity(),alarmItemArrayList);
         binding.mainAlarmList.setAdapter(alarmAdapter);
 
@@ -42,6 +39,7 @@ public class NotificationsFragment extends Fragment {
                 if(!editText.getText().toString().equals("")) {
                     String newAlarm = editText.getText().toString();
                     alarmItemArrayList.add(newAlarm);
+                    editText.getText().clear();
                     alarmAdapter.notifyDataSetChanged();
                 }
             }
