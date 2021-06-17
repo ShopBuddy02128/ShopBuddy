@@ -2,7 +2,7 @@ package com.example.shopbuddy.ui.map;
 
 import android.Manifest;
 
-/*
+
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -55,6 +55,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+
+
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
@@ -173,16 +175,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapReady (@NonNull @NotNull GoogleMap googleMap){
         MapsInitializer.initialize(getContext());
         map = googleMap;
-        private void zoomToUserLocation(){
-            locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    latitude = userLatLng.latitude;
-                    longitude = userLatLng.longitude;
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
-                }
-            });
+
         if (ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             map.setMyLocationEnabled(true);
         }
@@ -254,6 +247,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         return true;
     }
 
+
     @Override
     public void onClick (View v) {
         Object dataTransfer[] = new Object[2];
@@ -310,5 +304,5 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
 }
 
- */
+
 
