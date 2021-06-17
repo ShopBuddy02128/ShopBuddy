@@ -1,7 +1,6 @@
 package com.example.shopbuddy.ui.notifications;
 
 import android.content.Context;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,6 @@ import com.example.shopbuddy.R;
 import java.util.ArrayList;
 
 public class AlarmAdapter extends ArrayAdapter<String> {
-
-    private SparseBooleanArray selectedItems;
 
     public AlarmAdapter(@NonNull Context context, ArrayList<String> alarmItems) {
         super(context, 0, alarmItems);
@@ -37,8 +34,5 @@ public class AlarmAdapter extends ArrayAdapter<String> {
         cAlarmCheck.setChecked(false);
 
         return convertView;
-    }
-    public void remove(String string){
-
     }
 }
