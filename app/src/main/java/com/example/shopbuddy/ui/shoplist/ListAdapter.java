@@ -13,26 +13,26 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.shopbuddy.R;
-import com.example.shopbuddy.models.Item;
+import com.example.shopbuddy.models.ShopListItem;
 import com.example.shopbuddy.utils.ImageLoadTask;
 
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ListAdapter extends ArrayAdapter<Item> {
+public class ListAdapter extends ArrayAdapter<ShopListItem> {
 
     private static final String TAG = "ListAdapter";
 
-    public ListAdapter(@NonNull Context context, @NonNull ArrayList<Item> items) {
-        super(context, R.layout.list_item, items);
+    public ListAdapter(@NonNull Context context, @NonNull ArrayList<ShopListItem> shopListItems) {
+        super(context, R.layout.list_item, shopListItems);
     }
 
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Item item = getItem(position);
+        ShopListItem shopListItem = getItem(position);
 
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
@@ -44,13 +44,13 @@ public class ListAdapter extends ArrayAdapter<Item> {
         TextView qty= convertView.findViewById(R.id.item_qty);
 
         ImageLoadTask task = new ImageLoadTask((CircleImageView) imageView);
-        Log.i(TAG, position + "Url = " + item.imageUrl);
-        task.execute(item.imageUrl);
+        Log.i(TAG, position + "Url = " + shopListItem.imageUrl);
+        task.execute(shopListItem.imageUrl);
 
-        name.setText(item.name);
-        brand.setText(item.brand);
-        price.setText(item.price);
-        qty.setText(item.qty);
+        name.setText(shopListItem.name);
+        brand.setText(shopListItem.brand);
+        price.setText(shopListItem.price);
+        qty.setText(shopListItem.qty);
 
         return convertView;
     }

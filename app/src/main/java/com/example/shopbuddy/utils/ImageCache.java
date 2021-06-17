@@ -9,7 +9,7 @@ import java.util.Queue;
 
 // cache images downloaded from web
 public abstract class ImageCache {
-    static final int CACHE_SIZE = 30;
+    static final int CACHE_SIZE = 50;
     static Queue<String> currentlyLoadedUrls = new LinkedList<>();
 
     // <ImageUrl, Image> -> maps urlString to the loaded image
