@@ -1,26 +1,28 @@
 package com.example.shopbuddy.ui.notifications;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.ActivityItemViewBinding;
 
-public class AlarmActivity extends AppCompatActivity {
+public class AlarmActivity extends Activity {
 
-    ActivityItemViewBinding bind;
+    ActivityItemViewBinding binding;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        bind = ActivityItemViewBinding.inflate(getLayoutInflater());
-        setContentView(bind.getRoot());
+        binding = ActivityItemViewBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         Intent intent = getIntent();
-        String name = intent.getStringExtra("alarm");
-
+        String name = intent.getStringExtra("name");
+        binding.itemviewName.setText(name);
 
     }
 
