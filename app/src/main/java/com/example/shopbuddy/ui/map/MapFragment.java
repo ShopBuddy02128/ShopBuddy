@@ -173,16 +173,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapReady (@NonNull @NotNull GoogleMap googleMap){
         MapsInitializer.initialize(getContext());
         map = googleMap;
-        private void zoomToUserLocation () {
-            locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    latitude = userLatLng.latitude;
-                    longitude = userLatLng.longitude;
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
-                }
-            });
+
         if (ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             map.setMyLocationEnabled(true);
         }
