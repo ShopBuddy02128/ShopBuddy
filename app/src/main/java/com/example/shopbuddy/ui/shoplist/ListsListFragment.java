@@ -6,17 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.shopbuddy.databinding.FragmentFirstBinding;
-import com.example.shopbuddy.models.Item;
+import com.example.shopbuddy.models.ShopListItem;
 import com.example.shopbuddy.models.ShoppingList;
 import com.example.shopbuddy.ui.navigation.NavigationActivity;
 import com.example.shopbuddy.utils.DummyData;
@@ -54,7 +50,7 @@ public class ListsListFragment extends Fragment {
         for(int i=0; i<names.length; i++){
             ShoppingList current = new ShoppingList(names[i]);
             for(int k=0; k<names.length; k++) {
-                current.addItem(new Item(names[k], brands[k], prices[k], qtys[k], imageUrls[k]));
+                current.addItem(new ShopListItem(names[k], brands[k], prices[k], qtys[k], imageUrls[k]));
             }
             lists.add(current);
         }
@@ -65,8 +61,8 @@ public class ListsListFragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ShoppingListFragment frag = new ShoppingListFragment();
-                frag.setShoppingList(lists.get(position));
+                ShopListFragment frag = new ShopListFragment();
+//                frag.setShoppingList(lists.get(position));
                 main.changeToFragment(frag, 3);
             }
         });
