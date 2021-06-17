@@ -31,8 +31,8 @@
 
             <ImageView
                 android:id="@+id/menu_button_1"
-                android:layout_width="120px"
-                android:layout_height="120px"
+                android:layout_width="100px"
+                android:layout_height="100px"
                 android:background="@drawable/ic_shopping_map"
                 android:backgroundTint="@color/ShopDarkBuddyBlue" />
 
@@ -56,8 +56,8 @@
 
             <ImageView
                 android:id="@+id/menu_button_2"
-                android:layout_width="120px"
-                android:layout_height="120px"
+                android:layout_width="100px"
+                android:layout_height="100px"
                 android:background="@drawable/ic_tilbudsavis"
                 android:backgroundTint="@color/ShopDarkBuddyBlue" />
 
@@ -81,8 +81,8 @@
 
             <ImageView
                 android:id="@+id/menu_button_3"
-                android:layout_width="120px"
-                android:layout_height="120px"
+                android:layout_width="100px"
+                android:layout_height="100px"
                 android:background="@drawable/ic_liste"
                 android:backgroundTint="@color/ShopDarkBuddyBlue" />
 
@@ -106,8 +106,8 @@
 
             <ImageView
                 android:id="@+id/menu_button_4"
-                android:layout_width="120px"
-                android:layout_height="120px"
+                android:layout_width="100px"
+                android:layout_height="100px"
                 android:background="@drawable/ic_notifications_black_24dp"
                 android:backgroundTint="@color/ShopDarkBuddyBlue" />
 

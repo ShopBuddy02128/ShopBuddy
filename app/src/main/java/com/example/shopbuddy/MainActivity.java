@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         AlarmService.setmContext(getApplicationContext());
         AuthService.initializeFirebase();
 
-        if(AuthService.isLoggedIn()) {
+        if(!AuthService.isLoggedIn()) {
             setContentView(R.layout.startscreen_activity);
             getSupportActionBar().hide();
             setupMainMenuScreen();

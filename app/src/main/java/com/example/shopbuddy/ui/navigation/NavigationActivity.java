@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -94,21 +95,29 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     public void changePage(int pagenumber){
+        ActionBar actionBar = getSupportActionBar();
         switch(pagenumber){
             case 1:
                 changeToFragment(mapFragment, 1);
+                actionBar.setTitle(getString(R.string.menu_button_1));
 
                 break;
             case 2:
                 changeToFragment(offerFragment, 2);
+                actionBar.setTitle(getString(R.string.menu_button_2));
+
 
                 break;
             case 3:
                 changeToFragment(shopListFragment, 3);
+                actionBar.setTitle(getString(R.string.menu_button_3));
+
 
                 break;
             case 4:
                 changeToFragment(notificationsFragment, 4);
+                actionBar.setTitle(getString(R.string.menu_button_4));
+
 
                 break;
 
