@@ -18,6 +18,8 @@
 
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_map_key"/>
 
+        <receiver android:name="com.example.shopbuddy.services.AlarmReceiver" android:enabled="true"/>
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">

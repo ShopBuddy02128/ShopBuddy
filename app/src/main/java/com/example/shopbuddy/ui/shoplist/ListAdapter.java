@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.models.ShopListItem;
 import com.example.shopbuddy.utils.ImageLoadTask;
+import com.example.shopbuddy.utils.TextFormatter;
 
 import java.util.ArrayList;
 
@@ -28,13 +29,10 @@ public class ListAdapter extends ArrayAdapter<ShopListItem> {
         super(context, R.layout.list_item, shopListItems);
     }
 
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ShopListItem shopListItem = getItem(position);
-
-        Log.i("bruh", "getView called");
 
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
@@ -49,28 +47,11 @@ public class ListAdapter extends ArrayAdapter<ShopListItem> {
         Log.i(TAG, position + "Url = " + shopListItem.imageUrl);
         task.execute(shopListItem.imageUrl);
 
-        name.setText(shopListItem.name);
-        brand.setText(shopListItem.brand);
+        name.setText(TextFormatter.toNameFormat(shopListItem.name));
+        brand.setText(TextFormatter.toNameFormat(shopListItem.brand));
         price.setText(shopListItem.price);
         qty.setText(shopListItem.qty);
 
         return convertView;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
