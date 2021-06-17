@@ -65,4 +65,10 @@ public class DiscountItem {
     public void setValidFrom(Date validFrom) {
         this.validFrom = validFrom;
     }
+
+    public boolean stillValid(){
+        Date current = new Date();
+        int result = current.compareTo(validTo);
+        return result > 0? false : true;
+    }
 }
