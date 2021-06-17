@@ -55,6 +55,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:28.1.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-firestore:23.0.1'
 
     // For API services - okHttp
     implementation("com.squareup.okhttp3:okhttp:4.9.0")

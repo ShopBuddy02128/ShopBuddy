@@ -15,18 +15,17 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.ActivityMainBinding;
 import com.example.shopbuddy.ui.map.MapFragment;
-import com.example.shopbuddy.ui.map.MapFragmentPlaceholder;
 import com.example.shopbuddy.ui.notifications.NotificationsFragment;
 import com.example.shopbuddy.ui.offer.OfferFragment;
 import com.example.shopbuddy.ui.shoplist.ListsListFragment;
-import com.example.shopbuddy.ui.shoplist.ShoppingListFragment;
+import com.example.shopbuddy.ui.shoplist.ShopListFragment;
 
 
 public class NavigationActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     private ListsListFragment listsListFragment;
-    private ShoppingListFragment shoppingListFragment;
+    private ShopListFragment shopListFragment;
     private MapFragment mapFragment;
     private NotificationsFragment notificationsFragment;
     private OfferFragment offerFragment;
@@ -49,7 +48,7 @@ public class NavigationActivity extends AppCompatActivity {
         //Instantiate the fragments
         listsListFragment = new ListsListFragment();
         listsListFragment.setNavigationActivity(this);
-        shoppingListFragment = new ShoppingListFragment();
+        shopListFragment = new ShopListFragment();
         mapFragment = new MapFragment();
         notificationsFragment = new NotificationsFragment();
         offerFragment = new OfferFragment();
@@ -110,7 +109,7 @@ public class NavigationActivity extends AppCompatActivity {
 
                 break;
             case 3:
-                changeToFragment(listsListFragment, 3);
+                changeToFragment(shopListFragment, 3);
                 actionBar.setTitle(getString(R.string.menu_button_3));
 
 
@@ -187,7 +186,7 @@ public class NavigationActivity extends AppCompatActivity {
         if (navButton == 5){
             if (f == mapFragment) setButtonVisibilities(1);
             if (f == offerFragment) setButtonVisibilities(2);
-            if (f == listsListFragment || f == shoppingListFragment) setButtonVisibilities(3);
+            if (f == listsListFragment || f == shopListFragment) setButtonVisibilities(3);
             if (f == notificationsFragment) setButtonVisibilities(4);
         }
     }
