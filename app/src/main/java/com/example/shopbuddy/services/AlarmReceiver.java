@@ -22,7 +22,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         AlarmService.resetListOfItems();
 
         for(String item : items) {
-            new DiscountSearchService(this, item).start();
+            new DiscountSearchService(item).start();
         }
     }
 }
