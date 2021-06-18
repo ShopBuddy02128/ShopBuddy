@@ -61,9 +61,8 @@ public class ListsListFragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ShopListFragment frag = new ShopListFragment();
-//                frag.setShoppingList(lists.get(position));
-                main.changeToFragment(frag, 3);
+                //shopListFragment.setData(lists.get(position));
+                main.changeToFragment(main.shopListFragment);
             }
         });
 

@@ -19,4 +19,6 @@
     <string name="menu_button_2">Offers</string>
     <string name="menu_button_3">Lists</string>
     <string name="menu_button_4">Alarm</string>
+
+    <string name="offer_store_items_text">Antal nedsatte varer: </string>
 </resources>
