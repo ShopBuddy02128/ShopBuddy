@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.FragmentShoplistBinding;
+import com.example.shopbuddy.models.ShoppingList;
 import com.example.shopbuddy.services.FirestoreHandler;
 import com.example.shopbuddy.utils.DummyData;
 import com.example.shopbuddy.models.ShopListItem;
@@ -37,6 +38,8 @@ public class ShopListFragment extends Fragment {
 
     public ListView listView;
     public ListAdapter listAdapter;
+    public ShoppingList shoppingList;
+    public ArrayList<ShopListItem> shopListItems;
 
     public FirestoreHandler dbHandler;
 
@@ -49,18 +52,12 @@ public class ShopListFragment extends Fragment {
 
         binding = FragmentShoplistBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        dbHandler = new FirestoreHandler(this.requireContext(), this);
 
         ArrayList<ShopListItem> shopListItemArrayList = new ArrayList<>();
 
-        for (int i = 0; i < DummyData.imageUrls.length; i++) {
-            ShopListItem shopListItem = new ShopListItem(DummyData.names[i],
-                    DummyData.brands[i],
-                    DummyData.prices[i],
-                    DummyData.qtys[i],
-                    DummyData.imageUrls[i],
-                    "bro");
-            shopListItemArrayList.add(shopListItem);
-        }
+        // TODO currently loads default (test) list
+        dbHandler.getShoppingListContents("fmeAODU9GwgSy0amghYH");
 
         ListAdapter listAdapter = new ListAdapter(this.requireContext(), shopListItemArrayList);
 
@@ -70,16 +67,15 @@ public class ShopListFragment extends Fragment {
             Log.i(TAG, ""+position+" clicked.");
 
             Intent i = new Intent(requireActivity(), ItemActivity.class);
-            i.putExtra("name", DummyData.names[position]);
-            i.putExtra("brand", DummyData.brands[position]);
-            i.putExtra("price", DummyData.prices[position]);
-            i.putExtra("qty", DummyData.qtys[position]);
-            i.putExtra("imageUrl", DummyData.imageUrls[position]);
+            i.putExtra("name", shopListItems.get(position).name);
+            i.putExtra("brand", shopListItems.get(position).brand);
+            i.putExtra("price", shopListItems.get(position).price);
+            i.putExtra("qty", shopListItems.get(position).qty);
+            i.putExtra("imageUrl", shopListItems.get(position).imageUrl);
             startActivity(i);
         });
 
         // TODO autocomplete
-        dbHandler = new FirestoreHandler(this.requireContext(), this);
         ac = binding.shoplistAutocomplete;
 
         ac.setOnItemClickListener((parent, view, position, id) -> {
