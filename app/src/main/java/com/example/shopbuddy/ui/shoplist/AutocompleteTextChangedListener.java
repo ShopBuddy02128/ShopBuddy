@@ -25,20 +25,14 @@ public class AutocompleteTextChangedListener implements TextWatcher {
     @Override
     public void onTextChanged(CharSequence userInput, int start, int before, int count) {
         try{
+//            Log.e(TAG, "User input: " + userInput);
 
-            // if you want to see in the logcat what the user types
-            Log.e(TAG, "User input: " + userInput);
-
-            // update the adapater
+            // update the adapter
             frag.acAdapter.notifyDataSetChanged();
 
             // get suggestions from the database
-            ArrayList<ShopListItem> myObjs = frag.dbHandler.queryForSuggestions(userInput.toString());
+           frag.dbHandler.queryForSuggestions(userInput.toString());
 
-            // update the adapter
-            frag.acAdapter = new AutocompleteAdapter(frag.requireContext(), myObjs);
-
-            frag.ac.setAdapter(frag.acAdapter);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -7,15 +7,17 @@ import java.util.TimeZone;
 
 public class DiscountItem {
     private double price;
+    private double oldPrice;
     private Date validFrom;
     private Date validTo;
     private String title;
-    private String store;
+    private Store store;
 
-    public DiscountItem(String title, String store, double price, String dateFrom, String dateTo) throws Exception{
+    public DiscountItem(String title, Store store, double price, double oldPrice, String dateFrom, String dateTo) throws Exception{
         this.title = title;
         this.store = store;
         this.price = price;
+        this.oldPrice = oldPrice;
 
         SimpleDateFormat format = new SimpleDateFormat(
                 "yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
@@ -24,6 +26,16 @@ public class DiscountItem {
         this.validFrom = format.parse(dateFrom);
         this.validTo = format.parse(dateTo);
 
+    }
+
+    public DiscountItem(String title, Store store, double price, double oldPrice, Date dateFrom, Date dateTo) {
+        this.title = title;
+        this.store = store;
+        this.price = price;
+        this.oldPrice = oldPrice;
+
+        this.validFrom = dateFrom;
+        this.validTo = dateTo;
     }
 
     public double getPrice() {
@@ -42,11 +54,11 @@ public class DiscountItem {
         this.title = title;
     }
 
-    public String getStore() {
+    public Store getStore() {
         return store;
     }
 
-    public void setStore(String store) {
+    public void setStore(Store store) {
         this.store = store;
     }
 
@@ -64,5 +76,11 @@ public class DiscountItem {
 
     public void setValidFrom(Date validFrom) {
         this.validFrom = validFrom;
+    }
+
+    public boolean stillValid(){
+        Date current = new Date();
+        int result = current.compareTo(validTo);
+        return result > 0? false : true;
     }
 }

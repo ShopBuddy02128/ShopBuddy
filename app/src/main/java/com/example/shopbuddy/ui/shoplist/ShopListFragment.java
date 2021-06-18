@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,10 +30,14 @@ public class ShopListFragment extends Fragment {
     private static final String TAG = "ShopListFragment";
 
     private ShopListViewModel shopListViewModel;
-    private FragmentShoplistBinding binding;
+    public FragmentShoplistBinding binding;
 
     public ShoplistAutocomplete ac;
     public AutocompleteAdapter acAdapter;
+
+    public ListView listView;
+    public ListAdapter listAdapter;
+
     public FirestoreHandler dbHandler;
 
     @SuppressLint("ResourceType")
@@ -52,11 +57,12 @@ public class ShopListFragment extends Fragment {
                     DummyData.brands[i],
                     DummyData.prices[i],
                     DummyData.qtys[i],
-                    DummyData.imageUrls[i]);
+                    DummyData.imageUrls[i],
+                    "bro");
             shopListItemArrayList.add(shopListItem);
         }
 
-        ListAdapter listAdapter = new ListAdapter(requireActivity(), shopListItemArrayList);
+        ListAdapter listAdapter = new ListAdapter(this.requireContext(), shopListItemArrayList);
 
         binding.listview.setAdapter(listAdapter);
         binding.listview.setClickable(true);
@@ -73,8 +79,8 @@ public class ShopListFragment extends Fragment {
         });
 
         // TODO autocomplete
-        dbHandler = new FirestoreHandler(this.requireContext());
-        ac = (ShoplistAutocomplete) binding.shoplistAutocomplete;
+        dbHandler = new FirestoreHandler(this.requireContext(), this);
+        ac = binding.shoplistAutocomplete;
 
         ac.setOnItemClickListener((parent, view, position, id) -> {
             Log.i(TAG, "ShopListItem #" + position + " clicked");
@@ -84,12 +90,12 @@ public class ShopListFragment extends Fragment {
         });
 
         ArrayList<ShopListItem> objectItemData = new ArrayList<>();
-        objectItemData.add(new ShopListItem("test", "test", "test", "test", "test"));
 
         ac.addTextChangedListener(new AutocompleteTextChangedListener(this));
         acAdapter = new AutocompleteAdapter(this.requireActivity(),  objectItemData);
         ac.setAdapter(acAdapter);
         Log.e(TAG,""+acAdapter);
+
         // TODO end autocomplete
         return root;
     }

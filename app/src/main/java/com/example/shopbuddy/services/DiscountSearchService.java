@@ -1,6 +1,7 @@
 package com.example.shopbuddy.services;
 
 import com.example.shopbuddy.models.DiscountItem;
+import com.example.shopbuddy.models.Store;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,7 +18,8 @@ import okhttp3.Response;
 public class DiscountSearchService extends Thread{
     private final OkHttpClient client = new OkHttpClient();
     private String productName;
-    public DiscountSearchService(String productName) {
+    private AlarmReceiver alarmCaller;
+    public DiscountSearchService(AlarmReceiver caller, String productName) {
         this.productName = productName.replaceAll(" ", "%20"); // Replace all spaces with http %20 space
     }
 
@@ -36,7 +38,8 @@ public class DiscountSearchService extends Thread{
             }
 
             String resultString = response.body().string();
-            getItemsOnDiscountFromJSON(resultString);
+
+            AlarmService.finishRequest(productName, getItemsOnDiscountFromJSON(resultString));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -67,6 +70,6 @@ public class DiscountSearchService extends Thread{
         double price = newItem.getDouble("price");
         String dateFrom = newItem.getString("validFrom");
         String dateTo = newItem.getString("validTo");
-        return new DiscountItem(title, store, price, dateFrom, dateTo);
+        return new DiscountItem(title, new Store(store, null, null), price, 0, dateFrom, dateTo);
     }
 }

@@ -1,14 +1,15 @@
 package com.example.shopbuddy.models;
 
 public class ShopListItem {
-    public String name, brand, price, qty, imageUrl;
+    public String name, brand, price, qty, imageUrl, itemId;
 
-    public ShopListItem(String name, String brand, String price, String qty, String imageUrl) {
+    public ShopListItem(String name, String brand, String price, String qty, String imageUrl, String itemId) {
         this.name = name;
         this.brand = brand;
         this.price = price;
         this.qty = qty;
         this.imageUrl = imageUrl;
+        this.itemId = itemId;
     }
 
     @Override
@@ -19,6 +20,7 @@ public class ShopListItem {
                 ", price='" + price + '\'' +
                 ", qty='" + qty + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
+                ", itemId='" + itemId + '\'' +
                 '}';
     }
 }

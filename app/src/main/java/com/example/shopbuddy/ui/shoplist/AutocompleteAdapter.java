@@ -14,18 +14,22 @@ import androidx.annotation.Nullable;
 
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.models.ShopListItem;
+import com.example.shopbuddy.utils.TextFormatter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AutocompleteAdapter extends ArrayAdapter<ShopListItem> {
     final String TAG = "AutocompleteCustomArrayAdapter";
 
-    Context mContext;
-    int layoutResourceId;
-
+    ArrayList<ShopListItem> data;
 
     public AutocompleteAdapter(@NonNull Context context, @NonNull List<ShopListItem> objects) {
         super(context, R.layout.autocomplete_row, objects);
+
+        Log.i("bruh", "Adapter created with: " + objects.toString());
+
+        this.data = (ArrayList<ShopListItem>) objects;
     }
 
     @Override
@@ -33,24 +37,19 @@ public class AutocompleteAdapter extends ArrayAdapter<ShopListItem> {
         try{
             if(convertView==null)
             {
-
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.autocomplete_row, parent, false);
             }
 
-            ShopListItem objectShopListItem = getItem(position);
+            ShopListItem objectShopListItem = data.get(position);
 
             TextView textViewItem = convertView.findViewById(R.id.textViewItem);
-            String concatString = objectShopListItem.name + ", " + objectShopListItem.brand;
+            String concatString = TextFormatter.toNameFormat(objectShopListItem.name) + ", " + TextFormatter.toNameFormat(objectShopListItem.brand);
             textViewItem.setText(concatString);
 
-            // in case you want to add some style, you can do something like:
-            textViewItem.setBackgroundColor(Color.CYAN);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        Log.e("bruh", "ac.getView called -> " + convertView);
         return convertView;
     }
 

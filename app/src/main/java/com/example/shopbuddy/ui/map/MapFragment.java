@@ -175,10 +175,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                latitude = userLatLng.latitude;
-                longitude = userLatLng.longitude;
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
+                try {
+                    userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    latitude = userLatLng.latitude;
+                    longitude = userLatLng.longitude;
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
             }
         });
 
