@@ -35,7 +35,6 @@ public class NavigationActivity extends AppCompatActivity {
     public MapFragment mapFragment;
     public NotificationsFragment notificationsFragment;
     public FoodWasteFragment foodWasteFragment;
-    public FoodWasteItemsFragment foodWasteItemsFragment;
 
     private ImageView menuButton1, menuButton2, menuButton3, menuButton4;
     private TextView menuButton1Text, menuButton2Text, menuButton3Text, menuButton4Text;
@@ -80,9 +79,6 @@ public class NavigationActivity extends AppCompatActivity {
 
         foodWasteFragment = new FoodWasteFragment(JSONReader.getFoodWasteFromJson(DummyData.jsonExample));
         foodWasteFragment.setNavigationActivity(this);
-
-        foodWasteItemsFragment = new FoodWasteItemsFragment();
-        foodWasteItemsFragment.setNavigationActivity(this);
 
 
         //Start by going to first fragment

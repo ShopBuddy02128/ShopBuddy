@@ -48,8 +48,7 @@ public class FoodWasteFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                main.foodWasteItemsFragment = new FoodWasteItemsFragment(fwfs.get(position));
-                main.changeToFragment(main.foodWasteItemsFragment, main.OFFERS_BUTTON);
+                main.changeToFragment(new FoodWasteItemsFragment(fwfs.get(position)), main.OFFERS_BUTTON);
             }
         });
 
