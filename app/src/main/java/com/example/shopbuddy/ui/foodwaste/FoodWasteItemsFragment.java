@@ -54,8 +54,8 @@ public class FoodWasteItemsFragment extends Fragment {
         binding = OfferItemsLayoutBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        TextView titel = binding.offersItemsTitleId;
-        titel.setText("Nedsatte varer fra " + store.getName() + ":");
+        TextView description = binding.offersItemsTitleDescription;
+        description.setText("Nedsatte varer fra " + store.getName() + ":");
 
         listView = binding.listOfOfferItems;
         adapter = new FoodWasteItemsAdapter(getActivity(), items);

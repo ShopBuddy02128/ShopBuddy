@@ -36,7 +36,6 @@ public class NavigationActivity extends AppCompatActivity {
     public NotificationsFragment notificationsFragment;
     public FoodWasteFragment foodWasteFragment;
     public FoodWasteItemsFragment foodWasteItemsFragment;
-    private Fragment currentFragment;
 
     private ImageView menuButton1, menuButton2, menuButton3, menuButton4;
     private TextView menuButton1Text, menuButton2Text, menuButton3Text, menuButton4Text;
@@ -87,7 +86,7 @@ public class NavigationActivity extends AppCompatActivity {
 
 
         //Start by going to first fragment
-        changePage(1);
+        changePage(MAP_BUTTON);
     }
 
 
@@ -200,7 +199,7 @@ public class NavigationActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        if(customBackStack.size() > 0) {
+        if(customBackStack.size() > 1) {
             super.onBackPressed();
             customBackStack.popCurrent();
             updateMenuButtons();
