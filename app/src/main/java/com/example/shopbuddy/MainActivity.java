@@ -1,5 +1,6 @@
 package com.example.shopbuddy;
 
+import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,7 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.shopbuddy.databinding.ActivityMainBinding;
+
 import com.example.shopbuddy.services.AlarmReceiver;
 import com.example.shopbuddy.services.AlarmService;
 import com.example.shopbuddy.services.AuthService;
@@ -25,6 +26,7 @@ import com.example.shopbuddy.ui.startScreen.RegisterScreenActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+
 
 public class MainActivity extends AppCompatActivity {
     
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         AlarmService.setmContext(getApplicationContext());
         AuthService.initializeFirebase();
 
-        if(AuthService.isLoggedIn()) {
+        if(!AuthService.isLoggedIn()) {
             setContentView(R.layout.startscreen_activity);
             getSupportActionBar().hide();
             setupMainMenuScreen();
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
             Intent createNavigationActivity = new Intent(MainActivity.this, NavigationActivity.class);
             startActivity(createNavigationActivity);
         }
+
     }
 
     private void setupMainMenuScreen() {

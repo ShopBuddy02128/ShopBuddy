@@ -11,4 +11,8 @@
 
     <color name="ShopLightBuddyBlue">#80C2FF</color>
     <color name="ShopDarkBuddyBlue">#316CA1</color>
+
+    <color name="Netto">#fed545</color>
+    <color name="Føtex">#113668</color>
+    <color name="Bilka">#019ddf</color>
 </resources>
