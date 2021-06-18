@@ -4,6 +4,7 @@ import android.Manifest;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 
@@ -75,14 +76,14 @@ import java.util.List;
 import static android.content.ContentValues.TAG;
 
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, AdapterView.OnItemSelectedListener {
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, AdapterView.OnItemSelectedListener, GoogleMap.OnInfoWindowClickListener {
     private FragmentMapBinding binding;
     private MapViewModel mapViewModel;
 
     private GoogleMap map;
     private MapView mapView;
     private Button btFind;
-    String[] shopNames = {"Netto", "Føtex", "Bilka"};
+    String[] shopNames = {"Vælg forretning","Netto", "Føtex", "Bilka"};
 
     private LatLng userLatLng;
     double latitude;
@@ -101,10 +102,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         super.onCreate(savedInstanceState);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.getContext());
         checkPermission(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_PERMISSION);
-
-
-
-
 
 
 
@@ -194,13 +191,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         if (ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             map.setMyLocationEnabled(true);
+            locationTask = fusedLocationProviderClient.getLastLocation();
+            zoomToUserLocation();
         }
+
         map.setOnMarkerClickListener(this);
+
         InfoWindowAdapter markerInfoWindowAdapter = new InfoWindowAdapter(this.getContext());
         map.setInfoWindowAdapter(markerInfoWindowAdapter);
 
-        locationTask = fusedLocationProviderClient.getLastLocation();
-        zoomToUserLocation();
+        map.setOnInfoWindowClickListener(this);
+
+
     }
 
 
@@ -222,7 +224,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
             Place place = response.getPlace();
             Log.i(TAG, "Place found: " + place.getName());
-
 
 
            String address = place.getAddress();
@@ -268,9 +269,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Object dataTransfer[] = new Object[2];
         GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
-        String shopName = shopNames[position];;
+        String shopName = shopNames[position];
+
 
         switch (shopName) {
+            case "Vælg forretning":
+                // Do nothing
+                break;
             case "Netto":
                 map.clear();
                 String url = getUrl(latitude, longitude, shopName);
@@ -303,6 +308,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Override
     public void onNothingSelected(AdapterView<?> arg0) {
     // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onInfoWindowClick(@NonNull @NotNull Marker marker) {
+        Log.e(TAG ,"Window clicked");
+
+        Intent intent = new Intent(this.getContext(), ShopChosenActivity.class);
+        startActivity(intent);
 
     }
 }
