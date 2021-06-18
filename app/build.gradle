@@ -42,9 +42,14 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.0'
     implementation 'androidx.navigation:navigation-ui:2.3.0'
 
+
+    //Implement Google Maps Dependencies
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.google.android.libraries.places:places:2.4.0'
+
+    //Implement Tilbudsavis/shopgun Dependencies
+    implementation 'com.shopgun.android:sdk:5.0.0'
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     testImplementation 'junit:junit:4.+'
@@ -59,4 +64,5 @@ dependencies {
 
     // For API services - okHttp
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
 }

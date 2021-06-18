@@ -320,6 +320,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         Log.e(TAG ,"Window clicked");
 
         Intent intent = new Intent(this.getContext(), ShopChosenActivity.class);
+        intent.putExtra("ShopInfo",marker.getTitle());
+        intent.putExtra("ShopOpeningHours", marker.getSnippet());
+        intent.putExtra("ShopId", String.valueOf(marker.getTag()));
         startActivity(intent);
 
     }
