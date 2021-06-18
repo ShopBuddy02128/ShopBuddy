@@ -1,18 +1,20 @@
 package com.example.shopbuddy.models;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 
 public class ShoppingList {
-    private String title;
-    private String createdByUserId;
+    private String title, createdByUserId, id;
     GregorianCalendar creationDate;
-    ArrayList<String> itemIds;
+    HashMap<String, Long> itemIds;
     double price;
+
 
     public ShoppingList(String title){
         this.title = title;
-        itemIds = new ArrayList<>();
+        itemIds = new HashMap<>();
         creationDate = new GregorianCalendar();
         price = 0;
     }
@@ -21,23 +23,38 @@ public class ShoppingList {
         this.title = title;
         this.createdByUserId = createdByUserId;
         this.creationDate = new GregorianCalendar();
-        this.itemIds = new ArrayList<>();
+        this.itemIds = new HashMap<>();
         this.price = price;
+    }
+
+    public ShoppingList(String title,
+                        String createdByUserId,
+                        Date creationDate,
+                        HashMap<String, Long> itemIds,
+                        double price,
+                        String id) {
+        this.title = title;
+        this.createdByUserId = createdByUserId;
+        this.creationDate = new GregorianCalendar();
+            this.creationDate.setTime(creationDate);;
+        this.itemIds = itemIds;
+        this.price = price;
+        this.id = id;
     }
 
     public String getTitle(){
         return title;
     }
 
-    public void addItem(String id){
-        itemIds.add(id);
+    public void addItem(String id, Long quantity){
+        itemIds.put(id, quantity);
     }
 
     public int getSize(){
         return itemIds.size();
     }
 
-    public ArrayList<String> getItems(){
+    public HashMap<String,Long> getItems(){
         return itemIds;
     }
 

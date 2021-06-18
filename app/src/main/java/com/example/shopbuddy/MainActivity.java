@@ -7,6 +7,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +29,9 @@ import com.example.shopbuddy.ui.startScreen.RegisterScreenActivity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
+import java.util.List;
+import java.util.Locale;
+
 
 public class MainActivity extends AppCompatActivity {
     
@@ -38,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         ToastService.setmContext(getApplicationContext());
         NotificationService.setContext(getApplicationContext());
         AlarmService.setmContext(getApplicationContext());
-        AuthService.initializeFirebase();
+        AuthService.initializeFirebaseAuth();
 
         if(!AuthService.isLoggedIn()) {
             setContentView(R.layout.startscreen_activity);

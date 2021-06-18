@@ -77,7 +77,7 @@ public class NavigationActivity extends AppCompatActivity {
 
         notificationsFragment = new NotificationsFragment();
 
-        foodWasteFragment = new FoodWasteFragment(JSONReader.getFoodWasteFromJson(DummyData.jsonExample));
+        foodWasteFragment = new FoodWasteFragment(JSONReader.getFoodWasteFromJson(DummyData.jsonExample), mapFragment);
         foodWasteFragment.setNavigationActivity(this);
 
 
