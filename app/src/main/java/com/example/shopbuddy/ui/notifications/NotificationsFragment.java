@@ -1,11 +1,15 @@
 package com.example.shopbuddy.ui.notifications;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -16,17 +20,14 @@ import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.FragmentNotificationsBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NotificationsFragment extends Fragment {
 
     private NotificationsViewModel notificationsViewModel;
     private FragmentNotificationsBinding binding;
-    private ArrayList<String> alarmItemArrayList;
-    private AlarmAdapter alarmAdapter;
-
-    private boolean fromBack = false;
-    private AlarmAdapter savedAlarmAdapter;
-    private ArrayList<String> savedDataItems;
+    private ListView listView;
+    CheckedTextView checkedTextView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -35,16 +36,11 @@ public class NotificationsFragment extends Fragment {
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        alarmItemArrayList = new ArrayList<String>();
-        alarmAdapter = new AlarmAdapter(requireActivity(),alarmItemArrayList);
-
-        if (fromBack){
-            savedDataItems = alarmItemArrayList;
-            savedAlarmAdapter = alarmAdapter;
-        }
-
-        binding.mainAlarmList.setAdapter(alarmAdapter);
-
+        listView = (ListView) root.findViewById(R.id.mainAlarmList);
+        ArrayList<String> alarmItemArrayList = new ArrayList<String>();
+        AlarmAdapter alarmAdapter = new AlarmAdapter(requireActivity(),alarmItemArrayList);
+        //binding.mainAlarmList.setAdapter(alarmAdapter);
+        listView.setAdapter(alarmAdapter);
 
 
         EditText editText = (EditText) root.findViewById(R.id.new_alarm);
@@ -59,6 +55,23 @@ public class NotificationsFragment extends Fragment {
                 }
             }
         });
+
+        binding.mainAlarmList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                checkedTextView = (CheckedTextView) root.findViewById(R.id.check_alarm);
+                if(checkedTextView.isChecked()){
+                    checkedTextView.setCheckMarkDrawable(0);
+                    checkedTextView.setChecked(false);
+                    Log.i("CHECKTEXTVIEWCLICK", "List item is already clicked");
+                }else{
+                    checkedTextView.setCheckMarkDrawable(R.color.ShopLightBuddyBlue);
+                    checkedTextView.setChecked(true);
+                    Log.i("CHECKTEXTVIEWCLICK", "List item was clicked");
+                }
+            }
+        });
+
 /*
         binding.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,8 +94,5 @@ public class NotificationsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        savedAlarmAdapter = alarmAdapter;
-        savedDataItems = alarmItemArrayList;
-        fromBack = true;
     }
 }

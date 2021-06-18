@@ -13,21 +13,18 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/alarm_name"
-                android:layout_width="wrap_content"
+            <CheckedTextView
+                android:id="@+id/check_alarm"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
                 android:text="Havremælk"
                 android:textColor="@color/black"
-                android:textStyle="bold">
-            </TextView>
-
-            <CheckBox
-                android:id="@+id/check_alarm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right">
-            </CheckBox>
+                android:textStyle="bold"
+                android:drawableRight="@drawable/ic_check_item"
+                android:layout_gravity="left"
+                android:checked="false"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
+            </CheckedTextView>
     </LinearLayout>
 </LinearLayout>

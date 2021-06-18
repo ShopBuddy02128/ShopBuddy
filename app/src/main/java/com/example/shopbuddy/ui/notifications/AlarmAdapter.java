@@ -1,11 +1,13 @@
 package com.example.shopbuddy.ui.notifications;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.example.shopbuddy.R;
@@ -27,11 +29,11 @@ public class AlarmAdapter extends ArrayAdapter<String> {
         }
 
         //Lookup View
-        TextView tAlarmName = (TextView) convertView.findViewById(R.id.alarm_name);
-        CheckBox cAlarmCheck = (CheckBox) convertView.findViewById(R.id.check_alarm);
+        CheckedTextView checkedTextView = (CheckedTextView) convertView.findViewById(R.id.check_alarm);
 
-        tAlarmName.setText(item);
-        cAlarmCheck.setChecked(false);
+        checkedTextView.setText(item);
+        checkedTextView.setChecked(false);
+        Log.i("CHECKTEXTITEM", "See if item is checked");
 
         return convertView;
     }
