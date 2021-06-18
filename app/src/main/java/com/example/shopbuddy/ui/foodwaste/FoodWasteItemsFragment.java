@@ -1,4 +1,4 @@
-package com.example.shopbuddy.ui.offer;
+package com.example.shopbuddy.ui.foodwaste;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.shopbuddy.databinding.FragmentOfferLayoutBinding;
 import com.example.shopbuddy.databinding.OfferItemsLayoutBinding;
 import com.example.shopbuddy.models.DiscountItem;
 import com.example.shopbuddy.models.FoodWasteFromStore;
@@ -20,7 +19,7 @@ import com.example.shopbuddy.ui.navigation.NavigationActivity;
 
 import java.util.ArrayList;
 
-public class OfferItemsFragment extends Fragment {
+public class FoodWasteItemsFragment extends Fragment {
 
     OfferItemsLayoutBinding binding;
     ArrayList<DiscountItem> items;
@@ -29,10 +28,10 @@ public class OfferItemsFragment extends Fragment {
     private ListView listView;
     private FoodWasteItemsAdapter adapter;
 
-    public OfferItemsFragment(){
+    public FoodWasteItemsFragment(){
 
     }
-    public OfferItemsFragment(FoodWasteFromStore fwfs){
+    public FoodWasteItemsFragment(FoodWasteFromStore fwfs){
         this.items = fwfs.getItems();
         this.store = fwfs.getStore();
     }

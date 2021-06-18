@@ -16,8 +16,8 @@ import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.ActivityMainBinding;
 import com.example.shopbuddy.ui.map.MapFragment;
 import com.example.shopbuddy.ui.notifications.NotificationsFragment;
-import com.example.shopbuddy.ui.offer.OfferFragment;
-import com.example.shopbuddy.ui.offer.OfferItemsFragment;
+import com.example.shopbuddy.ui.foodwaste.FoodWasteFragment;
+import com.example.shopbuddy.ui.foodwaste.FoodWasteItemsFragment;
 import com.example.shopbuddy.ui.shoplist.ListsListFragment;
 import com.example.shopbuddy.ui.shoplist.ShopListFragment;
 import com.example.shopbuddy.utils.DummyData;
@@ -31,8 +31,8 @@ public class NavigationActivity extends AppCompatActivity {
     public ShopListFragment shopListFragment;
     public MapFragment mapFragment;
     public NotificationsFragment notificationsFragment;
-    public OfferFragment offerFragment;
-    public OfferItemsFragment offerItemsFragment;
+    public FoodWasteFragment foodWasteFragment;
+    public FoodWasteItemsFragment foodWasteItemsFragment;
     private Fragment currentFragment;
 
     private ImageView menuButton1, menuButton2, menuButton3, menuButton4;
@@ -66,11 +66,11 @@ public class NavigationActivity extends AppCompatActivity {
 
         notificationsFragment = new NotificationsFragment();
 
-        offerFragment = new OfferFragment(JSONReader.getFoodWasteFromJson(DummyData.jsonExample));
-        offerFragment.setNavigationActivity(this);
+        foodWasteFragment = new FoodWasteFragment(JSONReader.getFoodWasteFromJson(DummyData.jsonExample));
+        foodWasteFragment.setNavigationActivity(this);
 
-        offerItemsFragment = new OfferItemsFragment();
-        offerItemsFragment.setNavigationActivity(this);
+        foodWasteItemsFragment = new FoodWasteItemsFragment();
+        foodWasteItemsFragment.setNavigationActivity(this);
 
 
         //Start by going to first fragment
@@ -122,7 +122,7 @@ public class NavigationActivity extends AppCompatActivity {
 
                 break;
             case 2:
-                changeToFragment(offerFragment);
+                changeToFragment(foodWasteFragment);
                 actionBar.setTitle(getString(R.string.menu_button_2));
 
 
@@ -199,7 +199,7 @@ public class NavigationActivity extends AppCompatActivity {
     public void updateMenuButtons() {
 
         if (currentFragment == mapFragment) setButtonVisibilities(1);
-        if (currentFragment == offerFragment) setButtonVisibilities(2);
+        if (currentFragment == foodWasteFragment) setButtonVisibilities(2);
         if (currentFragment == listsListFragment || currentFragment == shopListFragment) setButtonVisibilities(3);
         if (currentFragment == notificationsFragment) setButtonVisibilities(4);
 
