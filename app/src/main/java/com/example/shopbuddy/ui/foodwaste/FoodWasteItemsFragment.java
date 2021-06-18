@@ -1,4 +1,4 @@
-package com.example.shopbuddy.ui.offer;
+package com.example.shopbuddy.ui.foodwaste;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.shopbuddy.databinding.FragmentOfferLayoutBinding;
 import com.example.shopbuddy.databinding.OfferItemsLayoutBinding;
 import com.example.shopbuddy.models.DiscountItem;
 import com.example.shopbuddy.models.FoodWasteFromStore;
