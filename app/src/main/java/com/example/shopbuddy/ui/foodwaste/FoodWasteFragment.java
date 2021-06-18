@@ -1,40 +1,45 @@
-package com.example.shopbuddy.ui.offer;
+package com.example.shopbuddy.ui.foodwaste;
 
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.example.shopbuddy.databinding.FragmentOfferLayoutBinding;
+import com.example.shopbuddy.databinding.FragmentFoodWasteLayoutBinding;
 import com.example.shopbuddy.models.FoodWasteFromStore;
+import com.example.shopbuddy.services.DiscountFoodWasteService;
+import com.example.shopbuddy.ui.map.MapFragment;
 import com.example.shopbuddy.ui.navigation.NavigationActivity;
-import com.example.shopbuddy.utils.DummyData;
-import com.example.shopbuddy.utils.JSONReader;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class OfferFragment extends Fragment {
+public class FoodWasteFragment extends Fragment {
 
-    private FragmentOfferLayoutBinding binding;
+    private FragmentFoodWasteLayoutBinding binding;
 
     private ListView listView;
     private ArrayList<FoodWasteFromStore> fwfs = new ArrayList<>();
 
     private FoodWasteStoreAdapter adapter;
     private NavigationActivity main;
+    private MapFragment mapFragment;
 
-    public OfferFragment(ArrayList<FoodWasteFromStore> fwfs){
+    public FoodWasteFragment(ArrayList<FoodWasteFromStore> fwfs, MapFragment mapFragment){
         this.fwfs = fwfs;
+        this.mapFragment = mapFragment;
     }
 
     public void setNavigationActivity(NavigationActivity main){
@@ -44,7 +49,7 @@ public class OfferFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentOfferLayoutBinding.inflate(inflater, container, false);
+        binding = FragmentFoodWasteLayoutBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         listView = binding.listOfOffers;
@@ -55,10 +60,18 @@ public class OfferFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                main.offerItemsFragment = new OfferItemsFragment(fwfs.get(position));
-                main.changeToFragment(main.offerItemsFragment);
+                main.foodWasteItemsFragment = new FoodWasteItemsFragment(fwfs.get(position));
+                main.changeToFragment(main.foodWasteItemsFragment, main.OFFERS_BUTTON);
             }
         });
+
+
+        String zipcode = mapFragment.getZipcode();
+        try {
+            new DiscountFoodWasteService(this, zipcode).start();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
 
         return root;
     }
@@ -72,5 +85,9 @@ public class OfferFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public void finishRequest(ArrayList<FoodWasteFromStore> foodWasteDiscounts) {
+        ArrayList<FoodWasteFromStore> foodWaste = foodWasteDiscounts;
     }
 }

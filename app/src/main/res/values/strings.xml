@@ -7,7 +7,10 @@
     <string name="loginScreen_register_text"><b><u>Opret Bruger</u></b></string>
     <string name="loginScreen_userName_hint">Email</string>
     <string name="loginScreen_password_hint">Password</string>
+
     <string name="google_map_key">AIzaSyB5XfRLJLSH2HRD6HX9oj8BcAkAv_QcoE8</string>
+    <string name="shop_gun_key">cDD7cy</string>
+    <string name="shop_gun_secret">sBBrfMh-2IP0JdvhXCGsh</string>
 
     <string name="first_fragment_label">Alle Lister</string>
     <string name="second_fragment_label">Specifik Liste</string>
@@ -20,5 +23,6 @@
     <string name="menu_button_3">Lists</string>
     <string name="menu_button_4">Alarm</string>
 
-    <string name="offer_store_items_text">Antal nedsatte varer: </string>
+    <string name="offer_store_items_text">Antal nedsatte varer:</string>
+    <string name="enter_product">Indtast en vare</string>
 </resources>

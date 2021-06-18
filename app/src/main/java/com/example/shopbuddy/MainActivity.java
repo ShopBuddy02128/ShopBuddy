@@ -1,11 +1,14 @@
 package com.example.shopbuddy;
 
+import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.shopbuddy.databinding.ActivityMainBinding;
+
 import com.example.shopbuddy.services.AlarmReceiver;
 import com.example.shopbuddy.services.AlarmService;
 import com.example.shopbuddy.services.AuthService;
@@ -25,6 +28,10 @@ import com.example.shopbuddy.ui.startScreen.RegisterScreenActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+
+import java.util.List;
+import java.util.Locale;
+
 
 public class MainActivity extends AppCompatActivity {
     
@@ -46,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
             Intent createNavigationActivity = new Intent(MainActivity.this, NavigationActivity.class);
             startActivity(createNavigationActivity);
         }
+
     }
 
     private void setupMainMenuScreen() {

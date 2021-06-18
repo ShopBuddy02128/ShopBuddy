@@ -16,12 +16,15 @@ import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.ActivityMainBinding;
 import com.example.shopbuddy.ui.map.MapFragment;
 import com.example.shopbuddy.ui.notifications.NotificationsFragment;
-import com.example.shopbuddy.ui.offer.OfferFragment;
-import com.example.shopbuddy.ui.offer.OfferItemsFragment;
+import com.example.shopbuddy.ui.foodwaste.FoodWasteFragment;
+import com.example.shopbuddy.ui.foodwaste.FoodWasteItemsFragment;
 import com.example.shopbuddy.ui.shoplist.ListsListFragment;
 import com.example.shopbuddy.ui.shoplist.ShopListFragment;
+import com.example.shopbuddy.utils.CustomBackStack;
 import com.example.shopbuddy.utils.DummyData;
 import com.example.shopbuddy.utils.JSONReader;
+
+import java.util.List;
 
 
 public class NavigationActivity extends AppCompatActivity {
@@ -31,12 +34,15 @@ public class NavigationActivity extends AppCompatActivity {
     public ShopListFragment shopListFragment;
     public MapFragment mapFragment;
     public NotificationsFragment notificationsFragment;
-    public OfferFragment offerFragment;
-    public OfferItemsFragment offerItemsFragment;
+    public FoodWasteFragment foodWasteFragment;
+    public FoodWasteItemsFragment foodWasteItemsFragment;
     private Fragment currentFragment;
 
     private ImageView menuButton1, menuButton2, menuButton3, menuButton4;
     private TextView menuButton1Text, menuButton2Text, menuButton3Text, menuButton4Text;
+
+    private ActionBar actionBar;
+    private String[] actionBarTitles;
 
     boolean firstFragmentUsed = false;
 
@@ -45,6 +51,8 @@ public class NavigationActivity extends AppCompatActivity {
     public final int SHOPLIST_BUTTON = 3;
     public final int ALARM_BUTTON = 4;
     public final int BACK_BUTTON = 5;
+
+    private CustomBackStack customBackStack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +64,11 @@ public class NavigationActivity extends AppCompatActivity {
         //Instantiate the buttons
         setupMenuButtons(binding);
 
+        //Instantiate the custom backstack
+        customBackStack = new CustomBackStack();
+        actionBar = getSupportActionBar();
+        actionBarTitles = new String[]{"null", getString(R.string.menu_button_1), getString(R.string.menu_button_2),getString(R.string.menu_button_3),getString(R.string.menu_button_4)};
+
         //Instantiate the fragments
         listsListFragment = new ListsListFragment();
         listsListFragment.setNavigationActivity(this);
@@ -66,11 +79,11 @@ public class NavigationActivity extends AppCompatActivity {
 
         notificationsFragment = new NotificationsFragment();
 
-        offerFragment = new OfferFragment(JSONReader.getFoodWasteFromJson(DummyData.jsonExample));
-        offerFragment.setNavigationActivity(this);
+        foodWasteFragment = new FoodWasteFragment(JSONReader.getFoodWasteFromJson(DummyData.jsonExample), mapFragment);
+        foodWasteFragment.setNavigationActivity(this);
 
-        offerItemsFragment = new OfferItemsFragment();
-        offerItemsFragment.setNavigationActivity(this);
+        foodWasteItemsFragment = new FoodWasteItemsFragment();
+        foodWasteItemsFragment.setNavigationActivity(this);
 
 
         //Start by going to first fragment
@@ -84,7 +97,7 @@ public class NavigationActivity extends AppCompatActivity {
         menuButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changePage(1);
+                changePage(MAP_BUTTON);
             }
         });
         menuButton2 = binding.menuButton2;
@@ -92,7 +105,7 @@ public class NavigationActivity extends AppCompatActivity {
         menuButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changePage(2);
+                changePage(OFFERS_BUTTON);
             }
         });
         menuButton3 = binding.menuButton3;
@@ -100,7 +113,7 @@ public class NavigationActivity extends AppCompatActivity {
         menuButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changePage(3);
+                changePage(SHOPLIST_BUTTON);
             }
         });
         menuButton4 = binding.menuButton4;
@@ -108,35 +121,27 @@ public class NavigationActivity extends AppCompatActivity {
         menuButton4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changePage(4);
+                changePage(ALARM_BUTTON);
             }
         });
     }
 
     public void changePage(int pagenumber){
-        ActionBar actionBar = getSupportActionBar();
         switch(pagenumber){
             case 1:
-                changeToFragment(mapFragment);
-                actionBar.setTitle(getString(R.string.menu_button_1));
+                changeToFragment(mapFragment, MAP_BUTTON);
 
                 break;
             case 2:
-                changeToFragment(offerFragment);
-                actionBar.setTitle(getString(R.string.menu_button_2));
-
+                changeToFragment(foodWasteFragment, OFFERS_BUTTON);
 
                 break;
             case 3:
-                changeToFragment(shopListFragment);
-                actionBar.setTitle(getString(R.string.menu_button_3));
-
+                changeToFragment(shopListFragment, SHOPLIST_BUTTON);
 
                 break;
             case 4:
-                changeToFragment(notificationsFragment);
-                actionBar.setTitle(getString(R.string.menu_button_4));
-
+                changeToFragment(notificationsFragment, ALARM_BUTTON);
 
                 break;
 
@@ -174,8 +179,11 @@ public class NavigationActivity extends AppCompatActivity {
         }
     }
 
-    public void changeToFragment(Fragment fragment){
+    public void changeToFragment(Fragment fragment, int navButton){
         FragmentManager fm = getSupportFragmentManager();
+
+        if(fm.findFragmentById(R.id.fragment_container) == fragment) return;
+
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.fragment_container, fragment);
         if(!firstFragmentUsed){
@@ -186,22 +194,29 @@ public class NavigationActivity extends AppCompatActivity {
         }
         ft.commit();
 
-        currentFragment = fragment;
+        customBackStack.addToBackStack(navButton);
         updateMenuButtons();
     }
 
     @Override
     public void onBackPressed(){
-        super.onBackPressed();
-        updateMenuButtons();
+        if(customBackStack.size() > 0) {
+            super.onBackPressed();
+            customBackStack.popCurrent();
+            updateMenuButtons();
+        }
     }
 
     public void updateMenuButtons() {
 
-        if (currentFragment == mapFragment) setButtonVisibilities(1);
-        if (currentFragment == offerFragment) setButtonVisibilities(2);
-        if (currentFragment == listsListFragment || currentFragment == shopListFragment) setButtonVisibilities(3);
-        if (currentFragment == notificationsFragment) setButtonVisibilities(4);
+        int navButton = customBackStack.getCurrent();
+
+        actionBar.setTitle(actionBarTitles[navButton]);
+
+        if (navButton == MAP_BUTTON) setButtonVisibilities(MAP_BUTTON);
+        else if (navButton == OFFERS_BUTTON) setButtonVisibilities(OFFERS_BUTTON);
+        else if (navButton == SHOPLIST_BUTTON) setButtonVisibilities(SHOPLIST_BUTTON);
+        else if (navButton == ALARM_BUTTON) setButtonVisibilities(ALARM_BUTTON);
 
     }
 

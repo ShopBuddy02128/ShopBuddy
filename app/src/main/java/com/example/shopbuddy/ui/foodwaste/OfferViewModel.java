@@ -1,4 +1,4 @@
-package com.example.shopbuddy.ui.offer;
+package com.example.shopbuddy.ui.foodwaste;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

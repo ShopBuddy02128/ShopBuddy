@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_offers"
-        android:name="com.example.shopbuddy.ui.offer.OfferFragment"
+        android:name="com.example.shopbuddy.ui.foodwaste.FoodWasteFragment"
         android:label="Tilbud"
         tools:layout="@layout/fragment_offers" />
 
