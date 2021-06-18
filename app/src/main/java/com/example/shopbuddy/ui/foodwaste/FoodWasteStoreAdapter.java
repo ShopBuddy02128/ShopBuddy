@@ -1,27 +1,17 @@
-package com.example.shopbuddy.ui.offer;
+package com.example.shopbuddy.ui.foodwaste;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.FragmentFirstBinding;
 import com.example.shopbuddy.models.FoodWasteFromStore;
-import com.example.shopbuddy.models.ShoppingList;
 import com.example.shopbuddy.models.Store;
-import com.example.shopbuddy.ui.navigation.NavigationActivity;
-import com.example.shopbuddy.ui.shoplist.ListsListAdapter;
-import com.example.shopbuddy.ui.shoplist.ShopListFragment;
-import com.example.shopbuddy.utils.DummyData;
 
 import java.util.ArrayList;
 import java.util.List;

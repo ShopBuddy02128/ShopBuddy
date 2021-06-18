@@ -19,7 +19,7 @@ import com.example.shopbuddy.ui.navigation.NavigationActivity;
 
 import java.util.ArrayList;
 
-public class OfferItemsFragment extends Fragment {
+public class FoodWasteItemsFragment extends Fragment {
 
     OfferItemsLayoutBinding binding;
     ArrayList<DiscountItem> items;
@@ -28,10 +28,10 @@ public class OfferItemsFragment extends Fragment {
     private ListView listView;
     private FoodWasteItemsAdapter adapter;
 
-    public OfferItemsFragment(){
+    public FoodWasteItemsFragment(){
 
     }
-    public OfferItemsFragment(FoodWasteFromStore fwfs){
+    public FoodWasteItemsFragment(FoodWasteFromStore fwfs){
         this.items = fwfs.getItems();
         this.store = fwfs.getStore();
     }
