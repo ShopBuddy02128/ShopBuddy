@@ -13,6 +13,10 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.ActivityShopChosenBinding;
+import com.example.shopbuddy.models.DiscountItem;
+import com.example.shopbuddy.services.DiscountForStoreService;
+
+import java.util.List;
 
 
 public class ShopChosenActivity extends AppCompatActivity{
@@ -51,6 +55,16 @@ public class ShopChosenActivity extends AppCompatActivity{
         binding.shopAdress.setText("Addresse: " + shopAddress);
         binding.shopOpening.setText(shopOpeningHours);
 
+        try {
+            new DiscountForStoreService(this, "Netto", 20).start();
+        } catch (Exception e) {
+            // Failed to get request, most likely caused by not calling a correct store option
+        }
 
+    }
+
+
+    public void finishRequest(List<DiscountItem> listOfDiscountsForStore) {
+        List<DiscountItem> items = listOfDiscountsForStore;
     }
 }
