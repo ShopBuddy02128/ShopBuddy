@@ -13,9 +13,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.ActivityShopChosenBinding;
-import com.shopgun.android.sdk.ShopGun;
 
-import okhttp3.logging.HttpLoggingInterceptor;
 
 public class ShopChosenActivity extends AppCompatActivity{
     ActivityShopChosenBinding binding;
@@ -52,12 +50,6 @@ public class ShopChosenActivity extends AppCompatActivity{
         //Set description
         binding.shopAdress.setText("Addresse: " + shopAddress);
         binding.shopOpening.setText(shopOpeningHours);
-
-        // setup shopgun
-        new ShopGun.Builder(this.getApplication())
-                .setDevelop(true)
-                .addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
-                .setInstance();
 
 
     }

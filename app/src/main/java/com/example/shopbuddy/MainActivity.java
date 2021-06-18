@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.shopbuddy.databinding.ActivityMainBinding;
+
 import com.example.shopbuddy.services.AlarmReceiver;
 import com.example.shopbuddy.services.AlarmService;
 import com.example.shopbuddy.services.AuthService;
@@ -23,12 +23,10 @@ import com.example.shopbuddy.services.ToastService;
 import com.example.shopbuddy.ui.navigation.NavigationActivity;
 import com.example.shopbuddy.ui.startScreen.LoginScreenActivity;
 import com.example.shopbuddy.ui.startScreen.RegisterScreenActivity;
-import com.shopgun.android.sdk.ShopGun;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
-import okhttp3.logging.HttpLoggingInterceptor;
 
 public class MainActivity extends AppCompatActivity {
     
@@ -50,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
             Intent createNavigationActivity = new Intent(MainActivity.this, NavigationActivity.class);
             startActivity(createNavigationActivity);
         }
-
-
 
     }
 
