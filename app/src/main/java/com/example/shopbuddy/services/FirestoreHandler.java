@@ -1,6 +1,7 @@
 package com.example.shopbuddy.services;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,17 +14,18 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 
 public class FirestoreHandler {
     FirebaseFirestore db;
     ShopListFragment frag;
     Context context;
+
+    public FirestoreHandler() {
+        initFirebaseConn();
+    }
 
     public FirestoreHandler(Context context, ShopListFragment frag) {
         initFirebaseConn();
@@ -67,6 +69,9 @@ public class FirestoreHandler {
     }
 
     public void getShoppingListContents(String shoppingListId) {
+        if (frag.binding == null)
+            return;
+
         ArrayList<ShopListItem> list = new ArrayList<>();
             db.collection("shoppingLists")
                     .document(shoppingListId)
@@ -80,32 +85,57 @@ public class FirestoreHandler {
                                 (HashMap<String,Long>) doc.get("itemIds"),
                                 doc.getDouble("price"),
                                 doc.getString("id"));
+                        frag.shoppingList = shoppingList;
+
                         for (Map.Entry<String, Long> itemEntry : shoppingList.getItems().entrySet()) {
                             db.collection("items")
                                     .document(itemEntry.getKey())
                                     .get()
                                     .addOnCompleteListener(itemTask -> {
                                         DocumentSnapshot itemDoc = itemTask.getResult();
-                                        list.add(
-                                              new ShopListItem(itemDoc.getString("name"),
-                                                      itemDoc.getString("brand"),
-                                                      itemDoc.getString("price"),
-                                                      itemEntry.getValue().toString(),
-                                                      itemDoc.getString("imageUrl"),
-                                                      itemDoc.getId())
-                                        );
-                                        Log.i("bruh", "bruh");
+                                        ShopListItem curItem =  new ShopListItem(itemDoc.getString("name"),
+                                                itemDoc.getString("brand"),
+                                                itemDoc.getString("price"),
+                                                itemEntry.getValue().toString(),
+                                                itemDoc.getString("imageUrl"),
+                                                itemDoc.getId());
+                                        list.add(curItem);
+
+                                        Log.i("bruh", "loaded " + itemDoc.getString("name"));
+
+                                        // update the adapter
+                                        ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), list);
+
+                                        frag.shopListItems.add(curItem);
+
+                                        frag.binding.listview.setAdapter(newAdapter);
+//                                        frag.requireActivity().runOnUiThread(() -> {frag.listAdapter.notifyDataSetChanged();});
                                     });
                         }
-                        // update the adapter
-                        ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), list);
-                        frag.shoppingList = shoppingList;
-                        frag.shopListItems = list;
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_SHORT).show());
+        }
 
-                        frag.listAdapter = newAdapter;
-                        frag.listAdapter.notifyDataSetChanged();
+        public void updateQty(String shoppingListId, String itemId, String userId, boolean plus) {
+            db.collection("shoppingLists")
+                    .document(shoppingListId)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        DocumentSnapshot doc = task.getResult();
+                        if (!Objects.equals(doc.getString("userId"), userId)) {
+                            Toast.makeText(context, "Insufficient rights", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                        frag.binding.listview.setAdapter(newAdapter);
+                        int delta = plus ? 1 : -1;
+                        long qty = ((HashMap<String,Long>)doc.get("itemIds")).get(itemId);
+                        qty += delta;
+                        Map<String, Object> updateVal = new HashMap<>();
+                        updateVal.put("itemIds."+itemId, qty);
+                        db.collection("shoppingLists")
+                                .document(shoppingListId)
+                                .update(updateVal);
+//                        Toast.makeText(context, "Updated quantity", Toast.LENGTH_SHORT).show();
                     })
                     .addOnFailureListener(e -> Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_SHORT).show());
         }

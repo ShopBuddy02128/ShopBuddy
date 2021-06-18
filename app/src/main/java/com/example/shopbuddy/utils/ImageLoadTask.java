@@ -31,10 +31,10 @@ public class ImageLoadTask extends AsyncTask<String, Void, Bitmap> {
             url = new URL(urlString);
         } catch (MalformedURLException e) {
             e.printStackTrace();
+            return null;
         }
 
         try {
-            assert url != null;
 
             Bitmap bmp = ImageCache.loadImage(urlString);
             if (bmp == null) {

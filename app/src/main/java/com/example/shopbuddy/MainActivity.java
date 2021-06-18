@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         ToastService.setmContext(getApplicationContext());
         NotificationService.setContext(getApplicationContext());
         AlarmService.setmContext(getApplicationContext());
-        AuthService.initializeFirebase();
+        AuthService.initializeFirebaseAuth();
 
         if(!AuthService.isLoggedIn()) {
             setContentView(R.layout.startscreen_activity);
