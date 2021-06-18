@@ -49,7 +49,7 @@ public class FoodWasteFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 main.foodWasteItemsFragment = new FoodWasteItemsFragment(fwfs.get(position));
-                main.changeToFragment(main.foodWasteItemsFragment);
+                main.changeToFragment(main.foodWasteItemsFragment, main.OFFERS_BUTTON);
             }
         });
 
