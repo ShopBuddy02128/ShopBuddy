@@ -1,52 +1,47 @@
-package com.example.shopbuddy.ui.offer;
+package com.example.shopbuddy.ui.foodwaste;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.FragmentFirstBinding;
-import com.example.shopbuddy.models.DiscountItem;
 import com.example.shopbuddy.models.FoodWasteFromStore;
-import com.example.shopbuddy.models.ShoppingList;
 import com.example.shopbuddy.models.Store;
-import com.example.shopbuddy.ui.navigation.NavigationActivity;
-import com.example.shopbuddy.ui.shoplist.ListsListAdapter;
-import com.example.shopbuddy.ui.shoplist.ShopListFragment;
-import com.example.shopbuddy.utils.DummyData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FoodWasteItemsAdapter extends BaseAdapter {
+public class FoodWasteStoreAdapter extends BaseAdapter {
 
     private FragmentFirstBinding binding;
     private LayoutInflater inflater;//We use it in different methods
-    private List<DiscountItem> itemList;
+    private List<FoodWasteFromStore> list;
+    private List<Store> storeList = new ArrayList<>();
 
     //initialize NoteListAdapter
-    public FoodWasteItemsAdapter(Activity activity, List<DiscountItem> items){
+    public FoodWasteStoreAdapter(Activity activity, List<FoodWasteFromStore> items){
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        itemList = items;
+        list = items;
+
+        for(FoodWasteFromStore fwfs : list){
+            storeList.add(fwfs.getStore());
+        }
+
     }
 
     @Override
     public int getCount() {
-        return itemList.size();
+        return storeList.size();
     }
 
     @Override
-    public DiscountItem getItem(int position) {
-        return itemList.get(position);
+    public FoodWasteFromStore getItem(int position) {
+        return list.get(position);
     }
 
     @Override
@@ -55,8 +50,14 @@ public class FoodWasteItemsAdapter extends BaseAdapter {
         return position;
     }
 
-    public void setData(List<DiscountItem> itemList){
-        this.itemList = itemList;
+    public void setData(List<FoodWasteFromStore> items){
+        list = items;
+        storeList = new ArrayList<>();
+
+        for(FoodWasteFromStore fwfs : list){
+            storeList.add(fwfs.getStore());
+        }
+
         notifyDataSetChanged();
     }
 
@@ -69,10 +70,10 @@ public class FoodWasteItemsAdapter extends BaseAdapter {
             vi = inflater.inflate(R.layout.offer_store_layout, parent, false); // create layout from raw_layout
 
         TextView title = (TextView) vi.findViewById(R.id.offer_store_title);
-        title.setText(getItem(position).getTitle());
+        title.setText(getItem(position).getStore().getName());
 
         TextView price = (TextView) vi.findViewById(R.id.offer_store_items);
-        price.setText("Nedsat pris: " + getItem(position).getPrice());
+        price.setText("Antal nedsatte varer: " + list.get(position).getItems().size());
 
         return vi;
     }
