@@ -2,6 +2,7 @@ package com.example.shopbuddy.services;
 
 import com.example.shopbuddy.ui.foodwaste.FoodWasteFragment;
 import com.example.shopbuddy.ui.map.ShopChosenActivity;
+import com.example.shopbuddy.ui.navigation.NavigationActivity;
 import com.example.shopbuddy.utils.JSONReader;
 
 import java.io.IOException;
@@ -14,9 +15,9 @@ import okhttp3.Response;
 public class DiscountFoodWasteService extends Thread{
     private final OkHttpClient client = new OkHttpClient();
     private String zipcode;
-    private FoodWasteFragment caller;
+    private NavigationActivity caller;
 
-    public DiscountFoodWasteService(FoodWasteFragment caller, String zipcode) throws Exception{
+    public DiscountFoodWasteService(NavigationActivity caller, String zipcode) throws Exception{
         this.zipcode = zipcode;
         this.caller = caller;
     }
@@ -37,7 +38,7 @@ public class DiscountFoodWasteService extends Thread{
 
             String resultString = response.body().string();
 
-            caller.finishRequest(JSONReader.getFoodWasteFromJson(resultString));
+            caller.setupFoodWasteFragment(JSONReader.getFoodWasteFromJson(resultString));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

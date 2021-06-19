@@ -5,12 +5,15 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
 import com.example.shopbuddy.MainActivity;
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.models.DiscountItem;
+import com.example.shopbuddy.ui.navigation.NavigationActivity;
+import com.example.shopbuddy.ui.notifications.NotificationsFragment;
 import com.example.shopbuddy.ui.startScreen.RegisterScreenActivity;
 
 import java.util.Calendar;
@@ -25,6 +28,8 @@ public abstract class AlarmService {
     private static int receivedCalls;
     private static int callsToReceive;
     private static HashMap<String, List<DiscountItem>> listOfItems;
+
+    private static NotificationsFragment notificationsFragment;
 
     public static void setmContext(Context mContext) {
         AlarmService.mContext = mContext;
@@ -102,7 +107,7 @@ public abstract class AlarmService {
     private static void createDiscountNotification(String message) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(mContext.getApplicationContext(), "notify_001");
-        Intent ii = new Intent(mContext.getApplicationContext(), RegisterScreenActivity.class);
+        Intent ii = new Intent(mContext.getApplicationContext(), NavigationActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, ii, 0);
 
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
@@ -118,5 +123,24 @@ public abstract class AlarmService {
         mBuilder.setStyle(bigText);
 
         NotificationService.showNotification(mBuilder);
+    }
+
+
+    public static NotificationsFragment getNotificationsFragment() {
+        return notificationsFragment;
+    }
+
+    public static void setNotificationsFragment(NotificationsFragment notificationsFragment) {
+        AlarmService.notificationsFragment = notificationsFragment;
+    }
+
+    public static void createDiscountAlarm() {
+        Intent intent = new Intent(mContext, AlarmReceiver.class);
+        AlarmService.createAlarm(intent);
+    }
+
+    public static void alarmDiscountRemove() {
+        Intent intent = new Intent(mContext, AlarmReceiver.class);
+        AlarmService.removeAlarm(intent);
     }
 }

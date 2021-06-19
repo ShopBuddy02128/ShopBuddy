@@ -23,6 +23,8 @@ import com.example.shopbuddy.MainActivity;
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.FragmentNotificationsBinding;
 import com.example.shopbuddy.models.AlarmItem;
+import com.example.shopbuddy.services.AuthService;
+import com.example.shopbuddy.services.FirestoreHandler;
 import com.example.shopbuddy.services.ToastService;
 import com.example.shopbuddy.ui.navigation.NavigationActivity;
 
@@ -93,18 +95,15 @@ public class NotificationsFragment extends Fragment {
         alarmAdapter.resetCheckedMap();
     }
 
-    @Override
-    public void onPause() {
-        parent.saveItems(alarmItemArrayList);
-        super.onPause();
+    public ArrayList<String> getItems() {
+        return this.alarmItemArrayList;
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Bundle b = new Bundle();
-        b.putStringArrayList("items", alarmItemArrayList);
-        outState.putBundle("itemsBundle", b);
+    public void onPause() {
+        parent.saveItems(alarmItemArrayList);
+        new FirestoreHandler().updateDiscountList(AuthService.getCurrentUserId(), alarmItemArrayList);
+        super.onPause();
     }
 
     @Override

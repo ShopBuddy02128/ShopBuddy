@@ -21,7 +21,7 @@ public abstract class NotificationService {
     }
 
     public static void showNotification(NotificationCompat.Builder mBuilder) {
-        /*
+        /* TEMPLATE
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(mContext.getApplicationContext(), "notify_001");
         Intent ii = new Intent(mContext.getApplicationContext(), RegisterScreenActivity.class);

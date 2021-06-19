@@ -56,7 +56,6 @@ public class FoodWasteFragment extends Fragment {
             e.printStackTrace();
         }
 
-
         return root;
     }
 
@@ -67,9 +66,6 @@ public class FoodWasteFragment extends Fragment {
     }
 
     public void finishRequest(ArrayList<FoodWasteFromStore> foodWasteDiscounts) {
-        for(FoodWasteFromStore f : foodWasteDiscounts) {
-            Log.i("DIN FAR", f.toString());
-        }
 
         fwfs = foodWasteDiscounts;
         //adapter.notifyDataSetChanged();

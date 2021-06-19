@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.example.shopbuddy.models.DiscountItem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,7 +17,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String[] items = new String[]{"havredrik", "øl", "banan", "køkkenrulle", "supermand"};
+        ArrayList<String> itemsList = AlarmService.getNotificationsFragment().getItems();
+        if(itemsList == null) return;
+        String[] items = itemsList.toArray(new String[0]);
+
         AlarmService.setReceivedCalls(0);
         AlarmService.setCallsToReceive(items.length);
         AlarmService.resetListOfItems();
