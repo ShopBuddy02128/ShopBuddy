@@ -17,6 +17,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.ActivityMainBinding;
 import com.example.shopbuddy.services.AlarmService;
+import com.example.shopbuddy.services.AuthService;
+import com.example.shopbuddy.services.FirestoreHandler;
 import com.example.shopbuddy.services.ToastService;
 import com.example.shopbuddy.ui.map.MapFragment;
 import com.example.shopbuddy.ui.notifications.NotificationsFragment;
@@ -86,6 +88,7 @@ public class NavigationActivity extends AppCompatActivity {
         notificationsFragment = new NotificationsFragment(this);
         AlarmService.setNotificationsFragment(notificationsFragment);
         AlarmService.createDiscountAlarm();
+        new FirestoreHandler().getDiscountAlarmList(AuthService.getCurrentUserId(), this);
 
         foodWasteFragment = new FoodWasteFragment(JSONReader.getFoodWasteFromJson(DummyData.jsonExample), mapFragment);
         foodWasteFragment.setNavigationActivity(this);
