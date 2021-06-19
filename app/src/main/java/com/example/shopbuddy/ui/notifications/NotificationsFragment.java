@@ -59,6 +59,8 @@ public class NotificationsFragment extends Fragment {
                 }
             }
         });
+
+
 /*
         binding.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
