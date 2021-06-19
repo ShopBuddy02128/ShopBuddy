@@ -8,6 +8,7 @@
         android:id="@+id/shop_adress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:text="shopAddress"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -17,12 +18,21 @@
     <TextView
         android:id="@+id/shop_opening"
         android:layout_width="match_parent"
+        android:gravity="center"
         android:layout_height="176dp"
         android:layout_below="@+id/shop_adress"
+        android:layout_centerHorizontal="true"
         android:text="shopDescription"
         android:textColor="@color/black"
         android:textSize="18sp" />
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView2"
+        android:name="com.example.shopbuddy.ui.map.SaleListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/shop_opening"
+        />
 
 
 </RelativeLayout>
