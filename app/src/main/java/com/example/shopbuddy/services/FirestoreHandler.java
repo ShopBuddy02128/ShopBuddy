@@ -139,4 +139,21 @@ public class FirestoreHandler {
                     })
                     .addOnFailureListener(e -> Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_SHORT).show());
         }
+
+        public String[] getUserDiscountList(String userId) {
+            db.collection("discountAlarmsForUsers")
+                    .document(userId)
+                    .get()
+                    .addOnSuccessListener(task -> {
+                        DocumentSnapshot doc = task.get;
+                        if (!Objects.equals(doc.getString("userId"), userId)) {
+                            Toast.makeText(context, "Insufficient rights", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                       ToastService.makeToast("Failed to retrieve list", Toast.LENGTH_SHORT);
+                    });
+            return null;
+        }
 }

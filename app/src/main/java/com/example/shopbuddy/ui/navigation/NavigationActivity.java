@@ -62,11 +62,6 @@ public class NavigationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         //Classic
         super.onCreate(savedInstanceState);
-        if(savedInstanceState == null) {
-            ToastService.makeToast("FAILED", Toast.LENGTH_SHORT);
-        } else {
-            ToastService.makeToast("TRUE", Toast.LENGTH_SHORT);
-        }
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
