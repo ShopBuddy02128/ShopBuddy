@@ -64,14 +64,6 @@ public class FoodWasteFragment extends Fragment {
             }
         });
 
-
-        String zipcode = mapFragment.getZipcode();
-        try {
-            new DiscountFoodWasteService(this, zipcode).start();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-
         return root;
     }
 
@@ -84,9 +76,5 @@ public class FoodWasteFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    public void finishRequest(ArrayList<FoodWasteFromStore> foodWasteDiscounts) {
-        ArrayList<FoodWasteFromStore> foodWaste = foodWasteDiscounts;
     }
 }
