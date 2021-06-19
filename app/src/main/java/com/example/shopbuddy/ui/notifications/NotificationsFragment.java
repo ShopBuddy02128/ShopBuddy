@@ -72,7 +72,25 @@ public class NotificationsFragment extends Fragment {
             }
         });
 
+        binding.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeSelectedFromList();
+            }
+        });
+
         return root;
+    }
+
+    public void removeSelectedFromList() {
+        for(int i = alarmItemArrayList.size() - 1; i >= 0 ; i--) {
+            String s = alarmAdapter.getItem(i);
+            if (alarmAdapter.isChecked(i)) {
+                alarmItemArrayList.remove(i);
+            }
+        }
+        alarmAdapter.notifyDataSetChanged();
+        alarmAdapter.resetCheckedMap();
     }
 
     @Override

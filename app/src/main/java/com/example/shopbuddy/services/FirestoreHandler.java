@@ -140,7 +140,7 @@ public class FirestoreHandler {
                     .addOnFailureListener(e -> Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_SHORT).show());
         }
 
-        public String[] getUserDiscountList(String userId) {
+        /*public String[] getUserDiscountList(String userId) {
             db.collection("discountAlarmsForUsers")
                     .document(userId)
                     .get()
@@ -155,5 +155,5 @@ public class FirestoreHandler {
                        ToastService.makeToast("Failed to retrieve list", Toast.LENGTH_SHORT);
                     });
             return null;
-        }
+        } */
 }
