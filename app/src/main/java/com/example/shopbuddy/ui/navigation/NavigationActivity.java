@@ -103,13 +103,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
         AlarmService.createDiscountAlarm();
         new FirestoreHandler().getDiscountAlarmList(AuthService.getCurrentUserId(), this);
 
-<<<<<<< HEAD
         foodWasteFragment = new FoodWasteFragment(mapFragment);
-=======
-        // Setup Dummy Foodwaste fragment
-        ArrayList<FoodWasteFromStore> fwfs = JSONReader.getFoodWasteFromJson(DummyData.jsonExample);
-        foodWasteFragment = new FoodWasteFragment(fwfs, mapFragment);
->>>>>>> 163b70675f120455bb113dce740503156902bb0b
         foodWasteFragment.setNavigationActivity(this);
 
         LocationManager locationManager = (LocationManager) getSystemService(getApplicationContext().LOCATION_SERVICE);
@@ -253,7 +247,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
     }
 
     public void setupFoodWasteFragment(ArrayList<FoodWasteFromStore> fwfs) {
-        foodWasteFragment = new FoodWasteFragment(fwfs, mapFragment);
+        foodWasteFragment = new FoodWasteFragment(mapFragment);
         foodWasteFragment.setNavigationActivity(this);
     }
 
