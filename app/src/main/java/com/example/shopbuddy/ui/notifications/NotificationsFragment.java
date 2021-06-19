@@ -93,18 +93,14 @@ public class NotificationsFragment extends Fragment {
         alarmAdapter.resetCheckedMap();
     }
 
+    public ArrayList<String> getItems() {
+        return this.alarmItemArrayList;
+    }
+
     @Override
     public void onPause() {
         parent.saveItems(alarmItemArrayList);
         super.onPause();
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Bundle b = new Bundle();
-        b.putStringArrayList("items", alarmItemArrayList);
-        outState.putBundle("itemsBundle", b);
     }
 
     @Override
