@@ -158,9 +158,6 @@ public class FirestoreHandler {
     }
 
     public void updateDiscountList(String userId, ArrayList<String> itemsList) {
-        if (itemsList == null) return;
-        String[] items = itemsList.toArray(new String[0]);
-
         Map<String, Object> itemsMap = new HashMap<>();
         itemsMap.put("items", itemsList);
 
