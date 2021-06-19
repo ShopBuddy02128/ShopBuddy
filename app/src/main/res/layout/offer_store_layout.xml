@@ -5,21 +5,30 @@
     android:orientation="horizontal"
     android:padding="6pt">
 
-    <TextView
-        android:id="@+id/offer_store_title"
-        android:layout_height="match_parent"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:textColor="@color/black"
-        android:layout_weight="1"
-        android:text="Name of Store"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/offer_store_items"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:textAlignment="textEnd"
-        android:textColor="@color/black"
-        android:text="Number of offers"/>
+        <TextView
+            android:id="@+id/offer_store_title"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:textColor="@color/black"
+            android:textSize="6pt"
+            android:layout_weight="1"
+            android:text="Name of Store"/>
+
+        <TextView
+            android:id="@+id/offer_store_items"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:textAlignment="textEnd"
+            android:textSize="6pt"
+            android:textColor="@color/black"
+            android:text="Number of offers"/>
+
+    </LinearLayout>
 
 </LinearLayout>

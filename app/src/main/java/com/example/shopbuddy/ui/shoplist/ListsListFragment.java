@@ -18,6 +18,7 @@ import com.example.shopbuddy.ui.navigation.NavigationActivity;
 import com.example.shopbuddy.utils.DummyData;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ListsListFragment extends Fragment {
 
@@ -50,19 +51,19 @@ public class ListsListFragment extends Fragment {
         for(int i=0; i<names.length; i++){
             ShoppingList current = new ShoppingList(names[i]);
             for(int k=0; k<names.length; k++) {
-                current.addItem("xJ7eYN13B3MBz22AWOO0"); // tilføjer kun lasagneplader
+                current.addItem("xJ7eYN13B3MBz22AWOO0", 1L); // tilføjer kun lasagneplader
             }
             lists.add(current);
         }
 
-        ListsListAdapter adapter = new ListsListAdapter(getActivity(), lists);
+        ListsListAdapter adapter = new ListsListAdapter(requireActivity(), lists);
         list.setAdapter(adapter);
         list.setClickable(true);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //shopListFragment.setData(lists.get(position));
-                main.changeToFragment(main.shopListFragment);
+                main.changeToFragment(main.shopListFragment, main.SHOPLIST_BUTTON);
             }
         });
 

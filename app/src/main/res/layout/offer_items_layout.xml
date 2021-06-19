@@ -4,13 +4,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textSize="10pt"
+        android:textColor="@color/black"
+        android:padding="6pt"
+        android:id="@+id/offers_items_title"
+        android:text="Anti-Food-Waste"/>
+
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:textSize="6pt"
         android:textColor="@color/black"
-        android:padding="6pt"
-        android:id="@+id/offers_items_title_id"
+        android:paddingLeft="6pt"
+        android:paddingRight="6pt"
+        android:id="@+id/offers_items_title_description"
         android:text="Her er tilbuddene: "/>
 
     <ListView

@@ -22,11 +22,12 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ListAdapter extends ArrayAdapter<ShopListItem> {
-
     private static final String TAG = "ListAdapter";
+    ArrayList<ShopListItem> shopListItems;
 
     public ListAdapter(@NonNull Context context, @NonNull ArrayList<ShopListItem> shopListItems) {
         super(context, R.layout.list_item, shopListItems);
+        this.shopListItems = shopListItems;
     }
 
     @NonNull
@@ -44,13 +45,13 @@ public class ListAdapter extends ArrayAdapter<ShopListItem> {
         TextView qty= convertView.findViewById(R.id.item_qty);
 
         ImageLoadTask task = new ImageLoadTask((CircleImageView) imageView);
-        Log.i(TAG, position + "Url = " + shopListItem.imageUrl);
         task.execute(shopListItem.imageUrl);
 
+        Log.e(TAG, shopListItem.itemId);
         name.setText(TextFormatter.toNameFormat(shopListItem.name));
         brand.setText(TextFormatter.toNameFormat(shopListItem.brand));
         price.setText(shopListItem.price);
-        qty.setText(shopListItem.qty);
+        qty.setText(shopListItems.get(position).qty);
 
         return convertView;
     }

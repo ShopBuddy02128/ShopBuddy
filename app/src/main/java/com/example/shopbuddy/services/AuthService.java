@@ -5,7 +5,14 @@ import com.google.firebase.auth.FirebaseAuth;
 public abstract class AuthService {
     private static FirebaseAuth mAuth;
 
-    public static void initializeFirebase() {
+    public static String getCurrentUserId() {
+        if (isLoggedIn())
+            return mAuth.getUid();
+        else
+            return "OOvklbbUonTliRCOsZRO3EPnBN53";
+    }
+
+    public static void initializeFirebaseAuth() {
         mAuth = FirebaseAuth.getInstance();
     }
 

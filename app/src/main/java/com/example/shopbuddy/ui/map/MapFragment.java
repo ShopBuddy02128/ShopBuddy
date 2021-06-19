@@ -6,6 +6,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 
 
@@ -72,6 +74,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import static android.content.ContentValues.TAG;
 
@@ -86,8 +89,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     String[] shopNames = {"Vælg forretning","Netto", "Føtex", "Bilka"};
 
     private LatLng userLatLng;
-    double latitude;
-    double longitude;
+    private double latitude;
+    private double longitude;
+    private String zipcode;
 
     private int PROXIMITY_RADIUS = 5000;
     private final static int LOCATION_PERMISSION = 1;
@@ -102,9 +106,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         super.onCreate(savedInstanceState);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.getContext());
         checkPermission(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_PERMISSION);
-
-
-
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -179,6 +180,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                     latitude = userLatLng.latitude;
                     longitude = userLatLng.longitude;
+
+                    List<Address> addresses = new Geocoder(getContext(), Locale.getDefault()).getFromLocation(latitude, longitude, 1);
+                    zipcode = addresses.get(0).getPostalCode();
+
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
                 }catch(Exception e){
                     e.printStackTrace();
@@ -325,6 +330,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         intent.putExtra("ShopId", String.valueOf(marker.getTag()));
         startActivity(intent);
 
+    }
+
+    public String getZipcode() {
+        return zipcode;
     }
 }
 

@@ -5,6 +5,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 
 import com.example.shopbuddy.models.ShopListItem;
+import com.example.shopbuddy.services.FirestoreHandler;
 
 import java.util.ArrayList;
 
