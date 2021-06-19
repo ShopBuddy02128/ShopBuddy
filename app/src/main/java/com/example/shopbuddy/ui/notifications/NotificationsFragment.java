@@ -11,8 +11,10 @@ import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,6 +23,10 @@ import com.example.shopbuddy.MainActivity;
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.FragmentNotificationsBinding;
 import com.example.shopbuddy.models.AlarmItem;
+import com.example.shopbuddy.services.ToastService;
+import com.example.shopbuddy.ui.navigation.NavigationActivity;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,17 +39,24 @@ public class NotificationsFragment extends Fragment {
     private ArrayList<String> alarmItemArrayList;
     private AlarmAdapter alarmAdapter;
 
+    private NavigationActivity parent;
+    public NotificationsFragment(NavigationActivity parent) {
+        this.parent = parent;
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
         notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
 
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        alarmItemArrayList = new ArrayList<>();
-        alarmItemArrayList.add("Havredrik");
+        alarmItemArrayList = parent.getItems();
+
         alarmAdapter = new AlarmAdapter(requireActivity(),alarmItemArrayList);
+
         binding.mainAlarmList.setAdapter(alarmAdapter);
 
         EditText editText = (EditText) root.findViewById(R.id.new_alarm);
@@ -60,6 +73,20 @@ public class NotificationsFragment extends Fragment {
         });
 
         return root;
+    }
+
+    @Override
+    public void onPause() {
+        parent.saveItems(alarmItemArrayList);
+        super.onPause();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Bundle b = new Bundle();
+        b.putStringArrayList("items", alarmItemArrayList);
+        outState.putBundle("itemsBundle", b);
     }
 
     @Override

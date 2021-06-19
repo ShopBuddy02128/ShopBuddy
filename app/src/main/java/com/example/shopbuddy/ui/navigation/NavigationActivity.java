@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -14,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.ActivityMainBinding;
+import com.example.shopbuddy.services.ToastService;
 import com.example.shopbuddy.ui.map.MapFragment;
 import com.example.shopbuddy.ui.notifications.NotificationsFragment;
 import com.example.shopbuddy.ui.foodwaste.FoodWasteFragment;
@@ -24,6 +27,9 @@ import com.example.shopbuddy.utils.CustomBackStack;
 import com.example.shopbuddy.utils.DummyData;
 import com.example.shopbuddy.utils.JSONReader;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -56,6 +62,12 @@ public class NavigationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         //Classic
         super.onCreate(savedInstanceState);
+        if(savedInstanceState == null) {
+            ToastService.makeToast("FAILED", Toast.LENGTH_SHORT);
+        } else {
+            ToastService.makeToast("TRUE", Toast.LENGTH_SHORT);
+        }
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -75,7 +87,7 @@ public class NavigationActivity extends AppCompatActivity {
 
         mapFragment = new MapFragment();
 
-        notificationsFragment = new NotificationsFragment();
+        notificationsFragment = new NotificationsFragment(this);
 
         foodWasteFragment = new FoodWasteFragment(JSONReader.getFoodWasteFromJson(DummyData.jsonExample), mapFragment);
         foodWasteFragment.setNavigationActivity(this);
@@ -83,6 +95,8 @@ public class NavigationActivity extends AppCompatActivity {
 
         //Start by going to first fragment
         changePage(MAP_BUTTON);
+
+        discountAlarmItems.add("Havredrik");
     }
 
 
@@ -215,4 +229,13 @@ public class NavigationActivity extends AppCompatActivity {
 
     }
 
+
+    ArrayList<String> discountAlarmItems = new ArrayList<String>();
+    public void saveItems(ArrayList<String> items) {
+        this.discountAlarmItems = items;
+    }
+
+    public ArrayList<String> getItems() {
+        return this.discountAlarmItems;
+    }
 }
