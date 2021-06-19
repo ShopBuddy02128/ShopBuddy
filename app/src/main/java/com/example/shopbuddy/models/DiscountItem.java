@@ -83,4 +83,8 @@ public class DiscountItem {
         int result = current.compareTo(validTo);
         return result > 0? false : true;
     }
+
+    public String toString(){
+        return this.title;
+    }
 }

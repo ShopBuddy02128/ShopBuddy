@@ -30,7 +30,7 @@ public class FoodWasteFromStore {
         String string = "";
 
         for(DiscountItem item : items){
-            string += item.getValidTo().toString();
+            string += item.toString();
         }
 
         return string;

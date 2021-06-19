@@ -20,23 +20,17 @@ public class FoodWasteStoreAdapter extends BaseAdapter {
 
     private FragmentFirstBinding binding;
     private LayoutInflater inflater;//We use it in different methods
-    private List<FoodWasteFromStore> list;
-    private List<Store> storeList = new ArrayList<>();
+    private ArrayList<FoodWasteFromStore> list;
 
     //initialize NoteListAdapter
-    public FoodWasteStoreAdapter(Activity activity, List<FoodWasteFromStore> items){
+    public FoodWasteStoreAdapter(Activity activity, ArrayList<FoodWasteFromStore> items){
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         list = items;
-
-        for(FoodWasteFromStore fwfs : list){
-            storeList.add(fwfs.getStore());
-        }
-
     }
 
     @Override
     public int getCount() {
-        return storeList.size();
+        return list.size();
     }
 
     @Override
@@ -48,17 +42,6 @@ public class FoodWasteStoreAdapter extends BaseAdapter {
     public long getItemId(int position) {
 
         return position;
-    }
-
-    public void setData(List<FoodWasteFromStore> items){
-        list = items;
-        storeList = new ArrayList<>();
-
-        for(FoodWasteFromStore fwfs : list){
-            storeList.add(fwfs.getStore());
-        }
-
-        notifyDataSetChanged();
     }
 
     @Override
@@ -73,7 +56,7 @@ public class FoodWasteStoreAdapter extends BaseAdapter {
         title.setText(getItem(position).getStore().getName());
 
         TextView price = (TextView) vi.findViewById(R.id.offer_store_items);
-        price.setText("Antal nedsatte varer: " + list.get(position).getItems().size());
+        price.setText("Antal nedsatte varer: " + getItem(position).getItems().size());
 
         return vi;
     }
