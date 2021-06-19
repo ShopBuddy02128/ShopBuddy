@@ -21,7 +21,6 @@ public class ListsListAdapter extends BaseAdapter {
     public ListsListAdapter(Activity activity, List<ShoppingList> items){
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         listsList = items;
-
     }
 
     @Override

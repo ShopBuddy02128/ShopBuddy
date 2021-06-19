@@ -55,6 +55,4 @@ public abstract class NotificationService {
 
         mNotificationManager.notify(0, mBuilder.build());
     }
-
-
 }
