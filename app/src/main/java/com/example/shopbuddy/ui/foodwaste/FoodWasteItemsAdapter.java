@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.FragmentFirstBinding;
 import com.example.shopbuddy.models.DiscountItem;
+import com.example.shopbuddy.models.ShopListItem;
 
 import java.util.List;
 
@@ -18,10 +19,10 @@ public class FoodWasteItemsAdapter extends BaseAdapter {
 
     private FragmentFirstBinding binding;
     private LayoutInflater inflater;//We use it in different methods
-    private List<DiscountItem> itemList;
+    private List<ShopListItem> itemList;
 
     //initialize NoteListAdapter
-    public FoodWasteItemsAdapter(Activity activity, List<DiscountItem> items){
+    public FoodWasteItemsAdapter(Activity activity, List<ShopListItem> items){
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         itemList = items;
     }
@@ -32,7 +33,7 @@ public class FoodWasteItemsAdapter extends BaseAdapter {
     }
 
     @Override
-    public DiscountItem getItem(int position) {
+    public ShopListItem getItem(int position) {
         return itemList.get(position);
     }
 
@@ -42,7 +43,7 @@ public class FoodWasteItemsAdapter extends BaseAdapter {
         return position;
     }
 
-    public void setData(List<DiscountItem> itemList){
+    public void setData(List<ShopListItem> itemList){
         this.itemList = itemList;
         notifyDataSetChanged();
     }
@@ -56,10 +57,10 @@ public class FoodWasteItemsAdapter extends BaseAdapter {
             vi = inflater.inflate(R.layout.offer_store_layout, parent, false); // create layout from raw_layout
 
         TextView title = (TextView) vi.findViewById(R.id.offer_store_title);
-        title.setText(getItem(position).getTitle());
+        title.setText(getItem(position).name);
 
         TextView price = (TextView) vi.findViewById(R.id.offer_store_items);
-        price.setText("Nedsat pris: " + getItem(position).getPrice());
+        price.setText("Nedsat pris: " + getItem(position).price);
 
         return vi;
     }

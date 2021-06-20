@@ -73,6 +73,7 @@ public class FoodWasteFragment extends Fragment {
         }
 
         fwfs = all;
+        Log.i("DINFAR", fwfs.toString());
         //adapter.notifyDataSetChanged();
 
         listView = binding.listOfOffers;

@@ -1,6 +1,9 @@
 package com.example.shopbuddy.utils;
+import android.util.Log;
+
 import com.example.shopbuddy.models.DiscountItem;
 import com.example.shopbuddy.models.FoodWasteFromStore;
+import com.example.shopbuddy.models.ShopListItem;
 import com.example.shopbuddy.models.Store;
 
 import org.json.*;
@@ -45,7 +48,7 @@ public class JSONReader {
 
                 //Add every item to the list
                 for(JSONObject offerItem : offerItems){
-                    DiscountItem item = getDiscountItemFromClearance(offerItem, store);
+                    ShopListItem item = getItemFromClearance(offerItem, store);
                     cl.addItem(item);
                 }
 
@@ -89,34 +92,33 @@ public class JSONReader {
     }
 
     //Getting an item from Anti Food Waste API
-    private static DiscountItem getDiscountItemFromClearance(JSONObject offerItem, Store store) {
+    private static ShopListItem getItemFromClearance(JSONObject offerItem, Store store) {
         try{
             //Separate offer from item
             JSONObject offer = offerItem.getJSONObject("offer");
             JSONObject item = offerItem.getJSONObject("product");
 
             //Get new and old price
-            double newPrice = offer.getDouble("newPrice");
-            double oldPrice = offer.getDouble("originalPrice");
+            String newPrice = offer.getDouble("newPrice") + "";
+            String oldPrice = offer.getDouble("originalPrice") + "";
+
+            //Get quantity in stock
+            String qty = offer.getDouble("stock") + "";
 
             //Get dates
             String eDate = offer.getString("endTime");
+            Log.i("DINFAR", eDate);
             String sDate = offer.getString("startTime");
-            Date enddate = null;
-            Date startdate = null;
-            try {
-                enddate = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss").parse(eDate);
-                startdate = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss").parse(sDate);
 
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            //Get name of item
+            //Get name and id of item
             String name = item.getString("description");
+            String ean = item.getString("ean");
 
-            DiscountItem dItem = new DiscountItem(name, store, newPrice, oldPrice, startdate, enddate);
-            return dItem;
+            //Get imageUrl
+            String imageUrl = item.getString("image");
+
+            ShopListItem sItem = new ShopListItem(name, "", newPrice, "1", imageUrl, ean, oldPrice, eDate);
+            return sItem;
 
         }catch(JSONException e){
             e.printStackTrace();

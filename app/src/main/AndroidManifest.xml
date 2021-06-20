@@ -43,6 +43,7 @@
         <activity android:name=".ui.startScreen.RegisterScreenActivity" />
         <activity android:name=".ui.navigation.NavigationActivity" />
 
+        <activity android:name=".ui.foodwaste.DiscountItemActivity" />
         <activity android:name=".ui.shoplist.ItemActivity" />
         <activity android:name=".ui.map.ShopChosenActivity"/>
 

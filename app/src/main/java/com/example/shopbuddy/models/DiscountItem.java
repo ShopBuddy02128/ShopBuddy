@@ -22,12 +22,7 @@ public class DiscountItem {
         this.price = price;
         this.oldPrice = oldPrice;
 
-        SimpleDateFormat format = new SimpleDateFormat(
-                "yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-        format.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-        this.validFrom = format.parse(dateFrom);
-        this.validTo = format.parse(dateTo);
 
     }
 
@@ -52,6 +47,8 @@ public class DiscountItem {
     public String getTitle() {
         return title;
     }
+
+    public double getOldPrice(){ return oldPrice; }
 
     public void setTitle(String title) {
         this.title = title;
