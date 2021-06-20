@@ -1,9 +1,7 @@
 package com.example.shopbuddy.ui.foodwaste;
 
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,29 +13,26 @@ import androidx.fragment.app.Fragment;
 
 import com.example.shopbuddy.databinding.FragmentFoodWasteLayoutBinding;
 import com.example.shopbuddy.models.FoodWasteFromStore;
-import com.example.shopbuddy.services.DiscountFoodWasteService;
+import com.example.shopbuddy.services.FoodWasteFetcher;
 import com.example.shopbuddy.ui.map.MapFragment;
 import com.example.shopbuddy.ui.navigation.NavigationActivity;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.shopbuddy.utils.DummyData;
+import com.example.shopbuddy.utils.JSONReader;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 public class FoodWasteFragment extends Fragment {
 
     private FragmentFoodWasteLayoutBinding binding;
 
     private ListView listView;
-    private ArrayList<FoodWasteFromStore> fwfs = new ArrayList<>();
+    private ArrayList<FoodWasteFromStore> fwfs = JSONReader.getFoodWasteFromJson(DummyData.jsonExample);
 
     private FoodWasteStoreAdapter adapter;
     private NavigationActivity main;
     private MapFragment mapFragment;
 
-    public FoodWasteFragment(ArrayList<FoodWasteFromStore> fwfs, MapFragment mapFragment){
+    public FoodWasteFragment(MapFragment mapFragment){
         this.fwfs = fwfs;
         this.mapFragment = mapFragment;
     }
@@ -52,32 +47,16 @@ public class FoodWasteFragment extends Fragment {
         binding = FragmentFoodWasteLayoutBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        listView = binding.listOfOffers;
-        adapter = new FoodWasteStoreAdapter(getActivity(), fwfs);
-
-        listView.setAdapter(adapter);
-        listView.setClickable(true);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                main.changeToFragment(new FoodWasteItemsFragment(fwfs.get(position)), main.OFFERS_BUTTON);
-            }
-        });
-
-
-        String zipcode = mapFragment.getZipcode();
+        String zipCode = mapFragment.getZipcode();
         try {
-            new DiscountFoodWasteService(this, zipcode).start();
+            FoodWasteFetcher dataFetcher = new FoodWasteFetcher(this, zipCode);
+
+            dataFetcher.getData(data -> finishRequest(data));
         } catch(Exception e) {
             e.printStackTrace();
         }
 
         return root;
-    }
-
-    public void setData(ArrayList<FoodWasteFromStore> items){
-        fwfs = items;
-        adapter.setData(items);
     }
 
     @Override
@@ -87,6 +66,26 @@ public class FoodWasteFragment extends Fragment {
     }
 
     public void finishRequest(ArrayList<FoodWasteFromStore> foodWasteDiscounts) {
-        ArrayList<FoodWasteFromStore> foodWaste = foodWasteDiscounts;
+
+        fwfs = foodWasteDiscounts;
+        //adapter.notifyDataSetChanged();
+
+        listView = binding.listOfOffers;
+        Log.i("DIN FAR", getActivity().toString());
+        adapter = new FoodWasteStoreAdapter(getActivity(), fwfs);
+
+
+        listView.setAdapter(adapter);
+        listView.setClickable(true);
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                main.changeToFragment(new FoodWasteItemsFragment(fwfs.get(position)), main.OFFERS_BUTTON);
+            }
+        });
+
+
     }
 }

@@ -119,23 +119,4 @@ public class MainActivity extends AppCompatActivity {
 
         mNotificationManager.notify(0, mBuilder.build());
     }
-
-    public void alarmCreator() {
-        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
-        if(AlarmService.alarmExists(intent)) {
-            ToastService.makeToast("Alarm Exists", Toast.LENGTH_SHORT);
-        } else {
-            ToastService.makeToast("Alarm Doesnt exist", Toast.LENGTH_SHORT);
-        }
-    }
-
-    public void createAlarm() {
-        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
-        AlarmService.createAlarm(intent);
-    }
-
-    public void alarmRemove() {
-        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
-        AlarmService.removeAlarm(intent);
-    }
 }

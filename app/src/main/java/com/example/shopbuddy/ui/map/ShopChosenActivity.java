@@ -52,7 +52,6 @@ public class ShopChosenActivity extends AppCompatActivity{
         binding.shopOpening.setText(shopOpeningHours);
 
 
-
     }
 
 

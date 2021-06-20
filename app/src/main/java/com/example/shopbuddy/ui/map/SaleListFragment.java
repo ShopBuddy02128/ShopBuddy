@@ -45,6 +45,7 @@ public class SaleListFragment extends Fragment {
     public void onAttach(@NonNull @NotNull Context context) {
         super.onAttach(context);
         mActivityContext = (AppCompatActivity) context;
+
     }
 
     @Override
@@ -89,7 +90,6 @@ public class SaleListFragment extends Fragment {
         View root = binding.getRoot();
 
         //Get items from activity
-
 
 
         ArrayList<ShopListItem> shopListItemArrayList = new ArrayList<>();

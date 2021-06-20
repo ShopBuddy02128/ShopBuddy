@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.example.shopbuddy.models.ShopListItem;
 import com.example.shopbuddy.models.ShoppingList;
+import com.example.shopbuddy.ui.navigation.NavigationActivity;
 import com.example.shopbuddy.ui.shoplist.AutocompleteAdapter;
 import com.example.shopbuddy.ui.shoplist.ListAdapter;
 import com.example.shopbuddy.ui.shoplist.ShopListFragment;
@@ -139,4 +140,29 @@ public class FirestoreHandler {
                     })
                     .addOnFailureListener(e -> Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_SHORT).show());
         }
+
+    public void getDiscountAlarmList(String userId, NavigationActivity navAct) {
+        db.collection("discountAlarmsForUsers")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        DocumentSnapshot doc = task.getResult();
+                        ArrayList<String> items = (ArrayList<String>) doc.get("items");
+                        navAct.saveItems(items);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    ToastService.makeToast("Failed to get discounts", Toast.LENGTH_SHORT);
+                });
+    }
+
+    public void updateDiscountList(String userId, ArrayList<String> itemsList) {
+        Map<String, Object> itemsMap = new HashMap<>();
+        itemsMap.put("items", itemsList);
+
+        db.collection("discountAlarmsForUsers")
+                .document(userId)
+                .update(itemsMap);
+    }
 }

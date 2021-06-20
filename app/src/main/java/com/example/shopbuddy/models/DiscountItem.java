@@ -87,6 +87,11 @@ public class DiscountItem {
         return result > 0 ? false : true;
     }
 
+
+    public String toString(){
+        return this.title;
+    }
+
 }
 
 
