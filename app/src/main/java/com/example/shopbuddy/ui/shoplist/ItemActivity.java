@@ -60,14 +60,18 @@ public class ItemActivity extends AppCompatActivity {
         binding.itemQtyPlus.setOnClickListener(l -> {
             Log.i(TAG, "itemQtyPlus pressed");
             qty++;
-            dbHandler.updateQty(shoppingListId, itemId, userId, true);
+            boolean plus = true;
+            dbHandler.updateQty(shoppingListId, itemId, userId, plus);
+            dbHandler.updateShoppingListPrice(shoppingListId, Double.parseDouble(i.getStringExtra("price")), plus);
             binding.itemviewQty.setText(qty.toString());
         });
 
         binding.itemQtyMinus.setOnClickListener(l -> {
             Log.i(TAG, "itemQtyMinus pressed");
             qty--;
-            dbHandler.updateQty(shoppingListId, itemId, userId, false);
+            boolean plus = false;
+            dbHandler.updateQty(shoppingListId, itemId, userId, plus);
+            dbHandler.updateShoppingListPrice(shoppingListId, Double.parseDouble(i.getStringExtra("price")), plus);
             binding.itemviewQty.setText(qty.toString());
         });
     }

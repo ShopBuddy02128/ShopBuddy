@@ -1,7 +1,6 @@
 package com.example.shopbuddy.services;
 
 import android.content.Context;
-import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -14,10 +13,10 @@ import com.example.shopbuddy.ui.shoplist.ShopListFragment;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -38,6 +37,45 @@ public class FirestoreHandler {
 
     public void initFirebaseConn() {
         db = FirebaseFirestore.getInstance();
+    }
+
+    public void addItemToShoppingList(String itemId, String shoppingListId, int orderNo) {
+        Map<String, Object> updateVal = new HashMap<>();
+        updateVal.put("itemIds."+itemId, 1);
+        updateVal.put("itemOrder."+itemId, orderNo);
+        db.collection("shoppingLists")
+                .document(shoppingListId)
+                .update(updateVal)
+                .addOnSuccessListener(t -> {
+                    // update listview
+                    getShoppingListContents(shoppingListId);
+                });
+    }
+
+    public void updateShoppingListPrice(String shoppingListId, double itemPrice, boolean plus) {
+        db.collection("shoppingLists")
+                .document(shoppingListId)
+                .get()
+                .addOnSuccessListener(t -> {
+                    double price = t.getDouble("price");
+                    if (plus)
+                        price += itemPrice;
+                    else
+                        price -= itemPrice;
+                    Map<String, Object> updateVal = new HashMap<>();
+                    updateVal.put("price", price);
+
+                    double finalPrice = price;
+                    db.collection("shoppingLists")
+                            .document(shoppingListId)
+                            .update(updateVal)
+                            .addOnSuccessListener(unused -> {
+                                // update listview
+                                getShoppingListContents(shoppingListId);
+                                // update shopping list price
+                                ShopListFragment.shoppingListPrice = finalPrice;
+                            });
+                });
     }
 
     // firestore on its own does not offer the greatest querying - this only looks for prefixes
@@ -66,12 +104,15 @@ public class FirestoreHandler {
                         AutocompleteAdapter newAdapter = new AutocompleteAdapter(frag.requireActivity(), list);
 
                         frag.ac.setAdapter(newAdapter);
+                        frag.acAdapter = newAdapter;
                     }
                 })
                 .addOnFailureListener(e -> Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     public void getShoppingListContents(String shoppingListId) {
+        if (frag == null)
+            return;
         if (frag.binding == null)
             return;
 
@@ -108,18 +149,22 @@ public class FirestoreHandler {
 
                                         Log.i("bruh", "loaded " + itemDoc.getString("name"));
 
+                                        // sort by orderNo
                                         Collections.sort(list);
+
+                                        // update shopping list price
+                                        double shoppingListPrice = doc.getDouble("price");
+                                        ShopListFragment.shoppingListPrice = shoppingListPrice;
+                                        frag.binding.totalPrice.setText("Total: " + new DecimalFormat("#.##").format(shoppingListPrice));
 
                                         // update the adapter
                                         ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), list);
-
                                         frag.shopListItems = list;
-
                                         frag.binding.listview.setAdapter(newAdapter);
                                     });
                         }
                     })
-                    .addOnFailureListener(e -> Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_SHORT).show());
+                    .addOnFailureListener(e -> ToastService.makeToast("" + e.getMessage(), Toast.LENGTH_SHORT));
         }
 
 //    public ArrayList<ShopListItem> sortByShoppingListOrder(ArrayList<ShopListItem> items, ShoppingList shoppingList) {
@@ -145,6 +190,8 @@ public class FirestoreHandler {
                         db.collection("shoppingLists")
                                 .document(shoppingListId)
                                 .update(updateVal);
+                        // TODO Toast message does not currently work:
+                          ToastService.makeToast("Updated quantity", Toast.LENGTH_SHORT);
 //                        Toast.makeText(context, "Updated quantity", Toast.LENGTH_SHORT).show();
                     })
                     .addOnFailureListener(e -> Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_SHORT).show());

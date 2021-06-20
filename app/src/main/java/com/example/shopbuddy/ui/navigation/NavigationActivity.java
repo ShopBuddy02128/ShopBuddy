@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -122,7 +123,11 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
 
         notificationsFragment = new NotificationsFragment(this);
         AlarmService.setNotificationsFragment(notificationsFragment);
-        AlarmService.createDiscountAlarm();
+        try {
+            AlarmService.createDiscountAlarm();
+        } catch (Exception e) {
+            Log.e("Error",e.getMessage());
+        }
         new FirestoreHandler().getDiscountAlarmList(AuthService.getCurrentUserId(), this);
 
         foodWasteFragment = new FoodWasteFragment(mapFragment);

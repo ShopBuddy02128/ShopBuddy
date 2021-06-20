@@ -1,7 +1,6 @@
 package com.example.shopbuddy.ui.shoplist;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,19 +12,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.shopbuddy.MainActivity;
 import com.example.shopbuddy.databinding.FragmentShoplistBinding;
 import com.example.shopbuddy.models.ShoppingList;
 import com.example.shopbuddy.services.AuthService;
 import com.example.shopbuddy.services.FirestoreHandler;
 import com.example.shopbuddy.models.ShopListItem;
 
-import org.jetbrains.annotations.NotNull;
-
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ShopListFragment extends Fragment {
@@ -42,13 +38,14 @@ public class ShopListFragment extends Fragment {
     public ListView listView;
     public ListAdapter listAdapter;
     public ShoppingList shoppingList;
-    public String shoppingListId = "fmeAODU9GwgSy0amghYH";
+    public static double shoppingListPrice = 0;
+    // test lists in firebase
+    public String shoppingListId_ = "fmeAODU9GwgSy0amghYH"; // nice, realistic data
+    public String shoppingListId = "sd3k6GhP6Z3S8DK9WPav"; // for testing add item
+    // end test lists
     public ArrayList<ShopListItem> shopListItems;
 
     public FirestoreHandler dbHandler;
-
-    private static final int NEW_QTY_REQUEST_CODE = 0x9988;
-    private static int lastSelected;
 
     @SuppressLint("ResourceType")
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -59,6 +56,28 @@ public class ShopListFragment extends Fragment {
 
         binding = FragmentShoplistBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        setupListView();
+        setupAutocomplete();
+
+        return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // find better way to update view
+        dbHandler.getShoppingListContents(shoppingListId);
+        binding.totalPrice.setText("Total: " + new DecimalFormat("#.##").format(shoppingListPrice));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    private void setupListView() {
         dbHandler = new FirestoreHandler(this.requireContext(), this);
 
         shopListItems = new ArrayList<>();
@@ -86,20 +105,12 @@ public class ShopListFragment extends Fragment {
             i.putExtra("userId", AuthService.getCurrentUserId());
             i.putExtra("shoppingListId", shoppingListId);
 
-//            startActivityForResult(i, NEW_QTY_REQUEST_CODE);
-//            lastSelected = position;
             startActivity(i);
         });
+    }
 
-        // TODO autocomplete
+    private void setupAutocomplete() {
         ac = binding.shoplistAutocomplete;
-
-        ac.setOnItemClickListener((parent, view, position, id) -> {
-            Log.i(TAG, "ShopListItem #" + position + " clicked");
-            RelativeLayout rl = (RelativeLayout) view;
-            TextView tv = (TextView) rl.getChildAt(0);
-            ac.setText(tv.getText().toString());
-        });
 
         acItems = new ArrayList<>();
 
@@ -107,21 +118,17 @@ public class ShopListFragment extends Fragment {
         acAdapter = new AutocompleteAdapter(this.requireActivity(),  acItems);
         ac.setAdapter(acAdapter);
 
-        // TODO end autocomplete
-        return root;
-    }
+        ac.setOnItemClickListener((parent, view, position, id) -> {
+            ShopListItem item = acAdapter.getShopListItem(position);
+            Log.i(TAG, item.toString());
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // find better way to update view
-        dbHandler.getShoppingListContents(shoppingListId);
-        requireActivity().runOnUiThread(() -> listAdapter.notifyDataSetChanged());
-    }
+            RelativeLayout rl = (RelativeLayout) view;
+            TextView tv = (TextView) rl.getChildAt(0);
+            ac.setText("");
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+            dbHandler.addItemToShoppingList(item.itemId, shoppingListId, shoppingList.getSize());
+            boolean positivePriceAdjustment = true;
+            dbHandler.updateShoppingListPrice(shoppingListId, Double.parseDouble(item.price), positivePriceAdjustment);
+        });
     }
 }
