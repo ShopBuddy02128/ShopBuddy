@@ -107,6 +107,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
                 Intent createNavigationActivity = new Intent(NavigationActivity.this, MainActivity.class);
                 createNavigationActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(createNavigationActivity);
+                AlarmService.alarmDiscountRemove();
                 ToastService.makeToast("Logged out", Toast.LENGTH_SHORT);
             }
         });
@@ -123,6 +124,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
         notificationsFragment = new NotificationsFragment(this);
         AlarmService.setNotificationsFragment(notificationsFragment);
         AlarmService.createDiscountAlarm();
+        new FirestoreHandler().createAlarmListForUserIfItDoesNotExist(AuthService.getCurrentUserId());
         new FirestoreHandler().getDiscountAlarmList(AuthService.getCurrentUserId(), this);
 
         foodWasteFragment = new FoodWasteFragment(mapFragment);

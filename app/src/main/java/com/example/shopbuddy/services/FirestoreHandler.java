@@ -141,6 +141,20 @@ public class FirestoreHandler {
                     .addOnFailureListener(e -> Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_SHORT).show());
         }
 
+    public void createAlarmListForUserIfItDoesNotExist(String userId) {
+        db.collection("discountAlarmsForUsers")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful() && !task.getResult().exists()) {
+                        // Create document for user that is empty
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    ToastService.makeToast("Failed to ensure user has list", Toast.LENGTH_SHORT);
+                });
+    }
+
     public void getDiscountAlarmList(String userId, NavigationActivity navAct) {
         db.collection("discountAlarmsForUsers")
                 .document(userId)
