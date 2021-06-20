@@ -10,6 +10,7 @@ import com.example.shopbuddy.ui.navigation.NavigationActivity;
 import com.example.shopbuddy.ui.shoplist.AutocompleteAdapter;
 import com.example.shopbuddy.ui.shoplist.ListAdapter;
 import com.example.shopbuddy.ui.shoplist.ShopListFragment;
+import com.google.common.collect.Lists;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -17,6 +18,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -192,10 +194,39 @@ public class FirestoreHandler {
                                 .update(updateVal);
                         // TODO Toast message does not currently work:
                           ToastService.makeToast("Updated quantity", Toast.LENGTH_SHORT);
-//                        Toast.makeText(context, "Updated quantity", Toast.LENGTH_SHORT).show();
                     })
-                    .addOnFailureListener(e -> Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_SHORT).show());
+                    .addOnFailureListener(e -> ToastService.makeToast("" + e.getMessage(), Toast.LENGTH_SHORT));
         }
+
+    public void prepareAlarmListForUser(String userId, NavigationActivity navAct) {
+        db.collection("discountAlarmsForUsers")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful() && !task.getResult().exists()) {
+                        // Create document for user that is empty
+                        HashMap<String, List<String>> newDoc = new HashMap<>();
+                        List<String> emptyList = new ArrayList<>();
+                        newDoc.put("items", emptyList);
+                        db.collection("discountAlarmsForUsers")
+                                .document(userId)
+                                .set(newDoc)
+                                .addOnCompleteListener(secondTask -> {
+                                    if(secondTask.isSuccessful()) {
+                                        getDiscountAlarmList(userId, navAct);
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    ToastService.makeToast("Failed to create new document for user", Toast.LENGTH_SHORT);
+                                });
+                    } else {
+                        getDiscountAlarmList(userId, navAct);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    ToastService.makeToast("Failed to ensure user has list", Toast.LENGTH_SHORT);
+                });
+    }
 
     public void getDiscountAlarmList(String userId, NavigationActivity navAct) {
         db.collection("discountAlarmsForUsers")

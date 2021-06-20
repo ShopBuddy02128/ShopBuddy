@@ -104,7 +104,7 @@ public abstract class AlarmService {
         }
     }
 
-    private static void createDiscountNotification(String message) {
+    public static void createDiscountNotification(String message) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(mContext.getApplicationContext(), "notify_001");
         Intent ii = new Intent(mContext.getApplicationContext(), NavigationActivity.class);

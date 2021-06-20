@@ -68,6 +68,8 @@ public class ItemActivity extends AppCompatActivity {
 
         binding.itemQtyMinus.setOnClickListener(l -> {
             Log.i(TAG, "itemQtyMinus pressed");
+            if (qty == 0)
+                return;
             qty--;
             boolean plus = false;
             dbHandler.updateQty(shoppingListId, itemId, userId, plus);

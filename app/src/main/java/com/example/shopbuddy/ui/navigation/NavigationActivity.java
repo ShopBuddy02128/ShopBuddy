@@ -67,6 +67,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
     private String[] actionBarTitles;
 
     boolean firstFragmentUsed = false;
+    ArrayList<String> discountAlarmItems = new ArrayList<String>();
 
     public final int MAP_BUTTON = 1;
     public final int OFFERS_BUTTON = 2;
@@ -108,6 +109,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
                 Intent createNavigationActivity = new Intent(NavigationActivity.this, MainActivity.class);
                 createNavigationActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(createNavigationActivity);
+                AlarmService.alarmDiscountRemove();
                 ToastService.makeToast("Logged out", Toast.LENGTH_SHORT);
             }
         });
@@ -123,12 +125,14 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
 
         notificationsFragment = new NotificationsFragment(this);
         AlarmService.setNotificationsFragment(notificationsFragment);
+
         try {
             AlarmService.createDiscountAlarm();
         } catch (Exception e) {
             Log.e("Error",e.getMessage());
         }
         new FirestoreHandler().getDiscountAlarmList(AuthService.getCurrentUserId(), this);
+
 
         foodWasteFragment = new FoodWasteFragment(mapFragment);
         foodWasteFragment.setNavigationActivity(this);
@@ -137,7 +141,6 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
         if (!(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         }
-
 
         //Start by going to first fragment
         changePage(MAP_BUTTON);
@@ -294,8 +297,6 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
             }
         }
     }
-
-    ArrayList<String> discountAlarmItems = new ArrayList<String>();
 
     public void saveItems(ArrayList<String> items) {
         this.discountAlarmItems = items;
