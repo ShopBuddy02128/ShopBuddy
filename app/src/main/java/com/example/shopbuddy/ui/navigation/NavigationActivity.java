@@ -1,6 +1,8 @@
 package com.example.shopbuddy.ui.navigation;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -8,7 +10,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +26,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
+import com.example.shopbuddy.MainActivity;
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.ActivityMainBinding;
 import com.example.shopbuddy.models.FoodWasteFromStore;
@@ -33,15 +38,11 @@ import com.example.shopbuddy.services.ToastService;
 import com.example.shopbuddy.ui.map.MapFragment;
 import com.example.shopbuddy.ui.notifications.NotificationsFragment;
 import com.example.shopbuddy.ui.foodwaste.FoodWasteFragment;
-import com.example.shopbuddy.ui.foodwaste.FoodWasteItemsFragment;
 import com.example.shopbuddy.ui.shoplist.ListsListFragment;
 import com.example.shopbuddy.ui.shoplist.ShopListFragment;
+import com.example.shopbuddy.ui.startScreen.LoginScreenActivity;
 import com.example.shopbuddy.utils.CustomBackStack;
-import com.example.shopbuddy.utils.DummyData;
-import com.example.shopbuddy.utils.JSONReader;
 import com.google.android.gms.maps.model.LatLng;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
     private TextView menuButton1Text, menuButton2Text, menuButton3Text, menuButton4Text;
 
     private ActionBar actionBar;
+    private TextView actionBarTitle;
     private String[] actionBarTitles;
 
     boolean firstFragmentUsed = false;
@@ -82,6 +84,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
         //Instantiate the buttons
         setupMenuButtons(binding);
 
@@ -89,6 +92,25 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
         customBackStack = new CustomBackStack();
         actionBar = getSupportActionBar();
         actionBarTitles = new String[]{"null", getString(R.string.menu_button_1), getString(R.string.menu_button_2), getString(R.string.menu_button_3), getString(R.string.menu_button_4)};
+
+        //setup custom actionbar
+
+        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflator.inflate(R.layout.activity_custom_actionbar, null);
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setCustomView(v);
+        actionBarTitle = (TextView) findViewById(R.id.custom_actionbar_title);
+        ((Button) findViewById(R.id.custom_actionbar_btn)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AuthService.getmAuth().signOut();
+                Intent createNavigationActivity = new Intent(NavigationActivity.this, MainActivity.class);
+                createNavigationActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(createNavigationActivity);
+                ToastService.makeToast("Logged out", Toast.LENGTH_SHORT);
+            }
+        });
+
 
         //Instantiate the fragments
         listsListFragment = new ListsListFragment();
@@ -237,7 +259,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
 
         int navButton = customBackStack.getCurrent();
 
-        actionBar.setTitle(actionBarTitles[navButton]);
+        actionBarTitle.setText(actionBarTitles[navButton]);
 
         if (navButton == MAP_BUTTON) setButtonVisibilities(MAP_BUTTON);
         else if (navButton == OFFERS_BUTTON) setButtonVisibilities(OFFERS_BUTTON);
