@@ -2,6 +2,7 @@ package com.example.shopbuddy.services;
 
 import com.example.shopbuddy.models.DiscountItem;
 import com.example.shopbuddy.models.Store;
+import com.example.shopbuddy.ui.map.SaleListFragment;
 import com.example.shopbuddy.ui.map.ShopChosenActivity;
 
 import org.json.JSONArray;
@@ -20,9 +21,9 @@ public class DiscountForStoreService extends Thread{
     private final OkHttpClient client = new OkHttpClient();
     private String storeName;
     private String urlForStore;
-    private ShopChosenActivity caller;
+    private SaleListFragment caller;
 
-    public DiscountForStoreService(ShopChosenActivity caller, String store, int nrOfResults) throws Exception{
+    public DiscountForStoreService(SaleListFragment caller, String store, int nrOfResults) throws Exception{
         if(!(store.equals("Netto") || store.equals("Bilka") || store.equals("Føtex")))
             throw new Exception("Store not available");
         this.storeName = store;
