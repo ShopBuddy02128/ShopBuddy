@@ -76,6 +76,14 @@ public class ItemActivity extends AppCompatActivity {
             dbHandler.updateShoppingListPrice(shoppingListId, Double.parseDouble(i.getStringExtra("price")), plus);
             binding.itemviewQty.setText(qty.toString());
         });
+
+        binding.itemDelete.setOnClickListener(l -> {
+            Log.i(TAG, "Delete pressed");
+
+            dbHandler.deleteItemFromShoppingList(itemId, Double.parseDouble(i.getStringExtra("price")), shoppingListId);
+
+            finish();
+        });
     }
 
     @Override

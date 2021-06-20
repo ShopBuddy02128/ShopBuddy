@@ -11,6 +11,8 @@ public class ShoppingList {
     GregorianCalendar creationDate;
     HashMap<String, Long> itemIds, itemOrder;
     double price;
+    // might be necessary at some point:
+//    private long orderNo; // NO. SERIES for orderNo. so that .size() will not mess it up on deletions
 
 
     public ShoppingList(String title){

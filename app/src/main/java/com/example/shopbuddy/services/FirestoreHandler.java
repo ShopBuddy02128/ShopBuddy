@@ -42,6 +42,7 @@ public class FirestoreHandler {
     }
 
     public void addItemToShoppingList(String itemId, String shoppingListId, int orderNo) {
+        // insert if key does not exist already
         Map<String, Object> updateVal = new HashMap<>();
         updateVal.put("itemIds."+itemId, 1);
         updateVal.put("itemOrder."+itemId, orderNo);
@@ -51,6 +52,63 @@ public class FirestoreHandler {
                 .addOnSuccessListener(t -> {
                     // update listview
                     getShoppingListContents(shoppingListId);
+                });
+    }
+
+    public void deleteItemFromShoppingList(String itemId, double itemPrice, String shoppingListId) {
+        db.collection("shoppingLists")
+                .document(shoppingListId)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    HashMap itemIds = (HashMap<String,Long>) doc.get("itemIds");
+                    HashMap itemOrder = (HashMap<String,Long>) doc.get("itemOrder");
+
+                    Map<String, Object> updateVal = new HashMap<>();
+                    double price = itemPrice;
+                    long qty = (long) itemIds.get(itemId);
+                    boolean negativeItemAdjustment = false;
+
+                    itemIds.remove(itemId);
+                    itemOrder.remove(itemId);
+
+                    updateVal.put("itemIds", itemIds);
+                    updateVal.put("itemOrder", itemOrder);
+
+                    db.collection("shoppingLists")
+                            .document(shoppingListId)
+                            .update(updateVal)
+                            .addOnSuccessListener(t -> {
+                                // finally update shopping list price
+                                updateShoppingListPrice(shoppingListId, price, negativeItemAdjustment, (int)qty);
+                                // update listview
+                                getShoppingListContents(shoppingListId);
+                            });
+                });
+    }
+
+    public void updateShoppingListPrice(String shoppingListId, double itemPrice, boolean plus, int qty) {
+        db.collection("shoppingLists")
+                .document(shoppingListId)
+                .get()
+                .addOnSuccessListener(t -> {
+                    double price = t.getDouble("price");
+                    if (plus)
+                        price += itemPrice * qty;
+                    else
+                        price -= itemPrice * qty;
+                    Map<String, Object> updateVal = new HashMap<>();
+                    updateVal.put("price", price);
+
+                    double finalPrice = price;
+                    db.collection("shoppingLists")
+                            .document(shoppingListId)
+                            .update(updateVal)
+                            .addOnSuccessListener(unused -> {
+//                                // update listview
+//                                getShoppingListContents(shoppingListId);
+                                // update shopping list price
+                                ShopListFragment.shoppingListPrice = finalPrice;
+                            });
                 });
     }
 
@@ -72,8 +130,8 @@ public class FirestoreHandler {
                             .document(shoppingListId)
                             .update(updateVal)
                             .addOnSuccessListener(unused -> {
-                                // update listview
-                                getShoppingListContents(shoppingListId);
+//                                // update listview
+//                                getShoppingListContents(shoppingListId);
                                 // update shopping list price
                                 ShopListFragment.shoppingListPrice = finalPrice;
                             });
@@ -169,10 +227,6 @@ public class FirestoreHandler {
                     .addOnFailureListener(e -> ToastService.makeToast("" + e.getMessage(), Toast.LENGTH_SHORT));
         }
 
-//    public ArrayList<ShopListItem> sortByShoppingListOrder(ArrayList<ShopListItem> items, ShoppingList shoppingList) {
-//        ArrayList<>
-//    }
-
         public void updateQty(String shoppingListId, String itemId, String userId, boolean plus) {
             db.collection("shoppingLists")
                     .document(shoppingListId)
@@ -192,7 +246,7 @@ public class FirestoreHandler {
                         db.collection("shoppingLists")
                                 .document(shoppingListId)
                                 .update(updateVal);
-                        // TODO Toast message does not currently work:
+
                           ToastService.makeToast("Updated quantity", Toast.LENGTH_SHORT);
                     })
                     .addOnFailureListener(e -> ToastService.makeToast("" + e.getMessage(), Toast.LENGTH_SHORT));

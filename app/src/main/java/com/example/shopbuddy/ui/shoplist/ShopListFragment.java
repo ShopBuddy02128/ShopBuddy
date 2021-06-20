@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,6 +21,7 @@ import com.example.shopbuddy.models.ShoppingList;
 import com.example.shopbuddy.services.AuthService;
 import com.example.shopbuddy.services.FirestoreHandler;
 import com.example.shopbuddy.models.ShopListItem;
+import com.example.shopbuddy.services.ToastService;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -82,9 +84,6 @@ public class ShopListFragment extends Fragment {
 
         shopListItems = new ArrayList<>();
 
-        // TODO currently loads default (test) list
-        dbHandler.getShoppingListContents(shoppingListId);
-
         listAdapter = new ListAdapter(this.requireContext(), shopListItems);
 
         binding.listview.setAdapter(listAdapter);
@@ -126,9 +125,14 @@ public class ShopListFragment extends Fragment {
             TextView tv = (TextView) rl.getChildAt(0);
             ac.setText("");
 
-            dbHandler.addItemToShoppingList(item.itemId, shoppingListId, shoppingList.getSize());
-            boolean positivePriceAdjustment = true;
-            dbHandler.updateShoppingListPrice(shoppingListId, Double.parseDouble(item.price), positivePriceAdjustment);
+            // check if key exists, and if not, insert into db
+            if (!shopListItems.stream().anyMatch(i -> i.itemId.equals(item.itemId))) {
+                dbHandler.addItemToShoppingList(item.itemId, shoppingListId, shoppingList.getSize());
+                boolean positivePriceAdjustment = true;
+                dbHandler.updateShoppingListPrice(shoppingListId, Double.parseDouble(item.price), positivePriceAdjustment);
+            }
+            else
+                ToastService.makeToast("Item already in list", Toast.LENGTH_SHORT);
         });
     }
 }
