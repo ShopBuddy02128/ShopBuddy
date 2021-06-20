@@ -1,40 +1,83 @@
 package com.example.shopbuddy.ui.map;
 
 import android.annotation.SuppressLint;
+import  androidx.appcompat.app.AppCompatActivity;
+import android.content.Context;
 import android.content.Intent;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 
 import com.example.shopbuddy.databinding.FragmentSalelistBinding;
 
 import com.example.shopbuddy.models.DiscountItem;
 import com.example.shopbuddy.models.ShopListItem;
 
+import com.example.shopbuddy.services.DiscountForStoreService;
 import com.example.shopbuddy.ui.shoplist.ItemActivity;
 import com.example.shopbuddy.ui.shoplist.ListAdapter;
 
 import com.example.shopbuddy.utils.DummyData;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class SaleListFragment extends Fragment {
     private static final String TAG = "SaleListFragment";
     public FragmentSalelistBinding binding;
     public ListView listView;
-    private List<DiscountItem> items;
+    private List<DiscountItem> items = null;
+    private String shopName;
+    private AppCompatActivity mActivityContext;
 
+    @Override
+    public void onAttach(@NonNull @NotNull Context context) {
+        super.onAttach(context);
+        mActivityContext = (AppCompatActivity) context;
+    }
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        shopName = mActivityContext.getTitle().toString();
+        Log.e(TAG, shopName);
+        System.out.println(getContext().toString());
+
+        if(shopName.toLowerCase().contains("netto")){
+            try {
+                new DiscountForStoreService(this, "Netto", 20).start();
+                Log.e(TAG, "Its a netto store");
+            } catch (Exception e) {
+                // Failed to get request, most likely caused by not calling a correct store option
+            }
+        } else if (shopName.toLowerCase().contains("føtex")){
+            try {
+                new DiscountForStoreService( this, "Føtex", 20).start();
+            } catch (Exception e) {
+                // Failed to get request, most likely caused by not calling a correct store option
+            }
+        } else if(shopName.toLowerCase().contains("bilka")) {
+            try {
+                new DiscountForStoreService(this, "Blika", 20).start();
+            } catch (Exception e) {
+                // Failed to get request, most likely caused by not calling a correct store option
+            }
+        }
+
+
+    }
 
     @SuppressLint("ResourceType")
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -46,7 +89,6 @@ public class SaleListFragment extends Fragment {
         View root = binding.getRoot();
 
         //Get items from activity
-
 
 
 
@@ -80,6 +122,11 @@ public class SaleListFragment extends Fragment {
 
 
         return root;
+    }
+
+
+    public void finishRequest(List<DiscountItem> listOfDiscountsForStore) {
+        items = listOfDiscountsForStore;
     }
 
     @Override

@@ -1,5 +1,8 @@
 package com.example.shopbuddy.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -13,7 +16,7 @@ public class DiscountItem {
     private String title;
     private Store store;
 
-    public DiscountItem(String title, Store store, double price, double oldPrice, String dateFrom, String dateTo) throws Exception{
+    public DiscountItem(String title, Store store, double price, double oldPrice, String dateFrom, String dateTo) throws Exception {
         this.title = title;
         this.store = store;
         this.price = price;
@@ -78,9 +81,12 @@ public class DiscountItem {
         this.validFrom = validFrom;
     }
 
-    public boolean stillValid(){
+    public boolean stillValid() {
         Date current = new Date();
         int result = current.compareTo(validTo);
-        return result > 0? false : true;
+        return result > 0 ? false : true;
     }
+
 }
+
+
