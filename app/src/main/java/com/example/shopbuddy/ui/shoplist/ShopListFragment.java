@@ -111,21 +111,11 @@ public class ShopListFragment extends Fragment {
         return root;
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == NEW_QTY_REQUEST_CODE) {
-//            assert data != null;
-//            shopListItems.get(lastSelected).qty =  data.getStringExtra("NEW_QTY");
-//            listAdapter.notifyDataSetChanged();
-//        }
-//    }
-
     @Override
     public void onResume() {
         super.onResume();
         // find better way to update view
-//        dbHandler.getShoppingListContents(shoppingListId);
+        dbHandler.getShoppingListContents(shoppingListId);
         requireActivity().runOnUiThread(() -> listAdapter.notifyDataSetChanged());
     }
 
