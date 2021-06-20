@@ -77,11 +77,9 @@ public class FirestoreHandler {
                     db.collection("shoppingLists")
                             .document(shoppingListId)
                             .update(updateVal)
-                            .addOnSuccessListener(t -> {
+                            .addOnCompleteListener(unused -> {
                                 // finally update shopping list price
                                 updateShoppingListPrice(shoppingListId, price, negativeItemAdjustment, (int)qty);
-                                // update listview
-                                getShoppingListContents(shoppingListId);
                             });
                 });
     }
@@ -104,8 +102,6 @@ public class FirestoreHandler {
                             .document(shoppingListId)
                             .update(updateVal)
                             .addOnSuccessListener(unused -> {
-//                                // update listview
-//                                getShoppingListContents(shoppingListId);
                                 // update shopping list price
                                 ShopListFragment.shoppingListPrice = finalPrice;
                             });
@@ -130,8 +126,6 @@ public class FirestoreHandler {
                             .document(shoppingListId)
                             .update(updateVal)
                             .addOnSuccessListener(unused -> {
-//                                // update listview
-//                                getShoppingListContents(shoppingListId);
                                 // update shopping list price
                                 ShopListFragment.shoppingListPrice = finalPrice;
                             });
@@ -234,7 +228,7 @@ public class FirestoreHandler {
                     .addOnCompleteListener(task -> {
                         DocumentSnapshot doc = task.getResult();
                         if (!Objects.equals(doc.getString("userId"), userId)) {
-                            Toast.makeText(context, "Insufficient rights", Toast.LENGTH_SHORT).show();
+                            ToastService.makeToast("Insufficient rights", Toast.LENGTH_SHORT);
                             return;
                         }
 

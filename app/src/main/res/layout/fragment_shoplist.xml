@@ -54,6 +54,10 @@
                 android:text="Total: 4999,95">
             </TextView>
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#ccc"/>
 
         <ListView
             android:id="@+id/listview"

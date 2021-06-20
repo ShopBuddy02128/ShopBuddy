@@ -24,7 +24,6 @@ public class ItemActivity extends AppCompatActivity {
 
     String shoppingListId, userId, itemId;
     Long qty;
-    public static final String NEW_QTY = "NEW_QTY";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,6 +79,7 @@ public class ItemActivity extends AppCompatActivity {
         binding.itemDelete.setOnClickListener(l -> {
             Log.i(TAG, "Delete pressed");
 
+            // TODO ask for confirmation before just deleting
             dbHandler.deleteItemFromShoppingList(itemId, Double.parseDouble(i.getStringExtra("price")), shoppingListId);
 
             finish();
@@ -88,9 +88,6 @@ public class ItemActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        final Intent data = new Intent();
-        data.putExtra(NEW_QTY, qty.toString());
-        setResult(Activity.RESULT_OK, data);
         super.onBackPressed();
     }
 }
