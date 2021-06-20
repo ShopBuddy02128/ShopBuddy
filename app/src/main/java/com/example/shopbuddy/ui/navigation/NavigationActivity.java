@@ -66,6 +66,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
     private String[] actionBarTitles;
 
     boolean firstFragmentUsed = false;
+    ArrayList<String> discountAlarmItems = new ArrayList<String>();
 
     public final int MAP_BUTTON = 1;
     public final int OFFERS_BUTTON = 2;
@@ -124,8 +125,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
         notificationsFragment = new NotificationsFragment(this);
         AlarmService.setNotificationsFragment(notificationsFragment);
         AlarmService.createDiscountAlarm();
-        new FirestoreHandler().createAlarmListForUserIfItDoesNotExist(AuthService.getCurrentUserId());
-        new FirestoreHandler().getDiscountAlarmList(AuthService.getCurrentUserId(), this);
+        new FirestoreHandler().prepareAlarmListForUser(AuthService.getCurrentUserId(), this);
 
         foodWasteFragment = new FoodWasteFragment(mapFragment);
         foodWasteFragment.setNavigationActivity(this);
@@ -291,8 +291,6 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
             }
         }
     }
-
-    ArrayList<String> discountAlarmItems = new ArrayList<String>();
 
     public void saveItems(ArrayList<String> items) {
         this.discountAlarmItems = items;
