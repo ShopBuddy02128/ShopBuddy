@@ -19,12 +19,10 @@ import java.util.Map;
 
 public class AlarmAdapter extends ArrayAdapter<String> {
 
-    private ArrayList<String> data;
     private HashMap<Integer, Boolean> checkedPositions = new HashMap<>();
 
     public AlarmAdapter(@NonNull Context context, @NonNull ArrayList<String> alarmItems) {
         super(context, R.layout.fragment_alarm_item, alarmItems);
-        data = alarmItems;
     }
 
     public View getView(int position, View convertView, ViewGroup viewGroup){
@@ -66,9 +64,5 @@ public class AlarmAdapter extends ArrayAdapter<String> {
 
     public void resetCheckedMap() {
         checkedPositions = new HashMap<>();
-    }
-
-    public ArrayList<String> getData() {
-        return data;
     }
 }

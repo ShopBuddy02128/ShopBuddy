@@ -135,7 +135,6 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         }
 
-
         //Start by going to first fragment
         changePage(MAP_BUTTON);
     }
