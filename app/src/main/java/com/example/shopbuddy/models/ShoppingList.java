@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class ShoppingList {
     private String title, createdByUserId, id;
     GregorianCalendar creationDate;
-    HashMap<String, Long> itemIds;
+    HashMap<String, Long> itemIds, itemOrder;
     double price;
 
 
@@ -31,6 +32,7 @@ public class ShoppingList {
                         String createdByUserId,
                         Date creationDate,
                         HashMap<String, Long> itemIds,
+                        HashMap<String, Long> itemOrder,
                         double price,
                         String id) {
         this.title = title;
@@ -38,8 +40,13 @@ public class ShoppingList {
         this.creationDate = new GregorianCalendar();
             this.creationDate.setTime(creationDate);;
         this.itemIds = itemIds;
+        this.itemOrder = itemOrder;
         this.price = price;
         this.id = id;
+    }
+
+    public int getOrderNoOfItem(String itemId) {
+        return Objects.requireNonNull(this.itemOrder.get(itemId)).intValue();
     }
 
     public String getTitle(){

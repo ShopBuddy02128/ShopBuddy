@@ -15,7 +15,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -84,6 +86,7 @@ public class FirestoreHandler {
                                 doc.getString("userId"),
                                 doc.getDate("creationDate"),
                                 (HashMap<String,Long>) doc.get("itemIds"),
+                                (HashMap<String,Long>) doc.get("itemOrder"),
                                 doc.getDouble("price"),
                                 doc.getString("id"));
                         frag.shoppingList = shoppingList;
@@ -100,22 +103,28 @@ public class FirestoreHandler {
                                                 itemEntry.getValue().toString(),
                                                 itemDoc.getString("imageUrl"),
                                                 itemDoc.getId());
+                                        curItem.setOrderNo(shoppingList.getOrderNoOfItem(curItem.itemId));
                                         list.add(curItem);
 
                                         Log.i("bruh", "loaded " + itemDoc.getString("name"));
 
+                                        Collections.sort(list);
+
                                         // update the adapter
                                         ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), list);
 
-                                        frag.shopListItems.add(curItem);
+                                        frag.shopListItems = list;
 
                                         frag.binding.listview.setAdapter(newAdapter);
-//                                        frag.requireActivity().runOnUiThread(() -> {frag.listAdapter.notifyDataSetChanged();});
                                     });
                         }
                     })
                     .addOnFailureListener(e -> Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_SHORT).show());
         }
+
+//    public ArrayList<ShopListItem> sortByShoppingListOrder(ArrayList<ShopListItem> items, ShoppingList shoppingList) {
+//        ArrayList<>
+//    }
 
         public void updateQty(String shoppingListId, String itemId, String userId, boolean plus) {
             db.collection("shoppingLists")
