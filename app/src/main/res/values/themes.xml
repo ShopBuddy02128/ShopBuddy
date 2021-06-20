@@ -15,7 +15,6 @@
     </style>
 
     <style name="TextAppearance.AppCompat.Widget.ActionBar.Title" parent = "@style/TextAppearance.AppCompat" >
-
         <item name="android:textColor">@color/ShopDarkBuddyBlue</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
 
