@@ -172,6 +172,8 @@ public class FirestoreHandler {
                                 .addOnFailureListener(e -> {
                                     ToastService.makeToast("Failed to create new document for user", Toast.LENGTH_SHORT);
                                 });
+                    } else {
+                        getDiscountAlarmList(userId, navAct);
                     }
                 })
                 .addOnFailureListener(e -> {
