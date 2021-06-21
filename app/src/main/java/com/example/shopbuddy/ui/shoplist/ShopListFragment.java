@@ -132,6 +132,10 @@ public class ShopListFragment extends Fragment {
         });
     }
 
+    private void tryEnterItemView() {
+
+    }
+
     private void tryAddItem(ShopListItem item) {
         // check if key exists, and if not, insert into db
         if (!shopListItems.stream().anyMatch(i -> i.itemId.equals(item.itemId))) {

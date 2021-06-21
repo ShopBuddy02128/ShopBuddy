@@ -1,6 +1,5 @@
 package com.example.shopbuddy.ui.shoplist;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,6 +42,9 @@ public class ItemActivity extends AppCompatActivity {
             shoppingListId = i.getStringExtra("shoppingListId");
             userId = i.getStringExtra("userId");
             itemId = i.getStringExtra("itemId");
+
+            // if item has been deleted but is still present in list
+            dbHandler.closeActivityIfNotInItemInShoppingList(itemId, shoppingListId, this);
 
             binding.itemviewName.setText(TextFormatter.toNameFormat(name));
             binding.itemviewBrand.setText(TextFormatter.toNameFormat(brand));
