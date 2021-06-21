@@ -14,7 +14,6 @@ import android.widget.ListView;
 
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.shopbuddy.databinding.FragmentSalelistBinding;
@@ -48,13 +47,20 @@ public class SaleListFragment extends Fragment {
 
     }
 
-    @Override
-    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        shopName = mActivityContext.getTitle().toString();
+    @SuppressLint("ResourceType")
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+
+        Log.i(TAG, "Entered onCreateView");
+
+        binding = FragmentSalelistBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        //Get items from activity
+        shopName = mActivityContext.getSupportActionBar().getTitle().toString();
         Log.e(TAG, shopName);
-        System.out.println(getContext().toString());
+        System.out.println(shopName);
 
         if(shopName.toLowerCase().contains("netto")){
             try {
@@ -76,20 +82,6 @@ public class SaleListFragment extends Fragment {
                 // Failed to get request, most likely caused by not calling a correct store option
             }
         }
-
-
-    }
-
-    @SuppressLint("ResourceType")
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-
-        Log.i(TAG, "Entered onCreateView");
-
-        binding = FragmentSalelistBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
-        //Get items from activity
 
 
         ArrayList<ShopListItem> shopListItemArrayList = new ArrayList<>();
@@ -127,6 +119,7 @@ public class SaleListFragment extends Fragment {
 
     public void finishRequest(List<DiscountItem> listOfDiscountsForStore) {
         items = listOfDiscountsForStore;
+        System.out.println("There has been returned a list");
     }
 
     @Override
