@@ -100,13 +100,13 @@ public class FirestoreHandler {
                                 doc.getString("imageUrl"),
                                 doc.getId());
                         list.add(shopListItem);
-
-                        // update the adapter
-                        AutocompleteAdapter newAdapter = new AutocompleteAdapter(frag.requireActivity(), list);
-
-                        frag.ac.setAdapter(newAdapter);
-                        frag.acAdapter = newAdapter;
                     }
+                    // update the adapter
+                    AutocompleteAdapter newAdapter = new AutocompleteAdapter(frag.requireActivity(), list);
+
+                    frag.ac.setAdapter(newAdapter);
+                    frag.acAdapter = newAdapter;
+                    frag.acAdapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_SHORT).show());
     }
@@ -152,7 +152,7 @@ public class FirestoreHandler {
                 list.add(curItem);
             }
 
-            // sort by orderNo
+            // sort by orderNo through Comparable interface
             Collections.sort(list);
 
             // update shopping list price
