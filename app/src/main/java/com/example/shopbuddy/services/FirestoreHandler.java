@@ -213,7 +213,7 @@ public class FirestoreHandler {
 
             return null;
         }).addOnSuccessListener(l -> {
-//            ToastService.makeToast("Hentet indkøbsliste", Toast.LENGTH_SHORT);
+            ToastService.makeToastWithDuration("Opdateret antal",  800);
         }).addOnFailureListener(l -> {
             ToastService.makeToast("Kunne ikke opdatere antal", Toast.LENGTH_SHORT);
             logTransactionError(l);
@@ -231,7 +231,7 @@ public class FirestoreHandler {
                     HashMap<String, Long> items = (HashMap<String, Long>) doc.get("itemIds");
                     if (!items.containsKey(itemId)) {
                         act.finish();
-                        ToastService.makeToast("Item no longer exists in shopping list", Toast.LENGTH_SHORT);
+                        ToastService.makeToast("Vare findes ikke længere i listen", Toast.LENGTH_SHORT);
                     }
                 });
     }
@@ -250,12 +250,12 @@ public class FirestoreHandler {
                                 .document(userId)
                                 .set(newDoc)
                                 .addOnFailureListener(e -> {
-                                    ToastService.makeToast("Failed to create new document for user", Toast.LENGTH_SHORT);
+                                    ToastService.makeToast("Kunne ikke oprette ny liste", Toast.LENGTH_SHORT);
                                 });
                     }
                 })
                 .addOnFailureListener(e -> {
-                    ToastService.makeToast("Failed to ensure user has list", Toast.LENGTH_SHORT);
+                    ToastService.makeToast("Kunne ikke få forbindelse", Toast.LENGTH_SHORT);
                 });
     }
 
@@ -271,7 +271,7 @@ public class FirestoreHandler {
                     }
                 })
                 .addOnFailureListener(e -> {
-                    ToastService.makeToast("Failed to get discounts", Toast.LENGTH_SHORT);
+                    ToastService.makeToast("Kunne ikke hente tilbud", Toast.LENGTH_SHORT);
                 });
     }
 
@@ -299,7 +299,7 @@ public class FirestoreHandler {
                             .document(userId)
                             .update(itemsMap)
                             .addOnCompleteListener(l -> {
-                                ToastService.makeToast("Added alarm for " + itemName, Toast.LENGTH_SHORT);
+                                ToastService.makeToast("Tilføjet alarm for " + itemName, Toast.LENGTH_SHORT);
                             });
                 });
     }
@@ -324,7 +324,7 @@ public class FirestoreHandler {
                                     }
                                 })
                                 .addOnFailureListener(e -> {
-                                    ToastService.makeToast("Failed to create new document for user", Toast.LENGTH_SHORT);
+                                    ToastService.makeToast("Kunne ikke oprette ny liste", Toast.LENGTH_SHORT);
                                 });
                     } else if(task.isSuccessful()){
                         ArrayList<String> shoppingList = (ArrayList<String>) task.getResult().get("shoppingLists");
@@ -336,7 +336,7 @@ public class FirestoreHandler {
                     }
                 })
                 .addOnFailureListener(e -> {
-                    ToastService.makeToast("Failed to ensure user has list", Toast.LENGTH_SHORT);
+                    ToastService.makeToast("Kunne ikke oprette forbindelse", Toast.LENGTH_SHORT);
                 });
     }
 
@@ -395,7 +395,7 @@ public class FirestoreHandler {
 
             return null;
         }).addOnSuccessListener(l -> {
-            ToastService.makeToast("Removed item from list", Toast.LENGTH_SHORT);
+            ToastService.makeToast("Fjernet vare fra liste", Toast.LENGTH_SHORT);
             activity.finish();
         }).addOnFailureListener(this::logTransactionError);
     }

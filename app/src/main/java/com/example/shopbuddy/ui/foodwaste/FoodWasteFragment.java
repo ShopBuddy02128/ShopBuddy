@@ -77,6 +77,9 @@ public class FoodWasteFragment extends Fragment {
         Log.i("DINFAR", fwfs.toString());
         //adapter.notifyDataSetChanged();
 
+        if (binding == null) // workaround / hotfix for seemingly random crashes
+            return;
+
         listView = binding.listOfOffers;
         Log.i("DIN FAR", getActivity().toString());
         adapter = new FoodWasteStoreAdapter(getActivity(), fwfs);
