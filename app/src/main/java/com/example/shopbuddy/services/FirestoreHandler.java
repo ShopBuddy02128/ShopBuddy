@@ -338,7 +338,7 @@ public class FirestoreHandler {
                 });
     }
 
-    public void prepareShoppingListForUser(String userId, String userEmail, ShopListFragment shopListFragment) {
+    public void prepareShoppingListCollectionForUser(String userId, String userEmail, ShopListFragment shoplistFragment) {
         db.collection("users")
                 .document(userId)
                 .get()
@@ -352,13 +352,54 @@ public class FirestoreHandler {
                         db.collection("users")
                                 .document(userId)
                                 .set(newDoc)
+                                .addOnCompleteListener(addUserTask -> {
+                                    if(addUserTask.isSuccessful()){
+                                        createShoppingListForUser(userId, shoplistFragment);
+                                    }
+                                })
                                 .addOnFailureListener(e -> {
                                     ToastService.makeToast("Failed to create new document for user", Toast.LENGTH_SHORT);
                                 });
+                    } else if(task.isSuccessful()){
+                        ArrayList<String> shoppingList = (ArrayList<String>) task.getResult().get("shoppingLists");
+                        if(shoppingList.size() == 0) {
+                            createShoppingListForUser(userId, shoplistFragment);
+                        } else {
+                            shoplistFragment.setShoppingListId(shoppingList.get(0));
+                        }
                     }
                 })
                 .addOnFailureListener(e -> {
                     ToastService.makeToast("Failed to ensure user has list", Toast.LENGTH_SHORT);
+                });
+    }
+
+    public void createShoppingListForUser(String userId, ShopListFragment shoplistFragment) {
+        HashMap<String, Object> shoplist = new HashMap<>();
+        shoplist.put("creationDate", new Date());
+        shoplist.put("itemIds", new HashMap<String, Long>());
+        shoplist.put("itemOrder", new HashMap<String, Long>());
+        shoplist.put("price", 0L);
+        shoplist.put("userId", userId);
+
+        db.collection("shoppingLists")
+                .add(shoplist)
+                .addOnCompleteListener(task -> {
+                    HashMap<String, Object> updateObject = new HashMap<>();
+                    List<String> newShoppingList = new ArrayList<>();
+                    newShoppingList.add(task.getResult().getId());
+                    updateObject.put("shoppingLists", newShoppingList);
+
+                    db.collection("users")
+                            .document(userId)
+                            .update(updateObject).addOnCompleteListener(createShoppingListTask -> {
+                            if(createShoppingListTask.isSuccessful()) {
+                                shoplistFragment.setShoppingListId(task.getResult().getId());
+                            }
+                    });
+                })
+                .addOnFailureListener(e -> {
+                    e.printStackTrace();
                 });
     }
 }
