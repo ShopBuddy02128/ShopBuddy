@@ -60,14 +60,14 @@ public class SaleListFragment extends Fragment {
         //Get items from activity
         shopName = mActivityContext.getSupportActionBar().getTitle().toString();
         Log.e(TAG, shopName);
-        System.out.println(shopName);
 
         if(shopName.toLowerCase().contains("netto")){
+            Log.e(TAG, "Its a netto store");
             try {
                 new DiscountForStoreService(this, "Netto", 20).start();
-                Log.e(TAG, "Its a netto store");
+
             } catch (Exception e) {
-                // Failed to get request, most likely caused by not calling a correct store option
+                Log.e(TAG, "Nothing was returned");
             }
         } else if (shopName.toLowerCase().contains("føtex")){
             try {
@@ -82,6 +82,9 @@ public class SaleListFragment extends Fragment {
                 // Failed to get request, most likely caused by not calling a correct store option
             }
         }
+
+
+
 
 
         ArrayList<ShopListItem> shopListItemArrayList = new ArrayList<>();
@@ -119,7 +122,7 @@ public class SaleListFragment extends Fragment {
 
     public void finishRequest(List<DiscountItem> listOfDiscountsForStore) {
         items = listOfDiscountsForStore;
-        System.out.println("There has been returned a list");
+        Log.e(TAG, "A list of discount items has been returned and the first item is" + items.get(0).getTitle());
     }
 
     @Override
