@@ -76,6 +76,8 @@ public class FirestoreHandler {
                     updateVal.put("itemIds", itemIds);
                     updateVal.put("itemOrder", itemOrder);
 
+                    ToastService.makeToast("Removed item from list", Toast.LENGTH_SHORT);
+
                     db.collection("shoppingLists")
                             .document(shoppingListId)
                             .update(updateVal)
@@ -253,7 +255,7 @@ public class FirestoreHandler {
                     .addOnFailureListener(e -> ToastService.makeToast("" + e.getMessage(), Toast.LENGTH_SHORT));
         }
 
-    public void closeActivityIfNotInItemInShoppingList(String itemId, String shoppingListId, Activity act) {
+    public void closeActivityIfItemNotInShoppingList(String itemId, String shoppingListId, Activity act) {
         Log.i("bruh", "starting query");
         db.collection("shoppingLists")
                 .document(shoppingListId)

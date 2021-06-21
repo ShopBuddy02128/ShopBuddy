@@ -44,7 +44,7 @@ public class ItemActivity extends AppCompatActivity {
             itemId = i.getStringExtra("itemId");
 
             // if item has been deleted but is still present in list
-            dbHandler.closeActivityIfNotInItemInShoppingList(itemId, shoppingListId, this);
+            dbHandler.closeActivityIfItemNotInShoppingList(itemId, shoppingListId, this);
 
             binding.itemviewName.setText(TextFormatter.toNameFormat(name));
             binding.itemviewBrand.setText(TextFormatter.toNameFormat(brand));
