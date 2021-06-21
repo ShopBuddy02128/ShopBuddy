@@ -118,7 +118,8 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
         } catch (Exception e) {
             Log.e("Error",e.getMessage());
         }
-        new FirestoreHandler().prepareAlarmListForUser(AuthService.getCurrentUserId(), this);
+        // Make sure the user has an alarmlist in the DB
+        new FirestoreHandler().prepareAlarmListForUser(AuthService.getCurrentUserId());
 
 
         foodWasteFragment = new FoodWasteFragment(mapFragment);
@@ -207,13 +208,5 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
 
     public TextView getActionBarTitle(){
         return actionBarTitle;
-    }
-
-    public void saveItems(ArrayList<String> items) {
-        this.discountAlarmItems = items;
-    }
-
-    public ArrayList<String> getItems() {
-        return this.discountAlarmItems;
     }
 }

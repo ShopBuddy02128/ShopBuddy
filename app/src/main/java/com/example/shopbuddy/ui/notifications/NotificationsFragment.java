@@ -23,24 +23,23 @@ public class NotificationsFragment extends Fragment {
     private NotificationsViewModel notificationsViewModel;
     public FragmentNotificationsBinding binding;
 
-    private ArrayList<String> alarmItemArrayList;
+    private ArrayList<String> alarmItemArrayList = new ArrayList<>();
     private AlarmAdapter alarmAdapter;
 
-    private NavigationActivity parent;
     public NotificationsFragment(NavigationActivity parent) {
-        this.parent = parent;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
+        // Get Items from database
+        new FirestoreHandler().getDiscountAlarmList(AuthService.getCurrentUserId(), this);
+
         notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
 
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-        alarmItemArrayList = parent.getItems();
 
         alarmAdapter = new AlarmAdapter(requireActivity(),alarmItemArrayList);
 
@@ -79,13 +78,14 @@ public class NotificationsFragment extends Fragment {
         alarmAdapter.resetCheckedMap();
     }
 
-    public ArrayList<String> getItems() {
-        return this.alarmItemArrayList;
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     @Override
     public void onPause() {
-        parent.saveItems(alarmItemArrayList);
         new FirestoreHandler().updateDiscountList(AuthService.getCurrentUserId(), alarmItemArrayList);
         super.onPause();
     }
@@ -94,5 +94,15 @@ public class NotificationsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public void updateItemsList(ArrayList<String> items) {
+        this.alarmItemArrayList.clear();
+        this.alarmItemArrayList.addAll(items);
+        alarmAdapter.notifyDataSetChanged();
+    }
+
+    public ArrayList<String> getAlarmItemArrayList() {
+        return this.alarmItemArrayList;
     }
 }

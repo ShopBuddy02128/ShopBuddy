@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.example.shopbuddy.models.ShopListItem;
 import com.example.shopbuddy.models.ShoppingList;
 import com.example.shopbuddy.ui.navigation.NavigationActivity;
+import com.example.shopbuddy.ui.notifications.NotificationsFragment;
 import com.example.shopbuddy.ui.shoplist.AutocompleteAdapter;
 import com.example.shopbuddy.ui.shoplist.ListAdapter;
 import com.example.shopbuddy.ui.shoplist.ShopListFragment;
@@ -266,7 +267,7 @@ public class FirestoreHandler {
                 });
     }
 
-    public void prepareAlarmListForUser(String userId, NavigationActivity navAct) {
+    public void prepareAlarmListForUser(String userId) {
         db.collection("discountAlarmsForUsers")
                 .document(userId)
                 .get()
@@ -279,16 +280,9 @@ public class FirestoreHandler {
                         db.collection("discountAlarmsForUsers")
                                 .document(userId)
                                 .set(newDoc)
-                                .addOnCompleteListener(secondTask -> {
-                                    if(secondTask.isSuccessful()) {
-                                        getDiscountAlarmList(userId, navAct);
-                                    }
-                                })
                                 .addOnFailureListener(e -> {
                                     ToastService.makeToast("Failed to create new document for user", Toast.LENGTH_SHORT);
                                 });
-                    } else {
-                        getDiscountAlarmList(userId, navAct);
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -296,7 +290,7 @@ public class FirestoreHandler {
                 });
     }
 
-    public void getDiscountAlarmList(String userId, NavigationActivity navAct) {
+    public void getDiscountAlarmList(String userId, NotificationsFragment notifyFragment) {
         db.collection("discountAlarmsForUsers")
                 .document(userId)
                 .get()
@@ -304,7 +298,7 @@ public class FirestoreHandler {
                     if(task.isSuccessful()) {
                         DocumentSnapshot doc = task.getResult();
                         ArrayList<String> items = (ArrayList<String>) doc.get("items");
-                        navAct.saveItems(items);
+                        notifyFragment.updateItemsList(items);
                     }
                 })
                 .addOnFailureListener(e -> {

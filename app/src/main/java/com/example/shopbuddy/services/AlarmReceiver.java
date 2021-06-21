@@ -17,7 +17,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        ArrayList<String> itemsList = AlarmService.getNotificationsFragment().getItems();
+        ArrayList<String> itemsList = AlarmService.getNotificationsFragment().getAlarmItemArrayList();
         if(itemsList == null) return;
         String[] items = itemsList.toArray(new String[0]);
 
