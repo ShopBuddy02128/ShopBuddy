@@ -9,7 +9,7 @@
     <ImageView
         android:layout_width="400px"
         android:layout_height="400px"
-        app:srcCompat="@drawable/ic_notifications_black_24dp" />
+        android:id="@+id/discount_item_image"/>
 
     <TextView
         android:layout_height="wrap_content"

@@ -72,6 +72,7 @@ public class FoodWasteItemsFragment extends Fragment {
                 intent.putExtra("price", items.get(position).price);
                 intent.putExtra("oldPrice", items.get(position).oldPrice);
                 intent.putExtra("validTo", items.get(position).validTo.toString());
+                intent.putExtra("imageUrl", items.get(position).imageUrl);
 
                 startActivity(intent);
             }

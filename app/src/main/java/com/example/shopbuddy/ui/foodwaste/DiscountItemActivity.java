@@ -1,9 +1,12 @@
 package com.example.shopbuddy.ui.foodwaste;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -11,15 +14,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.services.ToastService;
+import com.example.shopbuddy.utils.ImageLoadTask;
+import com.example.shopbuddy.utils.ImageLoader;
 
 import java.io.Serializable;
 import java.util.Date;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class DiscountItemActivity extends AppCompatActivity {
 
-    String name, validTo;
+    String name, validTo, imageUrl;
     String price, oldPrice, savings;
     TextView nameText, priceText, oldPriceText, savingsText, validToText;
+    ImageView image;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -32,8 +40,13 @@ public class DiscountItemActivity extends AppCompatActivity {
         price = origin.getStringExtra("price");
         oldPrice = origin.getStringExtra("oldPrice");
         validTo = origin.getStringExtra("validTo");
+        imageUrl = origin.getStringExtra("imageUrl");
         savings = "" + (int) ((1 - Double.parseDouble(price)/Double.parseDouble(oldPrice)) * 100);
 
+        //Start loading picture
+        image = (ImageView) findViewById(R.id.discount_item_image);
+        ImageLoader task = new ImageLoader(this, imageUrl);
+        task.loadImage(bitmap -> setImage(bitmap));
 
         //Get textview in layout and insert text
         nameText = (TextView) findViewById(R.id.discount_item_title);
@@ -67,5 +80,14 @@ public class DiscountItemActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void setImage(Bitmap bitmap){
+        if(bitmap == null){
+            Log.i("BITMAP", "Bitmap is null!!");
+            return;
+        }
+        Log.i("BITMAP", "Bitmap is not null!!");
+        image.setImageBitmap(bitmap);
     }
 }

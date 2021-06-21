@@ -131,7 +131,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
         } catch (Exception e) {
             Log.e("Error",e.getMessage());
         }
-        new FirestoreHandler().getDiscountAlarmList(AuthService.getCurrentUserId(), this);
+        new FirestoreHandler().prepareAlarmListForUser(AuthService.getCurrentUserId(), this);
 
 
         foodWasteFragment = new FoodWasteFragment(mapFragment);
