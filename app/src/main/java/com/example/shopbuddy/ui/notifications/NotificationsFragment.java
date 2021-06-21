@@ -33,7 +33,6 @@ public class NotificationsFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        // Get Items from database
         new FirestoreHandler().getDiscountAlarmList(AuthService.getCurrentUserId(), this);
 
         notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
@@ -46,30 +45,23 @@ public class NotificationsFragment extends Fragment {
         binding.mainAlarmList.setAdapter(alarmAdapter);
 
         EditText editText = (EditText) root.findViewById(R.id.new_alarm);
-        binding.addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!editText.getText().toString().equals("")) {
-                    alarmItemArrayList.add(editText.getText().toString());
-                    editText.getText().clear();
-                    alarmAdapter.notifyDataSetChanged();
-                }
+
+        binding.addButton.setOnClickListener(view -> {
+            if(!editText.getText().toString().equals("")) {
+                alarmItemArrayList.add(editText.getText().toString());
+                editText.getText().clear();
+                alarmAdapter.notifyDataSetChanged();
             }
         });
 
-        binding.deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeSelectedFromList();
-            }
-        });
+        binding.deleteButton.setOnClickListener(v -> removeSelectedFromList());
 
         return root;
     }
 
     public void removeSelectedFromList() {
+
         for(int i = alarmItemArrayList.size() - 1; i >= 0 ; i--) {
-            String s = alarmAdapter.getItem(i);
             if (alarmAdapter.isChecked(i)) {
                 alarmItemArrayList.remove(i);
             }

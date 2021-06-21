@@ -5,16 +5,13 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
-import com.example.shopbuddy.MainActivity;
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.models.DiscountItem;
 import com.example.shopbuddy.ui.navigation.NavigationActivity;
 import com.example.shopbuddy.ui.notifications.NotificationsFragment;
-import com.example.shopbuddy.ui.startScreen.RegisterScreenActivity;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -63,8 +60,6 @@ public abstract class AlarmService {
                 intent, PendingIntent.FLAG_NO_CREATE);
         alarmManager.cancel(pendingIntent);
     }
-
-
 
     public static void setReceivedCalls(int receivedCalls) {
         AlarmService.receivedCalls = receivedCalls;

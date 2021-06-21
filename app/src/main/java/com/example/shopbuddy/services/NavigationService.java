@@ -1,7 +1,5 @@
 package com.example.shopbuddy.services;
 
-import android.view.View;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
