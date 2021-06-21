@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -43,12 +44,17 @@ public class ShopListFragment extends Fragment {
     public ShoppingList shoppingList;
     public static double shoppingListPrice = 0;
     // test lists in firebase
-    public String shoppingListId_ = "fmeAODU9GwgSy0amghYH"; // nice, realistic data
-    public String shoppingListId = "sd3k6GhP6Z3S8DK9WPav"; // for testing add item
+    public String shoppingListId;
     // end test lists
     public ArrayList<ShopListItem> shopListItems;
 
     public FirestoreHandler dbHandler;
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //shoppingListId = "sd3k6GhP6Z3S8DK9WPav"; // for testing add item
+    }
 
     @SuppressLint("ResourceType")
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -132,10 +138,6 @@ public class ShopListFragment extends Fragment {
         });
     }
 
-    private void tryEnterItemView() {
-
-    }
-
     private void tryAddItem(ShopListItem item) {
         // check if key exists, and if not, insert into db
         if (!shopListItems.stream().anyMatch(i -> i.itemId.equals(item.itemId))) {
@@ -157,5 +159,9 @@ public class ShopListFragment extends Fragment {
             dbHandler.getShoppingListContents(shoppingListId);
             refresher.setRefreshing(false);
         });
+    }
+
+    public void setShoppingListId(String id) {
+        this.shoppingListId = id;
     }
 }
