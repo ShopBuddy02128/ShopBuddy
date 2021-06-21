@@ -1,30 +1,35 @@
 package com.example.shopbuddy.utils;
 
 
+import androidx.fragment.app.Fragment;
+
 import java.util.LinkedList;
 
 public class CustomBackStack {
 
-    private LinkedList<Integer> backStack;
+    private LinkedList<Integer> idStack;
 
     public CustomBackStack(){
-        backStack = new LinkedList<>();
+
+        idStack = new LinkedList<>();
     }
 
     public void addToBackStack(int num){
-        backStack.push(num);
+        idStack.push(num);
     }
 
     public CustomBackStack popCurrent(){
-        backStack.pop();
+        idStack.pop();
         return this;
     }
 
     public int getCurrent(){
-        return size() > 0 ? backStack.getFirst() : 0;
+        return size() > 0 ? idStack.getFirst() : 0;
     }
 
     public int size(){
-        return backStack.size();
+        return idStack.size();
     }
+
+    public LinkedList<Integer> getRawId(){ return idStack; }
 }

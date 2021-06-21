@@ -38,7 +38,7 @@ public class JSONReader {
                 cl.setStore(store);
 
                 //Separate every item to be cleared
-                JSONArray clearances = clearanceObj.getJSONArray("clearances");
+                JSONArray clearances = getArray(clearanceObj,"clearances");
                 JSONObject[] offerItems = new JSONObject[clearances.length()];
 
                 //Get Array of items to be cleared
@@ -49,7 +49,7 @@ public class JSONReader {
                 //Add every item to the list
                 for(JSONObject offerItem : offerItems){
                     ShopListItem item = getItemFromClearance(offerItem, store);
-                    cl.addItem(item);
+                    if(item != null) cl.addItem(item);
                 }
 
                 //Add every list to the list
@@ -68,62 +68,87 @@ public class JSONReader {
 
     //Getting the store from Anti Food Waste API
     private static Store getStoreFromClearance(JSONObject clearanceObj) {
-        try {
-            JSONObject storeNode = clearanceObj.getJSONObject("store");
+            JSONObject storeNode = getObject(clearanceObj,"store");
 
-            String storeName = storeNode.getString("name");
-            String storeId = storeNode.getString("id");
+            String storeName = getString(storeNode, "name");
+            String storeId = getString(storeNode,"id");
 
-            JSONObject addressNode = storeNode.getJSONObject("address");
+            JSONObject addressNode = getObject(storeNode, "address");
 
-            String street = addressNode.getString("street");
-            String city = addressNode.getString("city");
-            String zip = addressNode.getString("zip");
+            String street = getString(addressNode,"street");
+            String city = getString(addressNode,"city");
+            String zip = getString(addressNode,"zip");
             String storeAddress = street + ", " + city + ", " + zip;
 
             Store store = new Store(storeName, storeAddress, storeId);
             return store;
-
-        }catch(JSONException e){
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
     //Getting an item from Anti Food Waste API
     private static ShopListItem getItemFromClearance(JSONObject offerItem, Store store) {
-        try{
             //Separate offer from item
-            JSONObject offer = offerItem.getJSONObject("offer");
-            JSONObject item = offerItem.getJSONObject("product");
+            JSONObject offer = getObject(offerItem, "offer");
+            JSONObject item = getObject(offerItem, "product");
+            Log.i("JSON", item.toString());
 
             //Get new and old price
-            String newPrice = offer.getDouble("newPrice") + "";
-            String oldPrice = offer.getDouble("originalPrice") + "";
+            String newPrice = getDouble(offer,"newPrice") + "";
+            String oldPrice = getDouble(offer,"originalPrice") + "";
 
             //Get quantity in stock
-            String qty = offer.getDouble("stock") + "";
+            String qty = getDouble(offer,"stock") + "";
 
             //Get dates
-            String eDate = offer.getString("endTime");
+            String eDate = getString(offer,"endTime");
             Log.i("DINFAR", eDate);
-            String sDate = offer.getString("startTime");
+            String sDate = getString(offer,"startTime");
 
             //Get name and id of item
-            String name = item.getString("description");
-            String ean = item.getString("ean");
+            String name = getString(item,"description");
+            String ean = getString(item,"ean");
 
             //Get imageUrl
-            String imageUrl = item.getString("image");
+            String imageUrl = getString(item,"image");
 
             ShopListItem sItem = new ShopListItem(name, "", newPrice, qty, imageUrl, ean, oldPrice, eDate);
+            if(name == "") return null;
             return sItem;
+    }
 
+    private static String getString(JSONObject o, String tag){
+        try{
+            return o.getString(tag);
         }catch(JSONException e){
             e.printStackTrace();
+            return "";
         }
-        return null;
+    }
+
+    private static double getDouble(JSONObject o, String tag){
+        try{
+            return o.getDouble(tag);
+        }catch(JSONException e){
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    private static JSONObject getObject(JSONObject o, String tag){
+        try{
+            return o.getJSONObject(tag);
+        }catch(JSONException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static JSONArray getArray(JSONObject o, String tag){
+        try{
+            return o.getJSONArray(tag);
+        }catch(JSONException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

@@ -45,7 +45,7 @@ public class DiscountItemActivity extends AppCompatActivity {
         //Start loading picture
         image = (ImageView) findViewById(R.id.discount_item_image);
         ImageLoader task = new ImageLoader(this, imageUrl);
-        task.loadImage(bitmap -> setImage(bitmap));
+        task.loadImageF(bitmap -> setImage(bitmap));
 
         //Get textview in layout and insert text
         nameText = (TextView) findViewById(R.id.discount_item_title);

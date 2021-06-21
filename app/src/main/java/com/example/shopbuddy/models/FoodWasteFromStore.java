@@ -27,10 +27,10 @@ public class FoodWasteFromStore {
     }
 
     public String toString(){
-        String string = "";
+        String string = "Number of Items: " + items.size() + "\n";
 
         for(ShopListItem item : items){
-            string += item.toString();
+            string += item.toString() + "\n";
         }
 
         return string;

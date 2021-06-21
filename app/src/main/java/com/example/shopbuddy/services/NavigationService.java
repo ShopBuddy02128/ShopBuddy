@@ -22,7 +22,7 @@ public class NavigationService {
     //From NavigationActivity
     private static NavigationActivity navActivity;
     private static CustomNavBar navbar;
-    private static CustomBackStack customBackStack = new CustomBackStack();
+    private static CustomBackStack customBackStack;
 
     //Tab roots
     public static Fragment[] rootFragments;
@@ -46,6 +46,14 @@ public class NavigationService {
 
     public static void setPredifinedTabRoots(Fragment[] frags){
         rootFragments = frags;
+    }
+
+    public static void setCustomBackStack(CustomBackStack backStack){
+        customBackStack = backStack;
+    }
+
+    public static CustomBackStack getCustomBackStack(){
+        return customBackStack;
     }
 
     public static void changeToFragment(Fragment fragment, int navButton){

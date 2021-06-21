@@ -1,8 +1,10 @@
 package com.example.shopbuddy.ui.shoplist;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.shopbuddy.databinding.ActivityItemViewBinding;
 import com.example.shopbuddy.services.FirestoreHandler;
 import com.example.shopbuddy.utils.ImageLoadTask;
+import com.example.shopbuddy.utils.ImageLoader;
 import com.example.shopbuddy.utils.TextFormatter;
 
 
@@ -22,6 +25,8 @@ public class ItemActivity extends AppCompatActivity {
 
     String shoppingListId, userId, itemId;
     Long qty;
+
+    ImageView imageView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,11 +55,11 @@ public class ItemActivity extends AppCompatActivity {
             binding.itemviewBrand.setText(TextFormatter.toNameFormat(brand));
             binding.itemviewPrice.setText(price);
             binding.itemviewQty.setText(qty.toString());
+            imageView = binding.itemviewImage;
 
-            ImageLoadTask task = new ImageLoadTask(binding.itemviewImage);
-            Log.i(TAG, "UID = " + userId);
-            Log.i(TAG, "shoppingListId = " + shoppingListId);
-            task.execute(imageUrl);
+
+            ImageLoader task = new ImageLoader(this, imageUrl);
+            task.loadImageF(bitmap -> setImage(bitmap));
         }
 
         binding.itemQtyPlus.setOnClickListener(l -> {
@@ -91,8 +96,7 @@ public class ItemActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    public void setImage(Bitmap bitmap){
+        imageView.setImageBitmap(bitmap);
     }
 }

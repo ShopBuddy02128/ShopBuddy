@@ -221,7 +221,7 @@ public class FirestoreHandler {
                                         frag.binding.totalPrice.setText("Total: " + new DecimalFormat("#.##").format(shoppingListPrice));
 
                                         // update the adapter
-                                        ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), list);
+                                        ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), frag.requireActivity(), list);
                                         frag.shopListItems = list;
                                         frag.binding.list.setAdapter(newAdapter);
                                     });
