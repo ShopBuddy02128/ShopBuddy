@@ -117,7 +117,7 @@ public class JSONReader {
             //Get imageUrl
             String imageUrl = item.getString("image");
 
-            ShopListItem sItem = new ShopListItem(name, "", newPrice, "1", imageUrl, ean, oldPrice, eDate);
+            ShopListItem sItem = new ShopListItem(name, "", newPrice, qty, imageUrl, ean, oldPrice, eDate);
             return sItem;
 
         }catch(JSONException e){

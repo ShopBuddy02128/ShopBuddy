@@ -1,5 +1,6 @@
 package com.example.shopbuddy.services;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
@@ -10,7 +11,6 @@ import com.example.shopbuddy.ui.navigation.NavigationActivity;
 import com.example.shopbuddy.ui.shoplist.AutocompleteAdapter;
 import com.example.shopbuddy.ui.shoplist.ListAdapter;
 import com.example.shopbuddy.ui.shoplist.ShopListFragment;
-import com.google.common.collect.Lists;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -108,11 +108,16 @@ public class FirestoreHandler {
                 });
     }
 
-    public void updateShoppingListPrice(String shoppingListId, double itemPrice, boolean plus) {
+    public void updateShoppingListPrice(String shoppingListId, String userId, double itemPrice, boolean plus) {
         db.collection("shoppingLists")
                 .document(shoppingListId)
                 .get()
                 .addOnSuccessListener(t -> {
+                    if (!Objects.equals(t.getString("userId"), userId)) {
+                        ToastService.makeToast("Insufficient rights", Toast.LENGTH_SHORT);
+                        return;
+                    }
+
                     double price = t.getDouble("price");
                     if (plus)
                         price += itemPrice;
@@ -214,7 +219,7 @@ public class FirestoreHandler {
                                         // update the adapter
                                         ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), list);
                                         frag.shopListItems = list;
-                                        frag.binding.listview.setAdapter(newAdapter);
+                                        frag.binding.list.setAdapter(newAdapter);
                                     });
                         }
                     })
@@ -245,6 +250,21 @@ public class FirestoreHandler {
                     })
                     .addOnFailureListener(e -> ToastService.makeToast("" + e.getMessage(), Toast.LENGTH_SHORT));
         }
+
+    public void closeActivityIfNotInItemInShoppingList(String itemId, String shoppingListId, Activity act) {
+        Log.i("bruh", "starting query");
+        db.collection("shoppingLists")
+                .document(shoppingListId)
+                .get()
+                .addOnCompleteListener(t -> {
+                    DocumentSnapshot doc = t.getResult();
+                    HashMap<String, Long> items = (HashMap<String, Long>) doc.get("itemIds");
+                    if (!items.containsKey(itemId)) {
+                        act.finish();
+                        ToastService.makeToast("Item no longer exists in shopping list", Toast.LENGTH_SHORT);
+                    }
+                });
+    }
 
     public void prepareAlarmListForUser(String userId, NavigationActivity navAct) {
         db.collection("discountAlarmsForUsers")
@@ -299,5 +319,30 @@ public class FirestoreHandler {
         db.collection("discountAlarmsForUsers")
                 .document(userId)
                 .update(itemsMap);
+    }
+
+
+    public void prepareShoppingListForUser(String userId, String userEmail) {
+        db.collection("users")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful() && !task.getResult().exists()) {
+                        // Create document for user that is empty
+                        HashMap<String, Object> newDoc = new HashMap<>();
+                        List<String> emptyList = new ArrayList<>();
+                        newDoc.put("shoppingLists", emptyList);
+                        newDoc.put("userEmail", userEmail);
+                        db.collection("users")
+                                .document(userId)
+                                .set(newDoc)
+                                .addOnFailureListener(e -> {
+                                    ToastService.makeToast("Failed to create new document for user", Toast.LENGTH_SHORT);
+                                });
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    ToastService.makeToast("Failed to ensure user has list", Toast.LENGTH_SHORT);
+                });
     }
 }

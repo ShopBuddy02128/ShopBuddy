@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.shopbuddy.databinding.FragmentShoplistBinding;
 import com.example.shopbuddy.models.ShoppingList;
@@ -59,8 +60,10 @@ public class ShopListFragment extends Fragment {
         binding = FragmentShoplistBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        dbHandler = new FirestoreHandler(this.requireContext(), this);
         setupListView();
         setupAutocomplete();
+        setupRefresher();
 
         return root;
     }
@@ -80,15 +83,13 @@ public class ShopListFragment extends Fragment {
     }
 
     private void setupListView() {
-        dbHandler = new FirestoreHandler(this.requireContext(), this);
-
         shopListItems = new ArrayList<>();
 
         listAdapter = new ListAdapter(this.requireContext(), shopListItems);
 
-        binding.listview.setAdapter(listAdapter);
-        binding.listview.setClickable(true);
-        binding.listview.setOnItemClickListener((parent, view, position, id) -> {
+        binding.list.setAdapter(listAdapter);
+        binding.list.setClickable(true);
+        binding.list.setOnItemClickListener((parent, view, position, id) -> {
             Log.i(TAG, ""+position+" clicked.");
 
             Intent i = new Intent(requireActivity(), ItemActivity.class);
@@ -117,6 +118,8 @@ public class ShopListFragment extends Fragment {
         acAdapter = new AutocompleteAdapter(this.requireActivity(),  acItems);
         ac.setAdapter(acAdapter);
 
+        ac.setHint("Søg i varer");
+
         ac.setOnItemClickListener((parent, view, position, id) -> {
             ShopListItem item = acAdapter.getShopListItem(position);
             Log.i(TAG, item.toString());
@@ -125,14 +128,34 @@ public class ShopListFragment extends Fragment {
             TextView tv = (TextView) rl.getChildAt(0);
             ac.setText("");
 
-            // check if key exists, and if not, insert into db
-            if (!shopListItems.stream().anyMatch(i -> i.itemId.equals(item.itemId))) {
-                dbHandler.addItemToShoppingList(item.itemId, shoppingListId, shoppingList.getSize());
-                boolean positivePriceAdjustment = true;
-                dbHandler.updateShoppingListPrice(shoppingListId, Double.parseDouble(item.price), positivePriceAdjustment);
-            }
-            else
-                ToastService.makeToast("Item already in list", Toast.LENGTH_SHORT);
+            tryAddItem(item);
+        });
+    }
+
+    private void tryEnterItemView() {
+
+    }
+
+    private void tryAddItem(ShopListItem item) {
+        // check if key exists, and if not, insert into db
+        if (!shopListItems.stream().anyMatch(i -> i.itemId.equals(item.itemId))) {
+            dbHandler.addItemToShoppingList(item.itemId, shoppingListId, shoppingList.getSize());
+            boolean positivePriceAdjustment = true;
+            dbHandler.updateShoppingListPrice(
+                    shoppingListId,
+                    AuthService.getCurrentUserId(),
+                    Double.parseDouble(item.price),
+                    positivePriceAdjustment);
+        }
+        else
+            ToastService.makeToast("Item already in list", Toast.LENGTH_SHORT);
+    }
+
+    private void setupRefresher() {
+        SwipeRefreshLayout refresher = binding.swipeRefresher;
+        refresher.setOnRefreshListener(() -> {
+            dbHandler.getShoppingListContents(shoppingListId);
+            refresher.setRefreshing(false);
         });
     }
 }

@@ -1,6 +1,5 @@
 package com.example.shopbuddy.ui.shoplist;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,7 +7,6 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.shopbuddy.MainActivity;
 import com.example.shopbuddy.databinding.ActivityItemViewBinding;
 import com.example.shopbuddy.services.FirestoreHandler;
 import com.example.shopbuddy.utils.ImageLoadTask;
@@ -45,6 +43,9 @@ public class ItemActivity extends AppCompatActivity {
             userId = i.getStringExtra("userId");
             itemId = i.getStringExtra("itemId");
 
+            // if item has been deleted but is still present in list
+            dbHandler.closeActivityIfNotInItemInShoppingList(itemId, shoppingListId, this);
+
             binding.itemviewName.setText(TextFormatter.toNameFormat(name));
             binding.itemviewBrand.setText(TextFormatter.toNameFormat(brand));
             binding.itemviewPrice.setText(price);
@@ -61,7 +62,7 @@ public class ItemActivity extends AppCompatActivity {
             qty++;
             boolean plus = true;
             dbHandler.updateQty(shoppingListId, itemId, userId, plus);
-            dbHandler.updateShoppingListPrice(shoppingListId, Double.parseDouble(i.getStringExtra("price")), plus);
+            dbHandler.updateShoppingListPrice(shoppingListId, userId, Double.parseDouble(i.getStringExtra("price")), plus);
             binding.itemviewQty.setText(qty.toString());
         });
 
@@ -72,7 +73,7 @@ public class ItemActivity extends AppCompatActivity {
             qty--;
             boolean plus = false;
             dbHandler.updateQty(shoppingListId, itemId, userId, plus);
-            dbHandler.updateShoppingListPrice(shoppingListId, Double.parseDouble(i.getStringExtra("price")), plus);
+            dbHandler.updateShoppingListPrice(shoppingListId, userId, Double.parseDouble(i.getStringExtra("price")), plus);
             binding.itemviewQty.setText(qty.toString());
         });
 
