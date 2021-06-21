@@ -25,10 +25,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         AlarmService.setCallsToReceive(items.length);
         AlarmService.resetListOfItems();
 
-        AlarmService.createDiscountNotification("Message Test");
-
         for(String item : items) {
-            //new DiscountSearchService(item).start();
+            new DiscountSearchService(item).start();
         }
     }
 }
