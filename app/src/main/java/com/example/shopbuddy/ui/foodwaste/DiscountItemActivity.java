@@ -20,7 +20,6 @@ import com.example.shopbuddy.utils.ImageLoader;
 import java.io.Serializable;
 import java.util.Date;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DiscountItemActivity extends AppCompatActivity {
 

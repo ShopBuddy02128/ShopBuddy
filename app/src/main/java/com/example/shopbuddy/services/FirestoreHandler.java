@@ -305,4 +305,29 @@ public class FirestoreHandler {
                 .document(userId)
                 .update(itemsMap);
     }
+
+
+    public void prepareShoppingListForUser(String userId, String userEmail) {
+        db.collection("users")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful() && !task.getResult().exists()) {
+                        // Create document for user that is empty
+                        HashMap<String, Object> newDoc = new HashMap<>();
+                        List<String> emptyList = new ArrayList<>();
+                        newDoc.put("shoppingLists", emptyList);
+                        newDoc.put("userEmail", userEmail);
+                        db.collection("users")
+                                .document(userId)
+                                .set(newDoc)
+                                .addOnFailureListener(e -> {
+                                    ToastService.makeToast("Failed to create new document for user", Toast.LENGTH_SHORT);
+                                });
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    ToastService.makeToast("Failed to ensure user has list", Toast.LENGTH_SHORT);
+                });
+    }
 }
