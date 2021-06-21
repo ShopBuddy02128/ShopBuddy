@@ -303,23 +303,24 @@ public class FirestoreHandler {
     }
 
     public void addAlarmForItem(String userId, String itemName) {
-        db.collection("discountAlarmsForUsers")
-                .document(userId)
-                .get()
-                .addOnCompleteListener(t -> {
-                    ArrayList<String> alarmItems = (ArrayList<String>) t.getResult().get("items");
-                    alarmItems.add(itemName);
+        db.runTransaction((Transaction.Function<Void>) transaction -> {
+            DocumentReference alarmsRef = db
+                    .collection("discountAlarmsForUsers")
+                    .document(userId);
+            DocumentSnapshot alarmsSnapshot = transaction.get(alarmsRef);
 
-                    Map<String, Object> itemsMap = new HashMap<>();
-                    itemsMap.put("items", alarmItems);
+            ArrayList<String> alarmItems = (ArrayList<String>) alarmsSnapshot.get("items");
+            alarmItems.add(itemName);
 
-                    db.collection("discountAlarmsForUsers")
-                            .document(userId)
-                            .update(itemsMap)
-                            .addOnCompleteListener(l -> {
-                                ToastService.makeToast("Tilføjet alarm for " + itemName, Toast.LENGTH_SHORT);
-                            });
-                });
+            Map<String, Object> itemsMap = new HashMap<>();
+            itemsMap.put("items", alarmItems);
+
+            transaction.update(alarmsRef, itemsMap);
+
+            return null;
+        }).addOnSuccessListener(l -> {
+            ToastService.makeToast("Tilføjet alarm for " + itemName, Toast.LENGTH_SHORT);
+        }).addOnFailureListener(this::logTransactionError);
     }
 
     public void prepareShoppingListCollectionForUser(String userId, String userEmail, ShopListFragment shoplistFragment) {
