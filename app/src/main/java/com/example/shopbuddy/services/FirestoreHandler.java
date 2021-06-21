@@ -219,7 +219,7 @@ public class FirestoreHandler {
                                         // update the adapter
                                         ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), list);
                                         frag.shopListItems = list;
-                                        frag.binding.listview.setAdapter(newAdapter);
+                                        frag.binding.list.setAdapter(newAdapter);
                                     });
                         }
                     })
