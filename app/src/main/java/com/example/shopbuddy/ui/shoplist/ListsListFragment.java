@@ -64,7 +64,7 @@ public class ListsListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //shopListFragment.setData(lists.get(position));
-                NavigationService.changeToFragment(main.shopListFragment, NavigationService.SHOP_LIST_PAGE);
+                NavigationService.changeToFragment(new ShopListFragment(), NavigationService.SHOP_LIST_PAGE);
             }
         });
 
