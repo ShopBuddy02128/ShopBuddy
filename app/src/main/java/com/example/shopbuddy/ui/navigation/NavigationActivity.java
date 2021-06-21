@@ -50,11 +50,12 @@ import java.util.Locale;
 public class NavigationActivity extends AppCompatActivity implements LocationListener {
     private ActivityMainBinding binding;
 
-    public ListsListFragment listsListFragment;
-    public ShopListFragment shopListFragment;
-    public MapFragment mapFragment;
-    public NotificationsFragment notificationsFragment;
-    public FoodWasteFragment foodWasteFragment;
+
+    private ListsListFragment listsListFragment;
+    private ShopListFragment shopListFragment;
+    private MapFragment mapFragment;
+    private NotificationsFragment notificationsFragment;
+    private FoodWasteFragment foodWasteFragment;
 
     private ImageView menuButton1, menuButton2, menuButton3, menuButton4;
     private TextView menuButton1Text, menuButton2Text, menuButton3Text, menuButton4Text;
