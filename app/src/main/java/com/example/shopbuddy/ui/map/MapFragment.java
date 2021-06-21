@@ -81,7 +81,6 @@ import static android.content.ContentValues.TAG;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, AdapterView.OnItemSelectedListener, GoogleMap.OnInfoWindowClickListener {
     private FragmentMapBinding binding;
-    private MapViewModel mapViewModel;
 
     private GoogleMap map;
     private MapView mapView;
@@ -131,7 +130,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mapView = binding.mapView;
-        mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
 
         if (mapView != null) {
             mapView.onCreate(null);
@@ -153,7 +151,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             // Requesting the permission
             ActivityCompat.requestPermissions(this.getActivity(), new String[]{permission}, requestCode);
         } else {
-            Toast.makeText(this.getActivity(), "Permission already granted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.getActivity(), "Tilladelse til lokation allerede givet", Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -164,9 +162,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this.getActivity(), "Location Permission Granted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this.getActivity(), "Tilladelse til lokalitetstjeneste givet", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this.getActivity(), "Location Permission Denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this.getActivity(), "Tilladelse til lokalitetstjeneste afvist", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -291,7 +289,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 dataTransfer[0] = map;
                 dataTransfer[1] = url;
                 getNearbyPlacesData.execute(dataTransfer);
-                Toast.makeText(this.getContext(), "showing nearby Netto", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.getContext(), "Viser nærtliggende Netto", Toast.LENGTH_LONG).show();
                 break;
             case "Føtex":
                 map.clear();
@@ -299,7 +297,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 dataTransfer[0] = map;
                 dataTransfer[1] = url;
                 getNearbyPlacesData.execute(dataTransfer);
-                Toast.makeText(this.getContext(), "showing nearby Føtex", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.getContext(), "Viser nærtliggende Føtex", Toast.LENGTH_LONG).show();
                 break;
             case "Bilka":
                 map.clear();
@@ -307,7 +305,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 dataTransfer[0] = map;
                 dataTransfer[1] = url;
                 getNearbyPlacesData.execute(dataTransfer);
-                Toast.makeText(this.getContext(), "showing nearby Bilka", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.getContext(), "Viser nærtliggende Bilka", Toast.LENGTH_LONG).show();
                 break;
         }
 

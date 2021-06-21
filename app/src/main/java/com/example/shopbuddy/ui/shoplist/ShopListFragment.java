@@ -50,12 +50,6 @@ public class ShopListFragment extends Fragment {
 
     public FirestoreHandler dbHandler;
 
-    @Override
-    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //shoppingListId = "sd3k6GhP6Z3S8DK9WPav"; // for testing add item
-    }
-
     @SuppressLint("ResourceType")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
