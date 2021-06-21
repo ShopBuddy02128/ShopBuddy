@@ -22,7 +22,7 @@
         android:hint="@string/enter_product"
         android:inputType="text"
         android:textAlignment="textStart"
-        android:textSize="20sp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -47,12 +47,12 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         >
-
     </ImageButton>
 
     </LinearLayout>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/mainAlarmList"/>
+        android:id="@+id/mainAlarmList"
+        android:scrollbarAlwaysDrawVerticalTrack="true"/>
 </LinearLayout>

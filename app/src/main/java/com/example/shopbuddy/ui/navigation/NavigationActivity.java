@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 
@@ -90,7 +91,9 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setCustomView(v);
         actionBarTitle = (TextView) findViewById(R.id.custom_actionbar_title);
-        ((Button) findViewById(R.id.custom_actionbar_btn)).setOnClickListener(new View.OnClickListener() {
+        Button logoutButton = ((Button) findViewById(R.id.custom_actionbar_btn));
+        logoutButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.ShopDarkBuddyBlue, null));
+        logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AuthService.getmAuth().signOut();

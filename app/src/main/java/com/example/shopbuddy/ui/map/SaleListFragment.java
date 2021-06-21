@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -21,14 +22,10 @@ import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.FragmentSalelistBinding;
 
 import com.example.shopbuddy.models.DiscountItem;
-import com.example.shopbuddy.models.FoodWasteFromStore;
 import com.example.shopbuddy.models.ShopListItem;
 
 import com.example.shopbuddy.services.DiscountForStoreService;
-import com.example.shopbuddy.ui.shoplist.ItemActivity;
-import com.example.shopbuddy.ui.shoplist.ListAdapter;
 
-import com.example.shopbuddy.utils.DummyData;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -103,7 +100,7 @@ public class SaleListFragment extends Fragment {
 
     public void finishRequest(List<DiscountItem> listOfDiscountsForStore) {
         items = listOfDiscountsForStore;
-        Log.i(TAG, "A list of discount items has been returned and the first item is" + items.get(2).getTitle());
+        Log.i(TAG, "A list of discount items has been returned");
 
 
         ArrayList<ShopListItem> shopListItemArrayList = new ArrayList<>();
@@ -123,8 +120,16 @@ public class SaleListFragment extends Fragment {
         // set the list adapter
         adapter = new SaleListAdapter(getActivity(), R.layout.sale_list_item, shopListItemArrayList);
         //DET ER DET HER DER GIVER PROBLEMER : I/System.out: Only the original thread that created a view hierarchy can touch its views.
-        listView.setAdapter(adapter);
+        getActivity().runOnUiThread(() -> { listView.setAdapter(adapter);});
+        listView.setClickable(true);
         Log.i(TAG, "The adapter was created and set ");
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO - add ability to add items to the shopping list
+            }
+        });
 
 
     }

@@ -74,6 +74,8 @@ public class SaleListAdapter extends ArrayAdapter<ShopListItem> {
         ViewHolder holder = new ViewHolder();
 
         if (convertView == null){
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            convertView = inflater.inflate(mResource,parent,false);
             holder.name = (TextView) convertView.findViewById(R.id.sale_item_name);
             holder.brand= (TextView) convertView.findViewById(R.id.sale_item_brand);
             holder.price = (TextView) convertView.findViewById(R.id.sale_item_price);

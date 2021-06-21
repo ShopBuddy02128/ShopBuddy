@@ -75,6 +75,9 @@ public class FoodWasteFragment extends Fragment {
         //adapter.notifyDataSetChanged();
         fwfs = all;
 
+        if (binding == null) // workaround / hotfix for seemingly random crashes
+            return;
+
         listView = binding.listOfOffers;
         adapter = new FoodWasteStoreAdapter(getActivity(), fwfs);
 

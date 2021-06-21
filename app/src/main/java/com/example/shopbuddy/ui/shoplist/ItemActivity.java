@@ -66,29 +66,23 @@ public class ItemActivity extends AppCompatActivity {
             Log.i(TAG, "itemQtyPlus pressed");
             qty++;
             boolean plus = true;
-            dbHandler.updateQty(shoppingListId, itemId, userId, plus);
-            dbHandler.updateShoppingListPrice(shoppingListId, userId, Double.parseDouble(i.getStringExtra("price")), plus);
+            dbHandler.updateQtyTransaction(shoppingListId, itemId, userId, plus);
             binding.itemviewQty.setText(qty.toString());
         });
 
         binding.itemQtyMinus.setOnClickListener(l -> {
             Log.i(TAG, "itemQtyMinus pressed");
-            if (qty == 0)
+            if (qty <= 1)
                 return;
             qty--;
             boolean plus = false;
-            dbHandler.updateQty(shoppingListId, itemId, userId, plus);
-            dbHandler.updateShoppingListPrice(shoppingListId, userId, Double.parseDouble(i.getStringExtra("price")), plus);
+            dbHandler.updateQtyTransaction(shoppingListId, itemId, userId, plus);
             binding.itemviewQty.setText(qty.toString());
         });
 
         binding.itemDelete.setOnClickListener(l -> {
             Log.i(TAG, "Delete pressed");
-
-            // TODO ask for confirmation before just deleting
-            dbHandler.deleteItemFromShoppingList(itemId, Double.parseDouble(i.getStringExtra("price")), shoppingListId);
-
-            finish();
+            dbHandler.deleteItemTransaction(shoppingListId, itemId, Double.parseDouble(i.getStringExtra("price")), this);
         });
 
         binding.itemAddAlert.setOnClickListener(l -> {

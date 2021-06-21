@@ -17,12 +17,12 @@
                     android:id="@+id/checked_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Havredrik"
+                    android:text=""
                     android:checkMark="?android:attr/listChoiceIndicatorMultiple"
                     android:paddingTop="8dp"
-                    android:checked="false"
-                    android:focusable="false"
-                    >
+                    android:paddingBottom="8dp"
+                    android:textStyle="bold"
+                    android:textSize="24sp">
                 </CheckedTextView>
     </LinearLayout>
 </LinearLayout>

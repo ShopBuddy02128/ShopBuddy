@@ -1,6 +1,7 @@
 package com.example.shopbuddy.models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -83,5 +84,9 @@ public class ShoppingList {
 
     public String getPrice(){
         return "10";
+    }
+
+    public int getNextOrderNo() {
+        return this.itemOrder.values().size() > 0 ? Collections.max(this.itemOrder.values()).intValue() + 1 : 1;
     }
 }

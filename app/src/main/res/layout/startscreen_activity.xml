@@ -24,12 +24,12 @@
 
     <Button
         android:id="@+id/startScreen_loginBtn"
-        android:layout_width="119dp"
+        android:layout_width="139dp"
         android:layout_height="57dp"
         android:layout_marginTop="28dp"
         android:backgroundTint="#316CA2"
         android:fontFamily="@font/roboto_medium"
-        android:text="Login"
+        android:text="Log ind"
         android:textColor="#ffffff"
         android:textSize="24sp"
         android:textStyle="bold"
