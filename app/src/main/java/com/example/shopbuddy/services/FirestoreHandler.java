@@ -108,11 +108,16 @@ public class FirestoreHandler {
                 });
     }
 
-    public void updateShoppingListPrice(String shoppingListId, double itemPrice, boolean plus) {
+    public void updateShoppingListPrice(String shoppingListId, String userId, double itemPrice, boolean plus) {
         db.collection("shoppingLists")
                 .document(shoppingListId)
                 .get()
                 .addOnSuccessListener(t -> {
+                    if (!Objects.equals(t.getString("userId"), userId)) {
+                        ToastService.makeToast("Insufficient rights", Toast.LENGTH_SHORT);
+                        return;
+                    }
+
                     double price = t.getDouble("price");
                     if (plus)
                         price += itemPrice;

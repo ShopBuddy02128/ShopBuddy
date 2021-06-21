@@ -59,6 +59,7 @@ public class ShopListFragment extends Fragment {
         binding = FragmentShoplistBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        dbHandler = new FirestoreHandler(this.requireContext(), this);
         setupListView();
         setupAutocomplete();
 
@@ -80,8 +81,6 @@ public class ShopListFragment extends Fragment {
     }
 
     private void setupListView() {
-        dbHandler = new FirestoreHandler(this.requireContext(), this);
-
         shopListItems = new ArrayList<>();
 
         listAdapter = new ListAdapter(this.requireContext(), shopListItems);
@@ -129,7 +128,11 @@ public class ShopListFragment extends Fragment {
             if (!shopListItems.stream().anyMatch(i -> i.itemId.equals(item.itemId))) {
                 dbHandler.addItemToShoppingList(item.itemId, shoppingListId, shoppingList.getSize());
                 boolean positivePriceAdjustment = true;
-                dbHandler.updateShoppingListPrice(shoppingListId, Double.parseDouble(item.price), positivePriceAdjustment);
+                dbHandler.updateShoppingListPrice(
+                        shoppingListId,
+                        AuthService.getCurrentUserId(),
+                        Double.parseDouble(item.price),
+                        positivePriceAdjustment);
             }
             else
                 ToastService.makeToast("Item already in list", Toast.LENGTH_SHORT);
