@@ -17,12 +17,12 @@
 
     <Button
         android:id="@+id/custom_actionbar_btn"
-        android:layout_width="92dp"
+        android:layout_width="85dp"
         android:layout_height="46dp"
         android:layout_marginBottom="8dp"
         android:backgroundTint="#FF0000"
         android:backgroundTintMode="add"
-        android:text="Log Out"
+        android:text="Log ud"
         android:textColor="@color/white"
         android:textSize="12sp"
         android:textStyle="bold"

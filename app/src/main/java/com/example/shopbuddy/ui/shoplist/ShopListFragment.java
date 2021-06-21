@@ -139,7 +139,7 @@ public class ShopListFragment extends Fragment {
             dbHandler.addItemToShoppingList(item.itemId, shoppingListId, Double.parseDouble(item.price), shoppingList.getNextOrderNo());
         }
         else
-            ToastService.makeToast("Item already in list", Toast.LENGTH_SHORT);
+            ToastService.makeToast("Varen er allerede i liste", Toast.LENGTH_SHORT);
     }
 
     private void setupRefresher() {
