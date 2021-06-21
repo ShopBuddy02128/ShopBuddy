@@ -5,12 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.map.ShopChosenActivity">
 
-    <TextView
-        android:id="@+id/list_title"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        />
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,11 +13,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <com.example.shopbuddy.ui.shoplist.ShoplistAutocomplete
-                android:id="@+id/shoplist_autocomplete"
-                android:layout_width="300dp"
-                android:completionThreshold="1"
-                android:layout_height="wrap_content" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/shoplist_search_btn"
@@ -34,7 +23,7 @@
         </LinearLayout>
 
         <ListView
-            android:id="@+id/listview"
+            android:id="@+id/sale_listview"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
     </LinearLayout>

@@ -15,14 +15,16 @@ public class DiscountItem {
     private Date validTo;
     private String title;
     private Store store;
+    private String brand;
 
     public DiscountItem(String title, Store store, double price, double oldPrice, String dateFrom, String dateTo) throws Exception {
-        this.title = title;
         this.store = store;
         this.price = price;
         this.oldPrice = oldPrice;
 
-
+        int i = title.indexOf(' ');
+        brand = title.substring(0,i);
+        this.title = title.substring(i+1);
 
     }
 
@@ -46,6 +48,10 @@ public class DiscountItem {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getBrand() {
+        return brand;
     }
 
     public double getOldPrice(){ return oldPrice; }

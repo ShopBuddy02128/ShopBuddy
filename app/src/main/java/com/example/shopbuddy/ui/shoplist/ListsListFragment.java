@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.example.shopbuddy.databinding.FragmentFirstBinding;
 import com.example.shopbuddy.models.ShopListItem;
 import com.example.shopbuddy.models.ShoppingList;
+import com.example.shopbuddy.services.NavigationService;
 import com.example.shopbuddy.ui.navigation.NavigationActivity;
 import com.example.shopbuddy.utils.DummyData;
 
@@ -63,7 +64,7 @@ public class ListsListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //shopListFragment.setData(lists.get(position));
-                main.changeToFragment(main.shopListFragment, main.SHOPLIST_BUTTON);
+                NavigationService.changeToFragment(new ShopListFragment(), NavigationService.SHOP_LIST_PAGE);
             }
         });
 

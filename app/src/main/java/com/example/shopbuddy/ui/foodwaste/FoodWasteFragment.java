@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.example.shopbuddy.databinding.FragmentFoodWasteLayoutBinding;
 import com.example.shopbuddy.models.FoodWasteFromStore;
 import com.example.shopbuddy.services.FoodWasteFetcher;
+import com.example.shopbuddy.services.NavigationService;
 import com.example.shopbuddy.ui.map.MapFragment;
 import com.example.shopbuddy.ui.navigation.NavigationActivity;
 import com.example.shopbuddy.utils.DummyData;
@@ -88,7 +89,7 @@ public class FoodWasteFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                main.changeToFragment(new FoodWasteItemsFragment(fwfs.get(position)), main.OFFERS_BUTTON);
+                NavigationService.changeToFragment(new FoodWasteItemsFragment(fwfs.get(position)), NavigationService.FOOD_WASTE_PAGE);
             }
         });
 

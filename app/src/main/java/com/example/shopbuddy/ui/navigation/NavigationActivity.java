@@ -23,25 +23,22 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 
 import com.example.shopbuddy.MainActivity;
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.ActivityMainBinding;
-import com.example.shopbuddy.models.FoodWasteFromStore;
+import com.example.shopbuddy.models.CustomNavBar;
 import com.example.shopbuddy.services.AlarmService;
 import com.example.shopbuddy.services.AuthService;
-import com.example.shopbuddy.services.DiscountFoodWasteService;
 import com.example.shopbuddy.services.FirestoreHandler;
+import com.example.shopbuddy.services.NavigationService;
 import com.example.shopbuddy.services.ToastService;
 import com.example.shopbuddy.ui.map.MapFragment;
 import com.example.shopbuddy.ui.notifications.NotificationsFragment;
 import com.example.shopbuddy.ui.foodwaste.FoodWasteFragment;
 import com.example.shopbuddy.ui.shoplist.ListsListFragment;
 import com.example.shopbuddy.ui.shoplist.ShopListFragment;
-import com.example.shopbuddy.ui.startScreen.LoginScreenActivity;
 import com.example.shopbuddy.utils.CustomBackStack;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -53,11 +50,12 @@ import java.util.Locale;
 public class NavigationActivity extends AppCompatActivity implements LocationListener {
     private ActivityMainBinding binding;
 
-    public ListsListFragment listsListFragment;
-    public ShopListFragment shopListFragment;
-    public MapFragment mapFragment;
-    public NotificationsFragment notificationsFragment;
-    public FoodWasteFragment foodWasteFragment;
+
+    private ListsListFragment listsListFragment;
+    private ShopListFragment shopListFragment;
+    private MapFragment mapFragment;
+    private NotificationsFragment notificationsFragment;
+    private FoodWasteFragment foodWasteFragment;
 
     private ImageView menuButton1, menuButton2, menuButton3, menuButton4;
     private TextView menuButton1Text, menuButton2Text, menuButton3Text, menuButton4Text;
@@ -66,14 +64,9 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
     private TextView actionBarTitle;
     private String[] actionBarTitles;
 
-    boolean firstFragmentUsed = false;
-    ArrayList<String> discountAlarmItems = new ArrayList<String>();
+    private CustomNavBar navbar;
 
-    public final int MAP_BUTTON = 1;
-    public final int OFFERS_BUTTON = 2;
-    public final int SHOPLIST_BUTTON = 3;
-    public final int ALARM_BUTTON = 4;
-    public final int BACK_BUTTON = 5;
+    ArrayList<String> discountAlarmItems = new ArrayList<String>();
 
     private CustomBackStack customBackStack;
     private boolean locationChecked = false;
@@ -86,17 +79,9 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
-        //Instantiate the buttons
-        setupMenuButtons(binding);
-
-        //Instantiate the custom backstack
-        customBackStack = new CustomBackStack();
+        //setup custom actionbar
         actionBar = getSupportActionBar();
         actionBarTitles = new String[]{"null", getString(R.string.menu_button_1), getString(R.string.menu_button_2), getString(R.string.menu_button_3), getString(R.string.menu_button_4)};
-
-        //setup custom actionbar
-
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.activity_custom_actionbar, null);
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -145,18 +130,26 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         }
 
+        //setupNavbar and navigation service
+        setupNavBar(binding);
+        new NavigationService();
+        NavigationService.setNavigationActivity(this);
+        NavigationService.setCustomNavBar(navbar);
+        NavigationService.setPredifinedTabRoots(new Fragment[]{mapFragment, foodWasteFragment, shopListFragment, notificationsFragment});
+
         //Start by going to first fragment
-        changePage(MAP_BUTTON);
+        NavigationService.changePage(NavigationService.MAP_PAGE);
     }
 
 
-    public void setupMenuButtons(ActivityMainBinding binding){
+    public void setupNavBar(ActivityMainBinding binding){
+
         menuButton1 = binding.menuButton1;
         menuButton1Text = binding.menuButton1Text;
         menuButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changePage(MAP_BUTTON);
+                NavigationService.changePage(NavigationService.MAP_PAGE);
             }
         });
         menuButton2 = binding.menuButton2;
@@ -164,7 +157,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
         menuButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changePage(OFFERS_BUTTON);
+                NavigationService.changePage(NavigationService.FOOD_WASTE_PAGE);
             }
         });
         menuButton3 = binding.menuButton3;
@@ -172,7 +165,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
         menuButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changePage(SHOPLIST_BUTTON);
+                NavigationService.changePage(NavigationService.SHOP_LIST_PAGE);
             }
         });
         menuButton4 = binding.menuButton4;
@@ -180,108 +173,21 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
         menuButton4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changePage(ALARM_BUTTON);
+                NavigationService.changePage(NavigationService.ALARM_PAGE);
             }
         });
-    }
 
-    public void changePage(int pagenumber){
-        switch(pagenumber){
-            case 1:
-                changeToFragment(mapFragment, MAP_BUTTON);
-
-                break;
-            case 2:
-                changeToFragment(foodWasteFragment, OFFERS_BUTTON);
-
-                break;
-            case 3:
-                changeToFragment(shopListFragment, SHOPLIST_BUTTON);
-
-                break;
-            case 4:
-                changeToFragment(notificationsFragment, ALARM_BUTTON);
-
-                break;
-
-        }
-    }
-
-    public void setButtonVisibilities(int pagenumber) {
-        switch(pagenumber){
-            case 1:
-                menuButton1Text.setVisibility(View.VISIBLE);
-                menuButton2Text.setVisibility(View.GONE);
-                menuButton3Text.setVisibility(View.GONE);
-                menuButton4Text.setVisibility(View.GONE);
-                break;
-
-            case 2:
-                menuButton1Text.setVisibility(View.GONE);
-                menuButton2Text.setVisibility(View.VISIBLE);
-                menuButton3Text.setVisibility(View.GONE);
-                menuButton4Text.setVisibility(View.GONE);
-                break;
-
-            case 3:
-                menuButton1Text.setVisibility(View.GONE);
-                menuButton2Text.setVisibility(View.GONE);
-                menuButton3Text.setVisibility(View.VISIBLE);
-                menuButton4Text.setVisibility(View.GONE);
-                break;
-
-            case 4:
-                menuButton1Text.setVisibility(View.GONE);
-                menuButton2Text.setVisibility(View.GONE);
-                menuButton3Text.setVisibility(View.GONE);
-                menuButton4Text.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void changeToFragment(Fragment fragment, int navButton){
-        FragmentManager fm = getSupportFragmentManager();
-
-        if(fm.findFragmentById(R.id.fragment_container) == fragment) return;
-
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.fragment_container, fragment);
-        if(!firstFragmentUsed){
-            firstFragmentUsed = true;
-        }
-        else{
-            ft.addToBackStack(null);
-        }
-        ft.commit();
-
-        customBackStack.addToBackStack(navButton);
-        updateMenuButtons();
+        navbar = new CustomNavBar();
+        navbar.setButtons(menuButton1, menuButton2, menuButton3, menuButton4);
+        navbar.setButtonText(menuButton1Text, menuButton2Text, menuButton3Text, menuButton4Text);
     }
 
     @Override
     public void onBackPressed(){
-        if(customBackStack.size() > 1) {
+        if(NavigationService.canGoBack()) {
             super.onBackPressed();
-            customBackStack.popCurrent();
-            updateMenuButtons();
+            NavigationService.goBack();
         }
-    }
-
-    public void updateMenuButtons() {
-
-        int navButton = customBackStack.getCurrent();
-
-        actionBarTitle.setText(actionBarTitles[navButton]);
-
-        if (navButton == MAP_BUTTON) setButtonVisibilities(MAP_BUTTON);
-        else if (navButton == OFFERS_BUTTON) setButtonVisibilities(OFFERS_BUTTON);
-        else if (navButton == SHOPLIST_BUTTON) setButtonVisibilities(SHOPLIST_BUTTON);
-        else if (navButton == ALARM_BUTTON) setButtonVisibilities(ALARM_BUTTON);
-
-    }
-
-    public void setupFoodWasteFragment(ArrayList<FoodWasteFromStore> fwfs) {
-        foodWasteFragment = new FoodWasteFragment(mapFragment);
-        foodWasteFragment.setNavigationActivity(this);
     }
 
     @Override
@@ -294,11 +200,14 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
                 double longitude = userLatLng.longitude;
 
                 List<Address> addresses = new Geocoder(getApplicationContext(), Locale.getDefault()).getFromLocation(latitude, longitude, 1);
-                new DiscountFoodWasteService(this, addresses.get(0).getPostalCode()).start();
             } catch(Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public TextView getActionBarTitle(){
+        return actionBarTitle;
     }
 
     public void saveItems(ArrayList<String> items) {
