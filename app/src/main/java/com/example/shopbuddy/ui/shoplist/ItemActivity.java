@@ -61,8 +61,7 @@ public class ItemActivity extends AppCompatActivity {
             Log.i(TAG, "itemQtyPlus pressed");
             qty++;
             boolean plus = true;
-            dbHandler.updateQty(shoppingListId, itemId, userId, plus);
-            dbHandler.updateShoppingListPrice(shoppingListId, userId, Double.parseDouble(i.getStringExtra("price")), plus);
+            dbHandler.updateQtyTransaction(shoppingListId, itemId, userId, plus);
             binding.itemviewQty.setText(qty.toString());
         });
 
@@ -72,15 +71,13 @@ public class ItemActivity extends AppCompatActivity {
                 return;
             qty--;
             boolean plus = false;
-            dbHandler.updateQty(shoppingListId, itemId, userId, plus);
-            dbHandler.updateShoppingListPrice(shoppingListId, userId, Double.parseDouble(i.getStringExtra("price")), plus);
+            dbHandler.updateQtyTransaction(shoppingListId, itemId, userId, plus);
             binding.itemviewQty.setText(qty.toString());
         });
 
         binding.itemDelete.setOnClickListener(l -> {
             Log.i(TAG, "Delete pressed");
-
-            dbHandler.executeDeleteTransaction(shoppingListId, itemId, Double.parseDouble(i.getStringExtra("price")), this);
+            dbHandler.deleteItemTransaction(shoppingListId, itemId, Double.parseDouble(i.getStringExtra("price")), this);
         });
 
         binding.itemAddAlert.setOnClickListener(l -> {

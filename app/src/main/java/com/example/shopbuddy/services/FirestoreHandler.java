@@ -15,6 +15,7 @@ import com.example.shopbuddy.ui.notifications.NotificationsFragment;
 import com.example.shopbuddy.ui.shoplist.AutocompleteAdapter;
 import com.example.shopbuddy.ui.shoplist.ListAdapter;
 import com.example.shopbuddy.ui.shoplist.ShopListFragment;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -54,51 +55,34 @@ public class FirestoreHandler {
         db = FirebaseFirestore.getInstance();
     }
 
-    public void addItemToShoppingList(String itemId, String shoppingListId, int orderNo) {
-        // insert if key does not exist already
-        Map<String, Object> updateVal = new HashMap<>();
-        updateVal.put("itemIds."+itemId, 1);
-        updateVal.put("itemOrder."+itemId, orderNo);
-        db.collection("shoppingLists")
-                .document(shoppingListId)
-                .update(updateVal)
-                .addOnSuccessListener(t -> {
-                    // update listview
-                    getShoppingListContents(shoppingListId);
-                });
+    public void addItemToShoppingList(String itemId, String shoppingListId, double itemPrice, int orderNo) {
+        db.runTransaction((Transaction.Function<Void>) transaction -> {
+            DocumentReference listRef = db.collection("shoppingLists").document(shoppingListId);
+            DocumentSnapshot listSnapshot = transaction.get(listRef);
+
+            HashMap<String, Long> itemIds = (HashMap<String, Long>)listSnapshot.get("itemIds");
+
+            // insert if key does not exist already
+            if (!itemIds.containsKey(itemId)) {
+                Map<String, Object> updateVals = new HashMap<>();
+                updateVals.put("itemIds." + itemId, 1);
+                updateVals.put("itemOrder." + itemId, orderNo);
+
+                double totalPrice = roundToTwoDecimals(listSnapshot.getDouble("price"));
+                totalPrice += itemPrice;
+                updateVals.put("price", roundToTwoDecimals(totalPrice));
+                transaction.update(listRef, updateVals);
+            }
+            return null;
+        }).addOnSuccessListener(l -> {
+            ToastService.makeToast("Tilføjet vare til liste", Toast.LENGTH_SHORT);
+            getShoppingListContentsTransaction(shoppingListId);
+        }).addOnFailureListener(l -> {
+            ToastService.makeToast("Kunne ikke hente indkøbsliste", Toast.LENGTH_SHORT);
+            logTransactionError(l);
+        });
     }
 
-
-    public void updateShoppingListPrice(String shoppingListId, String userId, double itemPrice, boolean plus) {
-        db.collection("shoppingLists")
-                .document(shoppingListId)
-                .get()
-                .addOnSuccessListener(t -> {
-                    if (!Objects.equals(t.getString("userId"), userId)) {
-                        ToastService.makeToast("Insufficient rights", Toast.LENGTH_SHORT);
-                        return;
-                    }
-
-                    double price = t.getDouble("price");
-                    if (plus)
-                        price += itemPrice;
-                    else
-                        price -= itemPrice;
-                    Map<String, Object> updateVal = new HashMap<>();
-                    updateVal.put("price", price);
-
-                    double finalPrice = price;
-                    db.collection("shoppingLists")
-                            .document(shoppingListId)
-                            .update(updateVal)
-                            .addOnSuccessListener(unused -> {
-                                // update shopping list price
-                                ShopListFragment.shoppingListPrice = finalPrice;
-                            });
-                });
-
-
-    }
 
     // firestore on its own does not offer the greatest querying - this only looks for prefixes
     public void queryForSuggestions(String queryString) {
@@ -132,87 +116,110 @@ public class FirestoreHandler {
                 .addOnFailureListener(e -> Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
-    public void getShoppingListContents(String shoppingListId) {
+    public void getShoppingListContentsTransaction(String shoppingListId) {
         if (frag == null)
             return;
         if (frag.binding == null)
             return;
 
-        ArrayList<ShopListItem> list = new ArrayList<>();
-            db.collection("shoppingLists")
-                    .document(shoppingListId)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        DocumentSnapshot doc = task.getResult();
-                        ShoppingList shoppingList = new ShoppingList(
-                                doc.getString("title"),
-                                doc.getString("userId"),
-                                doc.getDate("creationDate"),
-                                (HashMap<String,Long>) doc.get("itemIds"),
-                                (HashMap<String,Long>) doc.get("itemOrder"),
-                                doc.getDouble("price"),
-                                doc.getString("id"));
-                        frag.shoppingList = shoppingList;
+        db.runTransaction((Transaction.Function<Void>) transaction -> {
+            DocumentReference listRef = db
+                    .collection("shoppingLists")
+                    .document(shoppingListId);
+            DocumentSnapshot listSnapshot = transaction.get(listRef);
+            ShoppingList shoppingList = new ShoppingList(
+                    listSnapshot.getString("title"),
+                    listSnapshot.getString("userId"),
+                    listSnapshot.getDate("creationDate"),
+                    (HashMap<String,Long>) listSnapshot.get("itemIds"),
+                    (HashMap<String,Long>) listSnapshot.get("itemOrder"),
+                    listSnapshot.getDouble("price"),
+                    listSnapshot.getString("id"));
+            frag.shoppingList = shoppingList;
 
-                        for (Map.Entry<String, Long> itemEntry : shoppingList.getItems().entrySet()) {
-                            db.collection("items")
-                                    .document(itemEntry.getKey())
-                                    .get()
-                                    .addOnCompleteListener(itemTask -> {
-                                        DocumentSnapshot itemDoc = itemTask.getResult();
-                                        ShopListItem curItem =  new ShopListItem(itemDoc.getString("name"),
-                                                itemDoc.getString("brand"),
-                                                itemDoc.getString("price"),
-                                                itemEntry.getValue().toString(),
-                                                itemDoc.getString("imageUrl"),
-                                                itemDoc.getId());
-                                        curItem.setOrderNo(shoppingList.getOrderNoOfItem(curItem.itemId));
-                                        list.add(curItem);
+            ArrayList<ShopListItem> list = new ArrayList<>();
+            CollectionReference itemsRef = db.collection("items");
+            DocumentReference itemRef;
+            DocumentSnapshot itemSnapshot;
+            for (Map.Entry<String, Long> itemEntry : shoppingList.getItems().entrySet()) {
 
-                                        Log.i("bruh", "loaded " + itemDoc.getString("name"));
+                itemRef = itemsRef.document(itemEntry.getKey());
+                itemSnapshot = transaction.get(itemRef);
 
-                                        // sort by orderNo
-                                        Collections.sort(list);
+                ShopListItem curItem =  new ShopListItem(itemSnapshot.getString("name"),
+                        itemSnapshot.getString("brand"),
+                        itemSnapshot.getString("price"),
+                        itemEntry.getValue().toString(),
+                        itemSnapshot.getString("imageUrl"),
+                        itemSnapshot.getId());
+                curItem.setOrderNo(shoppingList.getOrderNoOfItem(curItem.itemId));
 
-                                        // update shopping list price
-                                        double shoppingListPrice = doc.getDouble("price");
-                                        ShopListFragment.shoppingListPrice = shoppingListPrice;
-                                        frag.binding.totalPrice.setText("Total: " + new DecimalFormat("#.##").format(shoppingListPrice));
+                list.add(curItem);
+            }
 
-                                        // update the adapter
-                                        ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), list);
-                                        frag.shopListItems = list;
-                                        frag.binding.list.setAdapter(newAdapter);
-                                    });
-                        }
-                    })
-                    .addOnFailureListener(e -> ToastService.makeToast("" + e.getMessage(), Toast.LENGTH_SHORT));
-        }
+            // sort by orderNo
+            Collections.sort(list);
 
-        public void updateQty(String shoppingListId, String itemId, String userId, boolean plus) {
-            db.collection("shoppingLists")
-                    .document(shoppingListId)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        DocumentSnapshot doc = task.getResult();
-                        if (!Objects.equals(doc.getString("userId"), userId)) {
-                            ToastService.makeToast("Insufficient rights", Toast.LENGTH_SHORT);
-                            return;
-                        }
+            // update shopping list price
+            double shoppingListPrice = listSnapshot.getDouble("price");
+            ShopListFragment.shoppingListPrice = shoppingListPrice;
+            frag.requireActivity().runOnUiThread(() -> {
+                frag.binding.totalPrice.setText("Total: " + new DecimalFormat("#.##").format(shoppingListPrice));
 
-                        int delta = plus ? 1 : -1;
-                        long qty = ((HashMap<String,Long>)doc.get("itemIds")).get(itemId);
-                        qty += delta;
-                        Map<String, Object> updateVal = new HashMap<>();
-                        updateVal.put("itemIds."+itemId, qty);
-                        db.collection("shoppingLists")
-                                .document(shoppingListId)
-                                .update(updateVal);
+                // update the adapter
+                ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), list);
+                frag.shopListItems = list;
+                frag.binding.list.setAdapter(newAdapter);
+            });
 
-                          ToastService.makeToast("Updated quantity", Toast.LENGTH_SHORT);
-                    })
-                    .addOnFailureListener(e -> ToastService.makeToast("" + e.getMessage(), Toast.LENGTH_SHORT));
-        }
+            return null;
+        }).addOnSuccessListener(l -> {
+//            ToastService.makeToast("Hentet indkøbsliste", Toast.LENGTH_SHORT);
+        }).addOnFailureListener(l -> {
+            ToastService.makeToast("Kunne ikke hente indkøbsliste", Toast.LENGTH_SHORT);
+            logTransactionError(l);
+        });
+    }
+
+    public void updateQtyTransaction(String shoppingListId, String itemId, String userId, boolean plus) {
+        db.runTransaction((Transaction.Function<Void>) transaction -> {
+            DocumentReference listRef = db
+                    .collection("shoppingLists")
+                    .document(shoppingListId);
+            DocumentSnapshot listSnapshot = transaction.get(listRef);
+
+            CollectionReference itemsRef = db.collection("items");
+            DocumentReference itemRef = itemsRef.document(itemId);
+            DocumentSnapshot itemSnapshot = transaction.get(itemRef);
+
+            HashMap<String, Object> updateVals = new HashMap<>();
+
+            int delta = plus ? 1 : -1; // if plus, plus has been pressed -> add, otherwise minus -> subtract
+            long qty = ((HashMap<String,Long>)listSnapshot.get("itemIds")).get(itemId);
+            qty += delta;
+            updateVals.put("itemIds."+itemId, qty);
+
+            double totalPrice = roundToTwoDecimals(listSnapshot.getDouble("price"));
+            double itemPrice = roundToTwoDecimals(Double.parseDouble(itemSnapshot.getString("price")));
+
+            totalPrice += delta * itemPrice;
+
+            updateVals.put("price", roundToTwoDecimals(totalPrice));
+
+            transaction.update(listRef, updateVals);
+
+
+            Log.i("transaction", "" + listSnapshot.getDouble("price") + " - " + delta + " * " + itemPrice + " = " + totalPrice);
+
+            return null;
+        }).addOnSuccessListener(l -> {
+//            ToastService.makeToast("Hentet indkøbsliste", Toast.LENGTH_SHORT);
+        }).addOnFailureListener(l -> {
+            ToastService.makeToast("Kunne ikke opdatere antal", Toast.LENGTH_SHORT);
+            logTransactionError(l);
+        });
+    }
+
 
     public void closeActivityIfItemNotInShoppingList(String itemId, String shoppingListId, Activity act) {
         Log.i("bruh", "starting query");
@@ -357,12 +364,10 @@ public class FirestoreHandler {
                             }
                     });
                 })
-                .addOnFailureListener(e -> {
-                    e.printStackTrace();
-                });
+                .addOnFailureListener(this::logTransactionError);
     }
 
-    public void executeDeleteTransaction(String shoppingListId, String itemId, double itemPrice, Activity activity) {
+    public void deleteItemTransaction(String shoppingListId, String itemId, double itemPrice, Activity activity) {
         db.runTransaction((Transaction.Function<Void>) transaction -> {
             Log.i("transaction", "executing DELETE transaction");
             DocumentReference listRef = db
@@ -375,8 +380,9 @@ public class FirestoreHandler {
 
             Map<String, Object> updateVal = new HashMap<>();
 
-            long subtractQty = itemIds.get(itemId);
-            double newPrice = listSnapshot.getLong("price").doubleValue() - subtractQty * itemPrice;
+            int subtractQty = itemIds.get(itemId).intValue();
+            double newPrice = roundToTwoDecimals(listSnapshot.getDouble("price")) - subtractQty * itemPrice;
+//            Log.i("transaction", "" + listSnapshot.getDouble("price") + " - " + subtractQty + " * " + itemPrice + " = " + newPrice);
 
             itemIds.remove(itemId);
             itemOrder.remove(itemId);
@@ -391,10 +397,16 @@ public class FirestoreHandler {
         }).addOnSuccessListener(l -> {
             ToastService.makeToast("Removed item from list", Toast.LENGTH_SHORT);
             activity.finish();
-        }).addOnFailureListener(l -> {
-            Log.e("transaction", l.getLocalizedMessage());
-            for (StackTraceElement s : l.getStackTrace())
-                Log.e("transaction", s.toString());
-        });
+        }).addOnFailureListener(this::logTransactionError);
+    }
+
+    double roundToTwoDecimals(double number) {
+        return (int)(number*100) / 100.0;
+    }
+
+    void logTransactionError(Exception l) {
+        Log.e("transaction", l.getLocalizedMessage());
+        for (StackTraceElement s : l.getStackTrace())
+            Log.e("transaction", "        " + s.toString());
     }
 }

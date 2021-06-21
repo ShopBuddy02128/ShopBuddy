@@ -72,8 +72,9 @@ public class ShopListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         // find better way to update view
-        dbHandler.getShoppingListContents(shoppingListId);
+//        dbHandler.getShoppingListContents(shoppingListId);
         binding.totalPrice.setText("Total: " + new DecimalFormat("#.##").format(shoppingListPrice));
+        dbHandler.getShoppingListContentsTransaction(shoppingListId);
     }
 
     @Override
@@ -135,13 +136,7 @@ public class ShopListFragment extends Fragment {
     private void tryAddItem(ShopListItem item) {
         // check if key exists, and if not, insert into db
         if (!shopListItems.stream().anyMatch(i -> i.itemId.equals(item.itemId))) {
-            dbHandler.addItemToShoppingList(item.itemId, shoppingListId, shoppingList.getSize());
-            boolean positivePriceAdjustment = true;
-            dbHandler.updateShoppingListPrice(
-                    shoppingListId,
-                    AuthService.getCurrentUserId(),
-                    Double.parseDouble(item.price),
-                    positivePriceAdjustment);
+            dbHandler.addItemToShoppingList(item.itemId, shoppingListId, Double.parseDouble(item.price), shoppingList.getNextOrderNo());
         }
         else
             ToastService.makeToast("Item already in list", Toast.LENGTH_SHORT);
@@ -150,7 +145,7 @@ public class ShopListFragment extends Fragment {
     private void setupRefresher() {
         SwipeRefreshLayout refresher = binding.swipeRefresher;
         refresher.setOnRefreshListener(() -> {
-            dbHandler.getShoppingListContents(shoppingListId);
+            dbHandler.getShoppingListContentsTransaction(shoppingListId);
             refresher.setRefreshing(false);
         });
     }
