@@ -51,7 +51,6 @@ public class FoodWasteFragment extends Fragment {
         String zipCode = mapFragment.getZipcode();
         try {
             FoodWasteFetcher dataFetcher = new FoodWasteFetcher(this, zipCode);
-
             dataFetcher.getData(data -> finishRequest(data));
         } catch(Exception e) {
             e.printStackTrace();
@@ -71,17 +70,15 @@ public class FoodWasteFragment extends Fragment {
         ArrayList<FoodWasteFromStore> all = new ArrayList<>();
         for(FoodWasteFromStore f : foodWasteDiscounts){
             if(f.getItems().size() > 0) all.add(f);
+            Log.i("FOODWASTE", f.toString());
         }
-
-        fwfs = all;
-        Log.i("DINFAR", fwfs.toString());
         //adapter.notifyDataSetChanged();
+        fwfs = all;
 
         if (binding == null) // workaround / hotfix for seemingly random crashes
             return;
 
         listView = binding.listOfOffers;
-        Log.i("DIN FAR", getActivity().toString());
         adapter = new FoodWasteStoreAdapter(getActivity(), fwfs);
 
 

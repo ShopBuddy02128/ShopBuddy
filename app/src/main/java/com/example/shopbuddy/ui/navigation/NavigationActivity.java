@@ -44,13 +44,16 @@ import com.example.shopbuddy.utils.CustomBackStack;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
 
 public class NavigationActivity extends AppCompatActivity implements LocationListener {
-    private ActivityMainBinding binding;
 
+    private String NAV_TAG = "navigation";
+    private String NAV_KEY = "ID_STACK";
+    private ActivityMainBinding binding;
 
     private ListsListFragment listsListFragment;
     private ShopListFragment shopListFragment;
@@ -138,10 +141,16 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
         new NavigationService();
         NavigationService.setNavigationActivity(this);
         NavigationService.setCustomNavBar(navbar);
+
+        NavigationService.setCustomBackStack(new CustomBackStack());
         NavigationService.setPredifinedTabRoots(new Fragment[]{mapFragment, foodWasteFragment, shopListFragment, notificationsFragment});
 
         //Start by going to first fragment
-        NavigationService.changePage(NavigationService.MAP_PAGE);
+        int first = NavigationService.MAP_PAGE;
+        if(savedInstanceState != null){
+            first = savedInstanceState.getInt(NAV_KEY);
+        }
+        NavigationService.changePage(first);
     }
 
 
@@ -191,6 +200,15 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
             super.onBackPressed();
             NavigationService.goBack();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        //Save custombackstack
+        CustomBackStack cbs = NavigationService.getCustomBackStack();
+        outState.putInt(NAV_KEY, cbs.getCurrent());
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override

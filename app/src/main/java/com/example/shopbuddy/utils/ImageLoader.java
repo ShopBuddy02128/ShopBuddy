@@ -23,7 +23,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ImageLoader {
     private int cores = Runtime.getRuntime().availableProcessors();
     private ExecutorService executor = Executors.newFixedThreadPool(cores);
-    private AppCompatActivity f;
+    private AppCompatActivity f = null;
+    private Activity a = null;
     private String stringUrl;
     private CircleImageView target;
 
@@ -32,9 +33,14 @@ public class ImageLoader {
         this.stringUrl = stringUrl;
     }
 
+    public ImageLoader(Activity a, String stringUrl){
+        this.a = a;
+        this.stringUrl = stringUrl;
+    }
+
     public void stop(){executor.shutdown();}
 
-    public void loadImage(ImageLoadCallBack callBack){
+    public void loadImageF(ImageLoadCallBack callBack){
         executor.execute(() -> {
             Bitmap data = null;
 
@@ -51,6 +57,34 @@ public class ImageLoader {
             final Bitmap finalData = data;
 
             f.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    callBack.onImageLoaded(finalData);
+                }
+            });
+
+            stop();
+        });
+
+    }
+
+    public void loadImageA(ImageLoadCallBack callBack){
+        executor.execute(() -> {
+            Bitmap data = null;
+
+            Future<Bitmap> futureData = executor.submit(downloadImage());
+
+            try{
+                data = futureData.get();
+                Log.i("BITMAP","Data retrieved sucesfully");
+            }catch(Exception e){
+                Log.i("BITMAP","Data not retrieved sucesfully");
+                e.printStackTrace();
+            }
+
+            final Bitmap finalData = data;
+
+            a.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     callBack.onImageLoaded(finalData);

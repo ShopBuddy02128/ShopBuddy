@@ -163,7 +163,7 @@ public class FirestoreHandler {
                 frag.binding.totalPrice.setText("Total: " + new DecimalFormat("#.##").format(shoppingListPrice));
 
                 // update the adapter
-                ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), list);
+                ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), (Activity) frag.requireActivity(), list);
                 frag.shopListItems = list;
                 frag.binding.list.setAdapter(newAdapter);
                 if (scrollToIndex != -1)
@@ -381,9 +381,9 @@ public class FirestoreHandler {
                     db.collection("users")
                             .document(userId)
                             .update(updateObject).addOnCompleteListener(createShoppingListTask -> {
-                            if(createShoppingListTask.isSuccessful()) {
-                                shoplistFragment.setShoppingListId(task.getResult().getId());
-                            }
+                        if(createShoppingListTask.isSuccessful()) {
+                            shoplistFragment.setShoppingListId(task.getResult().getId());
+                        }
                     });
                 })
                 .addOnFailureListener(this::logTransactionError);

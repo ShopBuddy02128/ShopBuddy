@@ -88,20 +88,19 @@ public class ShopListItem implements Comparable<ShopListItem> {
         return result > 0 ? false : true;
     }
 
-    @Override
-    public String toString() {
-        return "ShopListItem{" +
-                "name='" + name + '\'' +
-                ", brand='" + brand + '\'' +
-                ", price='" + price + '\'' +
-                ", qty='" + qty + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", itemId='" + itemId + '\'' +
-                '}';
-    }
 
     @Override
     public int compareTo(ShopListItem otherItem) {
         return this.orderNo <= otherItem.getOrderNo() ? -1 : 1;
+    }
+
+    @Override
+    public String toString(){
+        String string = "Item: \n";
+        string += "name: " + (name == ""? "no name" : name) + "\n";
+        string += "price: " + (price == "0.0"? "no price" : price) + "\n";
+        string += "oldprice: " + (oldPrice == "0"? "no oldprice" : oldPrice) + "\n";
+        string += "imageUrl: " + (imageUrl == ""? "no url" : imageUrl) +"\n";
+        return string;
     }
 }
