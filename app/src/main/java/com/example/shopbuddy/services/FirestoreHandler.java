@@ -2,6 +2,7 @@ package com.example.shopbuddy.services;
 
 import android.app.Activity;
 import android.content.Context;
+import android.provider.DocumentsContract;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import com.example.shopbuddy.ui.notifications.NotificationsFragment;
 import com.example.shopbuddy.ui.shoplist.AutocompleteAdapter;
 import com.example.shopbuddy.ui.shoplist.ListAdapter;
 import com.example.shopbuddy.ui.shoplist.ShopListFragment;
+import com.example.shopbuddy.utils.DummyData;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -408,5 +410,23 @@ public class FirestoreHandler {
         Log.e("transaction", l.getLocalizedMessage());
         for (StackTraceElement s : l.getStackTrace())
             Log.e("transaction", "        " + s.toString());
+    }
+
+    // utility method for adding fake data for showcase
+    void addNewDataToDatabase(ArrayList<ShopListItem> items) {
+        WriteBatch batch = db.batch();
+        CollectionReference itemsRef = db.collection("items");
+        for (ShopListItem newItem : items) {
+            DocumentReference newItemRef = itemsRef.document();
+            Map<String, Object> newItemMap =  new HashMap<>();
+            newItemMap.put("name", newItem.name);
+            newItemMap.put("brand", newItem.brand);
+            newItemMap.put("price", newItem.price);
+            newItemMap.put("qty", 0);
+            newItemMap.put("imageUrl", newItem.imageUrl);
+            batch.set(newItemRef, newItemMap);
+        }
+
+        batch.commit().addOnFailureListener(this::logTransactionError);
     }
 }
