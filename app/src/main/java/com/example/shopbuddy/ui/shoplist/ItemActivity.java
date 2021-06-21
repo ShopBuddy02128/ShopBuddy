@@ -67,7 +67,7 @@ public class ItemActivity extends AppCompatActivity {
 
         binding.itemQtyMinus.setOnClickListener(l -> {
             Log.i(TAG, "itemQtyMinus pressed");
-            if (qty == 0)
+            if (qty <= 1)
                 return;
             qty--;
             boolean plus = false;
