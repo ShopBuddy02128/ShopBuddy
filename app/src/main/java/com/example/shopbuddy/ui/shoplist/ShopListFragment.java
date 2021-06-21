@@ -62,6 +62,7 @@ public class ShopListFragment extends Fragment {
         dbHandler = new FirestoreHandler(this.requireContext(), this);
         setupListView();
         setupAutocomplete();
+        setupDevRefreshButton();
 
         return root;
     }
@@ -116,6 +117,8 @@ public class ShopListFragment extends Fragment {
         acAdapter = new AutocompleteAdapter(this.requireActivity(),  acItems);
         ac.setAdapter(acAdapter);
 
+        ac.setHint("Søg i varer");
+
         ac.setOnItemClickListener((parent, view, position, id) -> {
             ShopListItem item = acAdapter.getShopListItem(position);
             Log.i(TAG, item.toString());
@@ -124,18 +127,28 @@ public class ShopListFragment extends Fragment {
             TextView tv = (TextView) rl.getChildAt(0);
             ac.setText("");
 
-            // check if key exists, and if not, insert into db
-            if (!shopListItems.stream().anyMatch(i -> i.itemId.equals(item.itemId))) {
-                dbHandler.addItemToShoppingList(item.itemId, shoppingListId, shoppingList.getSize());
-                boolean positivePriceAdjustment = true;
-                dbHandler.updateShoppingListPrice(
-                        shoppingListId,
-                        AuthService.getCurrentUserId(),
-                        Double.parseDouble(item.price),
-                        positivePriceAdjustment);
-            }
-            else
-                ToastService.makeToast("Item already in list", Toast.LENGTH_SHORT);
+            tryAddItem(item);
+        });
+    }
+
+    private void tryAddItem(ShopListItem item) {
+        // check if key exists, and if not, insert into db
+        if (!shopListItems.stream().anyMatch(i -> i.itemId.equals(item.itemId))) {
+            dbHandler.addItemToShoppingList(item.itemId, shoppingListId, shoppingList.getSize());
+            boolean positivePriceAdjustment = true;
+            dbHandler.updateShoppingListPrice(
+                    shoppingListId,
+                    AuthService.getCurrentUserId(),
+                    Double.parseDouble(item.price),
+                    positivePriceAdjustment);
+        }
+        else
+            ToastService.makeToast("Item already in list", Toast.LENGTH_SHORT);
+    }
+
+    private void setupDevRefreshButton() {
+        binding.shoplistRefreshBtn.setOnClickListener(l -> {
+            dbHandler.getShoppingListContents(shoppingListId);
         });
     }
 }
