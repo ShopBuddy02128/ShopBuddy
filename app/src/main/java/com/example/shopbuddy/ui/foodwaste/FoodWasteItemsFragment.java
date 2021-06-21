@@ -1,5 +1,6 @@
 package com.example.shopbuddy.ui.foodwaste;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.example.shopbuddy.databinding.OfferItemsLayoutBinding;
 import com.example.shopbuddy.models.DiscountItem;
 import com.example.shopbuddy.models.FoodWasteFromStore;
+import com.example.shopbuddy.models.ShopListItem;
 import com.example.shopbuddy.models.Store;
 import com.example.shopbuddy.ui.navigation.NavigationActivity;
 
@@ -22,7 +24,7 @@ import java.util.ArrayList;
 public class FoodWasteItemsFragment extends Fragment {
 
     OfferItemsLayoutBinding binding;
-    ArrayList<DiscountItem> items;
+    ArrayList<ShopListItem> items;
     Store store;
 
     private ListView listView;
@@ -65,6 +67,13 @@ public class FoodWasteItemsFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(requireActivity(), DiscountItemActivity.class);
+                intent.putExtra("name", items.get(position).name);
+                intent.putExtra("price", items.get(position).price);
+                intent.putExtra("oldPrice", items.get(position).oldPrice);
+                intent.putExtra("validTo", items.get(position).validTo.toString());
+
+                startActivity(intent);
             }
         });
 

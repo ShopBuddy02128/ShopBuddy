@@ -1,7 +1,6 @@
 package com.example.shopbuddy.services;
 
 import android.content.Context;
-import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -11,11 +10,15 @@ import com.example.shopbuddy.ui.navigation.NavigationActivity;
 import com.example.shopbuddy.ui.shoplist.AutocompleteAdapter;
 import com.example.shopbuddy.ui.shoplist.ListAdapter;
 import com.example.shopbuddy.ui.shoplist.ShopListFragment;
+import com.google.common.collect.Lists;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -36,6 +39,97 @@ public class FirestoreHandler {
 
     public void initFirebaseConn() {
         db = FirebaseFirestore.getInstance();
+    }
+
+    public void addItemToShoppingList(String itemId, String shoppingListId, int orderNo) {
+        // insert if key does not exist already
+        Map<String, Object> updateVal = new HashMap<>();
+        updateVal.put("itemIds."+itemId, 1);
+        updateVal.put("itemOrder."+itemId, orderNo);
+        db.collection("shoppingLists")
+                .document(shoppingListId)
+                .update(updateVal)
+                .addOnSuccessListener(t -> {
+                    // update listview
+                    getShoppingListContents(shoppingListId);
+                });
+    }
+
+    public void deleteItemFromShoppingList(String itemId, double itemPrice, String shoppingListId) {
+        db.collection("shoppingLists")
+                .document(shoppingListId)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    HashMap itemIds = (HashMap<String,Long>) doc.get("itemIds");
+                    HashMap itemOrder = (HashMap<String,Long>) doc.get("itemOrder");
+
+                    Map<String, Object> updateVal = new HashMap<>();
+                    double price = itemPrice;
+                    long qty = (long) itemIds.get(itemId);
+                    boolean negativeItemAdjustment = false;
+
+                    itemIds.remove(itemId);
+                    itemOrder.remove(itemId);
+
+                    updateVal.put("itemIds", itemIds);
+                    updateVal.put("itemOrder", itemOrder);
+
+                    db.collection("shoppingLists")
+                            .document(shoppingListId)
+                            .update(updateVal)
+                            .addOnCompleteListener(unused -> {
+                                // finally update shopping list price
+                                updateShoppingListPrice(shoppingListId, price, negativeItemAdjustment, (int)qty);
+                            });
+                });
+    }
+
+    public void updateShoppingListPrice(String shoppingListId, double itemPrice, boolean plus, int qty) {
+        db.collection("shoppingLists")
+                .document(shoppingListId)
+                .get()
+                .addOnSuccessListener(t -> {
+                    double price = t.getDouble("price");
+                    if (plus)
+                        price += itemPrice * qty;
+                    else
+                        price -= itemPrice * qty;
+                    Map<String, Object> updateVal = new HashMap<>();
+                    updateVal.put("price", price);
+
+                    double finalPrice = price;
+                    db.collection("shoppingLists")
+                            .document(shoppingListId)
+                            .update(updateVal)
+                            .addOnSuccessListener(unused -> {
+                                // update shopping list price
+                                ShopListFragment.shoppingListPrice = finalPrice;
+                            });
+                });
+    }
+
+    public void updateShoppingListPrice(String shoppingListId, double itemPrice, boolean plus) {
+        db.collection("shoppingLists")
+                .document(shoppingListId)
+                .get()
+                .addOnSuccessListener(t -> {
+                    double price = t.getDouble("price");
+                    if (plus)
+                        price += itemPrice;
+                    else
+                        price -= itemPrice;
+                    Map<String, Object> updateVal = new HashMap<>();
+                    updateVal.put("price", price);
+
+                    double finalPrice = price;
+                    db.collection("shoppingLists")
+                            .document(shoppingListId)
+                            .update(updateVal)
+                            .addOnSuccessListener(unused -> {
+                                // update shopping list price
+                                ShopListFragment.shoppingListPrice = finalPrice;
+                            });
+                });
     }
 
     // firestore on its own does not offer the greatest querying - this only looks for prefixes
@@ -64,12 +158,15 @@ public class FirestoreHandler {
                         AutocompleteAdapter newAdapter = new AutocompleteAdapter(frag.requireActivity(), list);
 
                         frag.ac.setAdapter(newAdapter);
+                        frag.acAdapter = newAdapter;
                     }
                 })
                 .addOnFailureListener(e -> Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     public void getShoppingListContents(String shoppingListId) {
+        if (frag == null)
+            return;
         if (frag.binding == null)
             return;
 
@@ -84,6 +181,7 @@ public class FirestoreHandler {
                                 doc.getString("userId"),
                                 doc.getDate("creationDate"),
                                 (HashMap<String,Long>) doc.get("itemIds"),
+                                (HashMap<String,Long>) doc.get("itemOrder"),
                                 doc.getDouble("price"),
                                 doc.getString("id"));
                         frag.shoppingList = shoppingList;
@@ -100,21 +198,27 @@ public class FirestoreHandler {
                                                 itemEntry.getValue().toString(),
                                                 itemDoc.getString("imageUrl"),
                                                 itemDoc.getId());
+                                        curItem.setOrderNo(shoppingList.getOrderNoOfItem(curItem.itemId));
                                         list.add(curItem);
 
                                         Log.i("bruh", "loaded " + itemDoc.getString("name"));
 
+                                        // sort by orderNo
+                                        Collections.sort(list);
+
+                                        // update shopping list price
+                                        double shoppingListPrice = doc.getDouble("price");
+                                        ShopListFragment.shoppingListPrice = shoppingListPrice;
+                                        frag.binding.totalPrice.setText("Total: " + new DecimalFormat("#.##").format(shoppingListPrice));
+
                                         // update the adapter
                                         ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), list);
-
-                                        frag.shopListItems.add(curItem);
-
+                                        frag.shopListItems = list;
                                         frag.binding.listview.setAdapter(newAdapter);
-//                                        frag.requireActivity().runOnUiThread(() -> {frag.listAdapter.notifyDataSetChanged();});
                                     });
                         }
                     })
-                    .addOnFailureListener(e -> Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_SHORT).show());
+                    .addOnFailureListener(e -> ToastService.makeToast("" + e.getMessage(), Toast.LENGTH_SHORT));
         }
 
         public void updateQty(String shoppingListId, String itemId, String userId, boolean plus) {
@@ -124,7 +228,7 @@ public class FirestoreHandler {
                     .addOnCompleteListener(task -> {
                         DocumentSnapshot doc = task.getResult();
                         if (!Objects.equals(doc.getString("userId"), userId)) {
-                            Toast.makeText(context, "Insufficient rights", Toast.LENGTH_SHORT).show();
+                            ToastService.makeToast("Insufficient rights", Toast.LENGTH_SHORT);
                             return;
                         }
 
@@ -136,10 +240,41 @@ public class FirestoreHandler {
                         db.collection("shoppingLists")
                                 .document(shoppingListId)
                                 .update(updateVal);
-//                        Toast.makeText(context, "Updated quantity", Toast.LENGTH_SHORT).show();
+
+                          ToastService.makeToast("Updated quantity", Toast.LENGTH_SHORT);
                     })
-                    .addOnFailureListener(e -> Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_SHORT).show());
+                    .addOnFailureListener(e -> ToastService.makeToast("" + e.getMessage(), Toast.LENGTH_SHORT));
         }
+
+    public void prepareAlarmListForUser(String userId, NavigationActivity navAct) {
+        db.collection("discountAlarmsForUsers")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful() && !task.getResult().exists()) {
+                        // Create document for user that is empty
+                        HashMap<String, List<String>> newDoc = new HashMap<>();
+                        List<String> emptyList = new ArrayList<>();
+                        newDoc.put("items", emptyList);
+                        db.collection("discountAlarmsForUsers")
+                                .document(userId)
+                                .set(newDoc)
+                                .addOnCompleteListener(secondTask -> {
+                                    if(secondTask.isSuccessful()) {
+                                        getDiscountAlarmList(userId, navAct);
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    ToastService.makeToast("Failed to create new document for user", Toast.LENGTH_SHORT);
+                                });
+                    } else {
+                        getDiscountAlarmList(userId, navAct);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    ToastService.makeToast("Failed to ensure user has list", Toast.LENGTH_SHORT);
+                });
+    }
 
     public void getDiscountAlarmList(String userId, NavigationActivity navAct) {
         db.collection("discountAlarmsForUsers")

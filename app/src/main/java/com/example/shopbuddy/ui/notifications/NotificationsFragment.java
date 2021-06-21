@@ -1,37 +1,22 @@
 package com.example.shopbuddy.ui.notifications;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.CheckedTextView;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.shopbuddy.MainActivity;
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.FragmentNotificationsBinding;
-import com.example.shopbuddy.models.AlarmItem;
 import com.example.shopbuddy.services.AuthService;
 import com.example.shopbuddy.services.FirestoreHandler;
-import com.example.shopbuddy.services.ToastService;
 import com.example.shopbuddy.ui.navigation.NavigationActivity;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class NotificationsFragment extends Fragment {
 
@@ -66,8 +51,7 @@ public class NotificationsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(!editText.getText().toString().equals("")) {
-                    String newAlarm = editText.getText().toString();
-                    alarmItemArrayList.add(newAlarm);
+                    alarmItemArrayList.add(editText.getText().toString());
                     editText.getText().clear();
                     alarmAdapter.notifyDataSetChanged();
                 }

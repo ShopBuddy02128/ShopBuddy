@@ -24,7 +24,6 @@ public class ItemActivity extends AppCompatActivity {
 
     String shoppingListId, userId, itemId;
     Long qty;
-    public static final String NEW_QTY = "NEW_QTY";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,23 +59,35 @@ public class ItemActivity extends AppCompatActivity {
         binding.itemQtyPlus.setOnClickListener(l -> {
             Log.i(TAG, "itemQtyPlus pressed");
             qty++;
-            dbHandler.updateQty(shoppingListId, itemId, userId, true);
+            boolean plus = true;
+            dbHandler.updateQty(shoppingListId, itemId, userId, plus);
+            dbHandler.updateShoppingListPrice(shoppingListId, Double.parseDouble(i.getStringExtra("price")), plus);
             binding.itemviewQty.setText(qty.toString());
         });
 
         binding.itemQtyMinus.setOnClickListener(l -> {
             Log.i(TAG, "itemQtyMinus pressed");
+            if (qty == 0)
+                return;
             qty--;
-            dbHandler.updateQty(shoppingListId, itemId, userId, false);
+            boolean plus = false;
+            dbHandler.updateQty(shoppingListId, itemId, userId, plus);
+            dbHandler.updateShoppingListPrice(shoppingListId, Double.parseDouble(i.getStringExtra("price")), plus);
             binding.itemviewQty.setText(qty.toString());
+        });
+
+        binding.itemDelete.setOnClickListener(l -> {
+            Log.i(TAG, "Delete pressed");
+
+            // TODO ask for confirmation before just deleting
+            dbHandler.deleteItemFromShoppingList(itemId, Double.parseDouble(i.getStringExtra("price")), shoppingListId);
+
+            finish();
         });
     }
 
     @Override
     public void onBackPressed() {
-        final Intent data = new Intent();
-        data.putExtra(NEW_QTY, qty.toString());
-        setResult(Activity.RESULT_OK, data);
         super.onBackPressed();
     }
 }

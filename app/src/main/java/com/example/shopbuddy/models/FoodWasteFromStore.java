@@ -3,14 +3,14 @@ import java.util.ArrayList;
 
 public class FoodWasteFromStore {
 
-    ArrayList<DiscountItem> items = new ArrayList<>();
+    ArrayList<ShopListItem> items = new ArrayList<>();
     Store store;
 
     public FoodWasteFromStore(){
 
     }
 
-    public void addItem(DiscountItem item){
+    public void addItem(ShopListItem item){
         items.add(item);
     }
 
@@ -22,14 +22,14 @@ public class FoodWasteFromStore {
         return this.store;
     }
 
-    public ArrayList<DiscountItem> getItems(){
+    public ArrayList<ShopListItem> getItems(){
         return items;
     }
 
     public String toString(){
         String string = "";
 
-        for(DiscountItem item : items){
+        for(ShopListItem item : items){
             string += item.toString();
         }
 

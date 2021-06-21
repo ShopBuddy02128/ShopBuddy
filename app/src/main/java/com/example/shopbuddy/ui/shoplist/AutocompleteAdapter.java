@@ -24,6 +24,10 @@ public class AutocompleteAdapter extends ArrayAdapter<ShopListItem> {
 
     ArrayList<ShopListItem> data;
 
+    public ShopListItem getShopListItem(int pos) {
+        return data.get(pos);
+    }
+
     public AutocompleteAdapter(@NonNull Context context, @NonNull List<ShopListItem> objects) {
         super(context, R.layout.autocomplete_row, objects);
 

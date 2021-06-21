@@ -67,7 +67,13 @@ public class FoodWasteFragment extends Fragment {
 
     public void finishRequest(ArrayList<FoodWasteFromStore> foodWasteDiscounts) {
 
-        fwfs = foodWasteDiscounts;
+        ArrayList<FoodWasteFromStore> all = new ArrayList<>();
+        for(FoodWasteFromStore f : foodWasteDiscounts){
+            if(f.getItems().size() > 0) all.add(f);
+        }
+
+        fwfs = all;
+        Log.i("DINFAR", fwfs.toString());
         //adapter.notifyDataSetChanged();
 
         listView = binding.listOfOffers;
