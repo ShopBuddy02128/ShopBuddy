@@ -85,6 +85,10 @@ public class ItemActivity extends AppCompatActivity {
 
             finish();
         });
+
+        binding.itemAddAlert.setOnClickListener(l -> {
+            dbHandler.addAlarmForItem(userId, i.getStringExtra("name"));
+        });
     }
 
     @Override

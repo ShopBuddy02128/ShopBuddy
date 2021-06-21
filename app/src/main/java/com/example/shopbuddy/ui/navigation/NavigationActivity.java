@@ -103,10 +103,11 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
         //Instantiate the fragments
         listsListFragment = new ListsListFragment();
         listsListFragment.setNavigationActivity(this);
-        // Prepare Database for user and their shopping lists
-        new FirestoreHandler().prepareShoppingListForUser(AuthService.getCurrentUserId(), AuthService.getmAuth().getCurrentUser().getEmail());
 
         shopListFragment = new ShopListFragment();
+        // Prepare Database for user and their shopping lists
+        new FirestoreHandler().prepareShoppingListForUser(AuthService.getCurrentUserId(), AuthService.getmAuth().getCurrentUser().getEmail(), shopListFragment);
+
 
         mapFragment = new MapFragment();
 

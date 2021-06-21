@@ -315,8 +315,27 @@ public class FirestoreHandler {
                 .update(itemsMap);
     }
 
+    public void addAlarmForItem(String userId, String itemName) {
+        db.collection("discountAlarmsForUsers")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(t -> {
+                    ArrayList<String> alarmItems = (ArrayList<String>) t.getResult().get("items");
+                    alarmItems.add(itemName);
 
-    public void prepareShoppingListForUser(String userId, String userEmail) {
+                    Map<String, Object> itemsMap = new HashMap<>();
+                    itemsMap.put("items", alarmItems);
+
+                    db.collection("discountAlarmsForUsers")
+                            .document(userId)
+                            .update(itemsMap)
+                            .addOnCompleteListener(l -> {
+                                ToastService.makeToast("Added alarm for " + itemName, Toast.LENGTH_SHORT);
+                            });
+                });
+    }
+
+    public void prepareShoppingListForUser(String userId, String userEmail, ShopListFragment shopListFragment) {
         db.collection("users")
                 .document(userId)
                 .get()
