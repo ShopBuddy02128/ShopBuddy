@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.shopbuddy.databinding.FragmentShoplistBinding;
 import com.example.shopbuddy.models.ShoppingList;
@@ -62,7 +63,7 @@ public class ShopListFragment extends Fragment {
         dbHandler = new FirestoreHandler(this.requireContext(), this);
         setupListView();
         setupAutocomplete();
-        setupDevRefreshButton();
+        setupRefresher();
 
         return root;
     }
@@ -86,9 +87,9 @@ public class ShopListFragment extends Fragment {
 
         listAdapter = new ListAdapter(this.requireContext(), shopListItems);
 
-        binding.listview.setAdapter(listAdapter);
-        binding.listview.setClickable(true);
-        binding.listview.setOnItemClickListener((parent, view, position, id) -> {
+        binding.list.setAdapter(listAdapter);
+        binding.list.setClickable(true);
+        binding.list.setOnItemClickListener((parent, view, position, id) -> {
             Log.i(TAG, ""+position+" clicked.");
 
             Intent i = new Intent(requireActivity(), ItemActivity.class);
@@ -131,6 +132,10 @@ public class ShopListFragment extends Fragment {
         });
     }
 
+    private void tryEnterItemView() {
+
+    }
+
     private void tryAddItem(ShopListItem item) {
         // check if key exists, and if not, insert into db
         if (!shopListItems.stream().anyMatch(i -> i.itemId.equals(item.itemId))) {
@@ -146,9 +151,11 @@ public class ShopListFragment extends Fragment {
             ToastService.makeToast("Item already in list", Toast.LENGTH_SHORT);
     }
 
-    private void setupDevRefreshButton() {
-        binding.shoplistRefreshBtn.setOnClickListener(l -> {
+    private void setupRefresher() {
+        SwipeRefreshLayout refresher = binding.swipeRefresher;
+        refresher.setOnRefreshListener(() -> {
             dbHandler.getShoppingListContents(shoppingListId);
+            refresher.setRefreshing(false);
         });
     }
 }

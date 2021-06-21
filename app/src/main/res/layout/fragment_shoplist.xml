@@ -58,18 +58,14 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#ccc"/>
-
-        <ListView
-            android:id="@+id/listview"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresher"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/shoplist_refresh_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="165dp"
-            android:backgroundTint="@color/places_ui_default_primary"
-            android:src="@drawable/ic_baseline_refresh_24"
-            />
+            android:layout_height="match_parent">
+            <ListView
+                android:id="@+id/list"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 </LinearLayout>

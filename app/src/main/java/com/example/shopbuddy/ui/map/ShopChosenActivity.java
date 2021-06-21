@@ -10,6 +10,8 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.ActivityShopChosenBinding;
@@ -17,6 +19,7 @@ import com.example.shopbuddy.databinding.ActivityShopChosenBinding;
 
 public class ShopChosenActivity extends AppCompatActivity{
     ActivityShopChosenBinding binding;
+    private String shopName;
 
 
     @Override
@@ -31,7 +34,7 @@ public class ShopChosenActivity extends AppCompatActivity{
 
         String shopInfo = intent.getStringExtra("ShopInfo");
         int i = shopInfo.indexOf(' ');
-        String shopName = shopInfo.substring(0, i);
+        shopName = shopInfo.substring(0, i);
         String shopAddress = shopInfo.substring(i);
         String shopOpeningHours = intent.getStringExtra("ShopOpeningHours");
 
@@ -52,8 +55,16 @@ public class ShopChosenActivity extends AppCompatActivity{
         binding.shopOpening.setText(shopOpeningHours);
 
 
+        // Set the fragment
+        if(savedInstanceState == null){
+            Fragment newFragment = new SaleListFragment();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.add(R.id.sale_list_fragment_container, newFragment).commit();
+        }
+
     }
 
-
-
+    public String getShopName() {
+        return shopName;
+    }
 }
