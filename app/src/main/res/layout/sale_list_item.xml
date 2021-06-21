@@ -27,7 +27,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/item_name"
+                        android:id="@+id/sale_item_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Sale item name here"
@@ -36,7 +36,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/item_brand"
+                        android:id="@+id/sale_item_brand"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -54,7 +54,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/item_price"
+                    android:id="@+id/sale_item_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="0dp"
@@ -69,7 +69,6 @@
             </LinearLayout>
 
         </RelativeLayout>
-
 
     </LinearLayout>
 
