@@ -31,7 +31,7 @@ public class FoodWasteFetcher {
         executor.shutdown();
     }
 
-    public void getData(ResultCallBack callBack){
+    public void getData(FoodWasteCallBack callBack){
         executor.execute(() -> {
 
             ArrayList<FoodWasteFromStore> data = null;
