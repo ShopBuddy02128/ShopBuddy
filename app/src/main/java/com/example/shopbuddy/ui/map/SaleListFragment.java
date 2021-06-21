@@ -103,7 +103,7 @@ public class SaleListFragment extends Fragment {
 
     public void finishRequest(List<DiscountItem> listOfDiscountsForStore) {
         items = listOfDiscountsForStore;
-        Log.i(TAG, "A list of discount items has been returned and the first item is" + items.get(2).getTitle());
+        Log.i(TAG, "A list of discount items has been returned");
 
 
         ArrayList<ShopListItem> shopListItemArrayList = new ArrayList<>();
@@ -123,7 +123,7 @@ public class SaleListFragment extends Fragment {
         // set the list adapter
         adapter = new SaleListAdapter(getActivity(), R.layout.sale_list_item, shopListItemArrayList);
         //DET ER DET HER DER GIVER PROBLEMER : I/System.out: Only the original thread that created a view hierarchy can touch its views.
-        listView.setAdapter(adapter);
+       getActivity().runOnUiThread(() -> { listView.setAdapter(adapter);});
         Log.i(TAG, "The adapter was created and set ");
 
 
