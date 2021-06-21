@@ -71,7 +71,7 @@ public class FirestoreHandler {
             return null;
         }).addOnSuccessListener(l -> {
             ToastService.makeToast("Tilføjet vare til liste", Toast.LENGTH_SHORT);
-            getShoppingListContentsTransaction(shoppingListId);
+            getShoppingListContentsTransaction(shoppingListId, orderNo);
         }).addOnFailureListener(l -> {
             ToastService.makeToast("Kunne ikke hente indkøbsliste", Toast.LENGTH_SHORT);
             logTransactionError(l);
@@ -111,7 +111,8 @@ public class FirestoreHandler {
                 .addOnFailureListener(e -> Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
-    public void getShoppingListContentsTransaction(String shoppingListId) {
+    // scrollToIndex is for scrolling to the right index when the view has been updated, since this has to be done inside the async lambda
+    public void getShoppingListContentsTransaction(String shoppingListId, int scrollToIndex) {
         if (frag == null)
             return;
         if (frag.binding == null)
@@ -165,6 +166,8 @@ public class FirestoreHandler {
                 ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), list);
                 frag.shopListItems = list;
                 frag.binding.list.setAdapter(newAdapter);
+                if (scrollToIndex != -1)
+                    frag.binding.list.setSelection(scrollToIndex);
             });
 
             return null;

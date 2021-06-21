@@ -50,6 +50,8 @@ public class ShopListFragment extends Fragment {
 
     public FirestoreHandler dbHandler;
 
+    private int scrollToIndex = -1;
+
     @SuppressLint("ResourceType")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -69,12 +71,17 @@ public class ShopListFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        View c = binding.list.getChildAt(0);
+        scrollToIndex = -c.getTop() + binding.list.getFirstVisiblePosition() * c.getHeight();
+        super.onPause();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        // find better way to update view
-//        dbHandler.getShoppingListContents(shoppingListId);
         binding.totalPrice.setText("Total: " + new DecimalFormat("#.##").format(shoppingListPrice));
-        dbHandler.getShoppingListContentsTransaction(shoppingListId);
+        dbHandler.getShoppingListContentsTransaction(shoppingListId, scrollToIndex);
     }
 
     @Override
@@ -105,6 +112,8 @@ public class ShopListFragment extends Fragment {
 
             i.putExtra("userId", AuthService.getCurrentUserId());
             i.putExtra("shoppingListId", shoppingListId);
+
+            scrollToIndex = position;
 
             startActivity(i);
         });
@@ -145,7 +154,7 @@ public class ShopListFragment extends Fragment {
     private void setupRefresher() {
         SwipeRefreshLayout refresher = binding.swipeRefresher;
         refresher.setOnRefreshListener(() -> {
-            dbHandler.getShoppingListContentsTransaction(shoppingListId);
+            dbHandler.getShoppingListContentsTransaction(shoppingListId, -1);
             refresher.setRefreshing(false);
         });
     }
