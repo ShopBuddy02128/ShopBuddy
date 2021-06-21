@@ -5,6 +5,9 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.example.shopbuddy.models.ShopListItem;
 import com.example.shopbuddy.models.ShoppingList;
 import com.example.shopbuddy.ui.navigation.NavigationActivity;
@@ -12,11 +15,19 @@ import com.example.shopbuddy.ui.notifications.NotificationsFragment;
 import com.example.shopbuddy.ui.shoplist.AutocompleteAdapter;
 import com.example.shopbuddy.ui.shoplist.ListAdapter;
 import com.example.shopbuddy.ui.shoplist.ShopListFragment;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Transaction;
+import com.google.firebase.firestore.WriteBatch;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,60 +68,6 @@ public class FirestoreHandler {
                 });
     }
 
-    public void deleteItemFromShoppingList(String itemId, double itemPrice, String shoppingListId) {
-        db.collection("shoppingLists")
-                .document(shoppingListId)
-                .get()
-                .addOnSuccessListener(doc -> {
-                    HashMap itemIds = (HashMap<String,Long>) doc.get("itemIds");
-                    HashMap itemOrder = (HashMap<String,Long>) doc.get("itemOrder");
-
-                    Map<String, Object> updateVal = new HashMap<>();
-                    double price = itemPrice;
-                    long qty = (long) itemIds.get(itemId);
-                    boolean negativeItemAdjustment = false;
-
-                    itemIds.remove(itemId);
-                    itemOrder.remove(itemId);
-
-                    updateVal.put("itemIds", itemIds);
-                    updateVal.put("itemOrder", itemOrder);
-
-                    ToastService.makeToast("Removed item from list", Toast.LENGTH_SHORT);
-
-                    db.collection("shoppingLists")
-                            .document(shoppingListId)
-                            .update(updateVal)
-                            .addOnCompleteListener(unused -> {
-                                // finally update shopping list price
-                                updateShoppingListPrice(shoppingListId, price, negativeItemAdjustment, (int)qty);
-                            });
-                });
-    }
-
-    public void updateShoppingListPrice(String shoppingListId, double itemPrice, boolean plus, int qty) {
-        db.collection("shoppingLists")
-                .document(shoppingListId)
-                .get()
-                .addOnSuccessListener(t -> {
-                    double price = t.getDouble("price");
-                    if (plus)
-                        price += itemPrice * qty;
-                    else
-                        price -= itemPrice * qty;
-                    Map<String, Object> updateVal = new HashMap<>();
-                    updateVal.put("price", price);
-
-                    double finalPrice = price;
-                    db.collection("shoppingLists")
-                            .document(shoppingListId)
-                            .update(updateVal)
-                            .addOnSuccessListener(unused -> {
-                                // update shopping list price
-                                ShopListFragment.shoppingListPrice = finalPrice;
-                            });
-                });
-    }
 
     public void updateShoppingListPrice(String shoppingListId, String userId, double itemPrice, boolean plus) {
         db.collection("shoppingLists")
@@ -139,6 +96,8 @@ public class FirestoreHandler {
                                 ShopListFragment.shoppingListPrice = finalPrice;
                             });
                 });
+
+
     }
 
     // firestore on its own does not offer the greatest querying - this only looks for prefixes
@@ -401,5 +360,41 @@ public class FirestoreHandler {
                 .addOnFailureListener(e -> {
                     e.printStackTrace();
                 });
+    }
+
+    public void executeDeleteTransaction(String shoppingListId, String itemId, double itemPrice, Activity activity) {
+        db.runTransaction((Transaction.Function<Void>) transaction -> {
+            Log.i("transaction", "executing DELETE transaction");
+            DocumentReference listRef = db
+                    .collection("shoppingLists")
+                    .document(shoppingListId);
+            DocumentSnapshot listSnapshot = transaction.get(listRef);
+
+            HashMap<String,Long> itemIds = (HashMap<String,Long>) listSnapshot.get("itemIds");
+            HashMap<String,Long> itemOrder = (HashMap<String,Long>) listSnapshot.get("itemOrder");
+
+            Map<String, Object> updateVal = new HashMap<>();
+
+            long subtractQty = itemIds.get(itemId);
+            double newPrice = listSnapshot.getLong("price").doubleValue() - subtractQty * itemPrice;
+
+            itemIds.remove(itemId);
+            itemOrder.remove(itemId);
+
+            updateVal.put("itemIds", itemIds);
+            updateVal.put("itemOrder", itemOrder);
+
+            transaction.update(listRef, updateVal);
+            transaction.update(listRef, "price", newPrice);
+
+            return null;
+        }).addOnSuccessListener(l -> {
+            ToastService.makeToast("Removed item from list", Toast.LENGTH_SHORT);
+            activity.finish();
+        }).addOnFailureListener(l -> {
+            Log.e("transaction", l.getLocalizedMessage());
+            for (StackTraceElement s : l.getStackTrace())
+                Log.e("transaction", s.toString());
+        });
     }
 }

@@ -80,10 +80,7 @@ public class ItemActivity extends AppCompatActivity {
         binding.itemDelete.setOnClickListener(l -> {
             Log.i(TAG, "Delete pressed");
 
-            // TODO ask for confirmation before just deleting
-            dbHandler.deleteItemFromShoppingList(itemId, Double.parseDouble(i.getStringExtra("price")), shoppingListId);
-
-            finish();
+            dbHandler.executeDeleteTransaction(shoppingListId, itemId, Double.parseDouble(i.getStringExtra("price")), this);
         });
 
         binding.itemAddAlert.setOnClickListener(l -> {
