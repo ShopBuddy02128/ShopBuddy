@@ -72,13 +72,14 @@ public class ShopListFragment extends Fragment {
 
     @Override
     public void onPause() {
-        View c = binding.list.getChildAt(0);
-        scrollToIndex = -c.getTop() + binding.list.getFirstVisiblePosition() * c.getHeight();
+        scrollToIndex = binding.list.getFirstVisiblePosition();
+        Log.i("scroll", "onPause called -> " + scrollToIndex);
         super.onPause();
     }
 
     @Override
     public void onResume() {
+        Log.i("scroll", "onResume called -> " + scrollToIndex);
         super.onResume();
         binding.totalPrice.setText("Total: " + new DecimalFormat("#.##").format(shoppingListPrice));
         dbHandler.getShoppingListContentsTransaction(shoppingListId, scrollToIndex);
