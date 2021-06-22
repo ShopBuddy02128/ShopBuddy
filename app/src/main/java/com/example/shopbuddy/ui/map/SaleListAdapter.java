@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.models.ShopListItem;
+import com.example.shopbuddy.utils.TextFormatter;
 
 import java.util.ArrayList;
 
@@ -66,7 +67,7 @@ public class SaleListAdapter extends ArrayAdapter<ShopListItem> {
         final View result;
 
         // Get the values
-        String itemName =getItem(position).name;
+        String itemName = TextFormatter.toNameFormat(getItem(position).name);
         String itemBrand = getItem(position).brand;
         String itemPrice = getItem(position).price + " kr.";
 
