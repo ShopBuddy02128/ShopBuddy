@@ -428,4 +428,27 @@ public class FirestoreHandler {
 
         batch.commit().addOnFailureListener(this::logTransactionError);
     }
+
+    public void getDiscountAlarmListFromAlarmReceiver(String userId) {
+        db.collection("discountAlarmsForUsers")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        DocumentSnapshot doc = task.getResult();
+                        ArrayList<String> items = (ArrayList<String>) doc.get("items");
+
+                        AlarmService.setCallsToReceive(items.size());
+                        AlarmService.setReceivedCalls(0);
+                        AlarmService.resetListOfItems();
+
+                        for (String item : items) {
+                            new DiscountSearchService(item).start();
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    ToastService.makeToast("Kunne ikke hente tilbud", Toast.LENGTH_SHORT);
+                });
+    }
 }
