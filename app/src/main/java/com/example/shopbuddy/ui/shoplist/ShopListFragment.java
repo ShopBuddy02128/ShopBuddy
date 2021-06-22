@@ -73,6 +73,7 @@ public class ShopListFragment extends Fragment {
     @Override
     public void onPause() {
         scrollToIndex = binding.list.getFirstVisiblePosition();
+        scrollToIndex = scrollToIndex == 0 ? scrollToIndex : scrollToIndex + 1;
         Log.i("scroll", "onPause called -> " + scrollToIndex);
         super.onPause();
     }
