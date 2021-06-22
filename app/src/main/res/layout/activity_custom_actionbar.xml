@@ -36,8 +36,8 @@
 
     <TextView
         android:id="@+id/custom_actionbar_title"
-        android:layout_width="338dp"
-        android:layout_height="66dp"
+        android:layout_width="380dp"
+        android:layout_height="69dp"
         android:gravity="center"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
