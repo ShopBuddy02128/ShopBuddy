@@ -2,7 +2,6 @@ package com.example.shopbuddy.services;
 
 import android.app.Activity;
 import android.content.Context;
-import android.provider.DocumentsContract;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,10 +11,8 @@ import com.example.shopbuddy.ui.notifications.NotificationsFragment;
 import com.example.shopbuddy.ui.shoplist.AutocompleteAdapter;
 import com.example.shopbuddy.ui.shoplist.ListAdapter;
 import com.example.shopbuddy.ui.shoplist.ShopListFragment;
-import com.example.shopbuddy.utils.DummyData;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.firebase.firestore.CollectionReference;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -163,7 +160,7 @@ public class FirestoreHandler {
                 frag.binding.totalPrice.setText("Total: " + new DecimalFormat("#.##").format(shoppingListPrice));
 
                 // update the adapter
-                ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), (Activity) frag.requireActivity(), list);
+                ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), list);
                 frag.shopListItems = list;
                 frag.binding.list.setAdapter(newAdapter);
                 if (scrollToIndex != -1)

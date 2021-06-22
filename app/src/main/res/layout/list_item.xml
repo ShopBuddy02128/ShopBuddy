@@ -28,7 +28,7 @@
                     android:layout_height="64dp"
                     app:civ_border_width="1dp"
                     app:civ_border_color="#FF000000"
-                    android:src="@drawable/ic_baseline_hourglass_top_24"/>
+                    android:src="@drawable/ic_baseline_broken_image_24"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"

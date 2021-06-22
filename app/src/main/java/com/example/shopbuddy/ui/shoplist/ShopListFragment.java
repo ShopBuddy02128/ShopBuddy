@@ -93,7 +93,7 @@ public class ShopListFragment extends Fragment {
     private void setupListView() {
         shopListItems = new ArrayList<>();
 
-        listAdapter = new ListAdapter(this.requireContext(), this.requireActivity(), shopListItems);
+        listAdapter = new ListAdapter(this.requireContext(), shopListItems);
 
         binding.list.setAdapter(listAdapter);
         binding.list.setClickable(true);
