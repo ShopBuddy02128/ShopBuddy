@@ -52,19 +52,24 @@ public class DiscountItemActivity extends AppCompatActivity {
         nameText.setText(name);
 
         priceText = (TextView) findViewById(R.id.discount_new_price);
-        priceText.setText("New price is " + price + ",-");
+        priceText.setText("Tilbudspris er " + price + ",-");
 
         oldPriceText = (TextView) findViewById(R.id.discount_old_price);
-        oldPriceText.setText("Original price is " + oldPrice + ",-");
+        oldPriceText.setText("Førpris var " + oldPrice + ",-");
 
         savingsText = (TextView) findViewById(R.id.discount_saving);
-        savingsText.setText("You save " + savings + "%");
+        savingsText.setText("Du sparer " + savings + "%");
 
         validToText = (TextView) findViewById(R.id.discount_validto_date);
-        validToText.setText("Valid until " + validTo.substring(0,10));
+        validToText.setText("Gyldig indtil " + validTo.substring(0,10));
 
         //Activate Buttons
         Button addButton = (Button) findViewById(R.id.discount_add_button);
+
+        // TODO disabled because time ran out 😅
+        addButton.setVisibility(View.GONE);
+        //
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
