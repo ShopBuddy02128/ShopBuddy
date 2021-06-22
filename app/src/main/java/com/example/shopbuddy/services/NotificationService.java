@@ -20,6 +20,7 @@ public abstract class NotificationService {
         NotificationService.mContext = contex;
     }
 
+    // This class is heavily inspired from the page https://developer.android.com/training/notify-user/build-notification
     public static void showNotification(NotificationCompat.Builder mBuilder) {
         /* TEMPLATE
         NotificationCompat.Builder mBuilder =
@@ -44,10 +45,10 @@ public abstract class NotificationService {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
-            String channelId = "Your_channel_id";
+            String channelId = "TILBUDSALARM";
             NotificationChannel channel = new NotificationChannel(
                     channelId,
-                    "Channel human readable title",
+                    "Notifikation for tilbudsalarm",
                     NotificationManager.IMPORTANCE_HIGH);
             mNotificationManager.createNotificationChannel(channel);
             mBuilder.setChannelId(channelId);

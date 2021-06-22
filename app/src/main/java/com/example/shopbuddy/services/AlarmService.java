@@ -82,7 +82,7 @@ public abstract class AlarmService {
     }
 
     private static void finishAlarmRequest() {
-        String message = "Found discounts for:";
+        String message = "Fundet tilbud på:";
         boolean foundDiscount = false;
         for (Map.Entry<String, List<DiscountItem>> entry : listOfItems.entrySet()) {
             String itemName = entry.getKey();
@@ -107,13 +107,13 @@ public abstract class AlarmService {
 
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
         bigText.bigText(message);
-        bigText.setBigContentTitle("Discounts found!");
-        bigText.setSummaryText("Your discount alarm is going off!");
+        bigText.setBigContentTitle("Tilbud fundet!");
+        bigText.setSummaryText("Din tilbudsalarm ringer!");
 
         mBuilder.setContentIntent(pendingIntent);
         mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
-        mBuilder.setContentTitle("Discounts found!");
-        mBuilder.setContentText("Click to view what you can save!");
+        mBuilder.setContentTitle("Tilbud fundet!");
+        mBuilder.setContentText("Tryk for at se hvad der er på tilbud!");
         mBuilder.setPriority(Notification.PRIORITY_MAX);
         mBuilder.setStyle(bigText);
 
