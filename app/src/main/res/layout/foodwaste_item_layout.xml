@@ -22,7 +22,8 @@
             android:paddingTop="4dp"
             android:text="Item Title blabla"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/foodwaste_item_stock"

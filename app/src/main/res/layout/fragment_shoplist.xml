@@ -20,12 +20,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <com.example.shopbuddy.ui.shoplist.ShoplistAutocomplete
                 android:id="@+id/shoplist_autocomplete"
                 android:layout_width="310dp"
-                android:completionThreshold="1"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_height="wrap_content" />
+                android:completionThreshold="1"
+                android:textSize="20sp" />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
