@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:backgroundTint="@color/places_autocomplete_error_message"
     android:orientation="horizontal"
     android:padding="6pt">
 
@@ -12,22 +13,26 @@
 
         <TextView
             android:id="@+id/offer_store_title"
-            android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:textColor="@color/black"
-            android:textSize="6pt"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Name of Store"/>
+            android:fontFamily="sans-serif-condensed"
+            android:text="Name of Store"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/offer_store_items"
-            android:layout_height="match_parent"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textAlignment="textEnd"
-            android:textSize="6pt"
+            android:fontFamily="sans-serif-condensed"
+            android:paddingLeft="30pt"
+            android:text="Number of offers"
+            android:textAlignment="center"
             android:textColor="@color/black"
-            android:text="Number of offers"/>
+            android:textSize="16sp" />
 
     </LinearLayout>
 

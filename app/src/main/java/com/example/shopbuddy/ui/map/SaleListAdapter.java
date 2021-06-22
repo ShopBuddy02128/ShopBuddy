@@ -73,8 +73,8 @@ public class SaleListAdapter extends ArrayAdapter<ShopListItem> {
 
         ViewHolder holder = new ViewHolder();
 
+        //Check if the view is null
         if (convertView == null){
-            LayoutInflater inflater = LayoutInflater.from(mContext);
             convertView = inflater.inflate(mResource,parent,false);
             holder.name = (TextView) convertView.findViewById(R.id.sale_item_name);
             holder.brand= (TextView) convertView.findViewById(R.id.sale_item_brand);
@@ -92,7 +92,6 @@ public class SaleListAdapter extends ArrayAdapter<ShopListItem> {
         holder.name.setText(itemName);
         holder.brand.setText(itemBrand);
         holder.price.setText(itemPrice);
-
 
 
         return result;

@@ -32,7 +32,7 @@ public class DownloadURL {
                 stringBuffer.append(line);
             }
 
-            //convert result from stringBuffer into string and it to data
+            //Convert result
             data = stringBuffer.toString();
 
             //Close the reader
@@ -46,6 +46,7 @@ public class DownloadURL {
             e.printStackTrace();
         }
 
+        //Must be run even if an exception is caught
         finally {
             inputStream.close();
             urlConnection.disconnect();

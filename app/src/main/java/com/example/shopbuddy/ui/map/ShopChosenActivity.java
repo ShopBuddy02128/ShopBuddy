@@ -3,11 +3,12 @@ package com.example.shopbuddy.ui.map;
 import android.content.Intent;
 
 import android.graphics.drawable.ColorDrawable;
-
 import android.os.Bundle;
-
+import android.view.Gravity;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBar.LayoutParams;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
@@ -36,20 +37,21 @@ public class ShopChosenActivity extends AppCompatActivity{
         int i = shopInfo.indexOf(' ');
         shopName = shopInfo.substring(0, i);
         String shopAddress = shopInfo.substring(i);
+
         String shopOpeningHours = intent.getStringExtra("ShopOpeningHours");
 
-        String id = intent.getStringExtra("ShopId");
-
         //Set the title of the activity
-        getSupportActionBar().setTitle(shopName);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(shopName);
 
         if(shopName.toLowerCase().contains("netto")){
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.Netto, null)));
+            actionBar.setBackgroundDrawable(new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.Netto, null)));
         } else if (shopName.toLowerCase().contains("føtex")){
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.Føtex, null)));
+            actionBar.setBackgroundDrawable(new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.Føtex, null)));
         } else if(shopName.toLowerCase().contains("bilka")) {
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.Bilka, null)));
+            actionBar.setBackgroundDrawable(new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.Bilka, null)));
         }
+
         //Set description
         binding.shopAdress.setText("Addresse: " + shopAddress);
         binding.shopOpening.setText(shopOpeningHours);

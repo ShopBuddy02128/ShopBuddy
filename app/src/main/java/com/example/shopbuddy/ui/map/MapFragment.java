@@ -3,7 +3,6 @@ package com.example.shopbuddy.ui.map;
 import android.Manifest;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -12,44 +11,29 @@ import android.location.Location;
 
 
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.view.inputmethod.InputMethodManager;
 
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 
 
 import android.widget.Spinner;
 import android.widget.Toast;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import androidx.lifecycle.ViewModelProvider;
-
-
-import com.example.shopbuddy.GoogleMapsHelper.GetNearbyPlacesData;
-
+import com.example.shopbuddy.GoogleMapsHelper.GetTextSearchPlacesData;
 import com.example.shopbuddy.R;
 import com.example.shopbuddy.databinding.FragmentMapBinding;
-
-
-import com.example.shopbuddy.ui.notifications.NotificationsViewModel;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -148,6 +132,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     public void checkPermission(String permission, int requestCode) {
         if (ContextCompat.checkSelfPermission(this.getContext(), permission) == PackageManager.PERMISSION_DENIED) {
+
             // Requesting the permission
             ActivityCompat.requestPermissions(this.getActivity(), new String[]{permission}, requestCode);
         } else {
@@ -175,6 +160,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             @Override
             public void onSuccess(Location location) {
                 try {
+                    //Getting and saving the user location
                     userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                     latitude = userLatLng.latitude;
                     longitude = userLatLng.longitude;
@@ -202,6 +188,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             zoomToUserLocation();
         }
 
+        //Set the functionalities of the markers and info-windows
         map.setOnMarkerClickListener(this);
 
         InfoWindowAdapter markerInfoWindowAdapter = new InfoWindowAdapter(this.getContext());
@@ -230,11 +217,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
             Place place = response.getPlace();
-            Log.i(TAG, "Place found: " + place.getName());
+            Log.i(TAG, "Shop found: " + place.getName());
 
-
+            // Add all the extra data to the marker/info window
            String address = place.getAddress();
-            String placeName = place.getName();
+           String placeName = place.getName();
            marker.setTitle(placeName+"\n" + address);
 
            if(place.getOpeningHours() != null){
@@ -275,7 +262,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Object dataTransfer[] = new Object[2];
-        GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+        GetTextSearchPlacesData getTextSearchPlacesData = new GetTextSearchPlacesData();
         String shopName = shopNames[position];
 
 
@@ -288,7 +275,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 String url = getUrl(latitude, longitude, shopName);
                 dataTransfer[0] = map;
                 dataTransfer[1] = url;
-                getNearbyPlacesData.execute(dataTransfer);
+                getTextSearchPlacesData.execute(dataTransfer);
                 Toast.makeText(this.getContext(), "Viser nærtliggende Netto", Toast.LENGTH_LONG).show();
                 break;
             case "Føtex":
@@ -296,7 +283,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 url = getUrl(latitude, longitude, shopName);
                 dataTransfer[0] = map;
                 dataTransfer[1] = url;
-                getNearbyPlacesData.execute(dataTransfer);
+                getTextSearchPlacesData.execute(dataTransfer);
                 Toast.makeText(this.getContext(), "Viser nærtliggende Føtex", Toast.LENGTH_LONG).show();
                 break;
             case "Bilka":
@@ -304,12 +291,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 url = getUrl(latitude, longitude, shopName);
                 dataTransfer[0] = map;
                 dataTransfer[1] = url;
-                getNearbyPlacesData.execute(dataTransfer);
+                getTextSearchPlacesData.execute(dataTransfer);
                 Toast.makeText(this.getContext(), "Viser nærtliggende Bilka", Toast.LENGTH_LONG).show();
                 break;
         }
-
-
     }
 
     @Override

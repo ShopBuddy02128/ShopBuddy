@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
+public class GetTextSearchPlacesData extends AsyncTask<Object, String, String> {
     String googlePlacesData;
     GoogleMap mMap;
     String url;
@@ -45,16 +45,12 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
         List<HashMap<String,String>> nearByPlaceList = null;
         DataParser parser = new DataParser();
         nearByPlaceList = parser.parse(s);
-        showNearbyPlaces(nearByPlaceList);
-
-
-
-
+        showTextSearchPlaces(nearByPlaceList);
 
     }
 
     //Method to show all the places in the list
-    private void showNearbyPlaces(List<HashMap<String,String>> nearbyPlaceList){
+    private void showTextSearchPlaces(List<HashMap<String,String>> nearbyPlaceList){
         for (int i = 0; i < nearbyPlaceList.size(); i++ ){
 
             MarkerOptions markerOptions = new MarkerOptions();
@@ -73,7 +69,7 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
             LatLng latLng = new LatLng(lat,lng);
             markerOptions.position(latLng);
 
-            //Depending on the store name
+            //Depending on the store name set the color
             if (placeName.toLowerCase().contains("netto")){
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
             } else if(placeName.toLowerCase().contains("føtex")){
@@ -89,9 +85,5 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
 
 
         }
-    }
-
-    public HashMap<String, Marker> getMarkerList() {
-        return markerList;
     }
 }

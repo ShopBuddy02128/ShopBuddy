@@ -14,25 +14,27 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/foodwaste_item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="5pt"
-            android:paddingTop="4dp"
+            android:fontFamily="sans-serif-condensed"
             android:paddingLeft="6dp"
-            android:textColor="@color/black"
+            android:paddingTop="4dp"
             android:text="Item Title blabla"
-            android:id="@+id/foodwaste_item_title"/>
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/foodwaste_item_stock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="4pt"
-            android:paddingTop="4dp"
+            android:fontFamily="sans-serif-condensed-light"
             android:paddingLeft="6dp"
+            android:paddingTop="4dp"
             android:paddingBottom="4dp"
-            android:textColor="@color/black"
             android:text="Item stock blabla"
-            android:id="@+id/foodwaste_item_stock"/>
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
     </LinearLayout>
     <LinearLayout
@@ -42,25 +44,29 @@
         android:gravity="center_vertical">
 
         <TextView
+            android:id="@+id/foodwaste_item_newprice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="4pt"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:paddingLeft="0dp"
             android:paddingTop="4dp"
-            android:paddingLeft="6dp"
-            android:textColor="@color/black"
             android:text="Price now blabla"
-            android:id="@+id/foodwaste_item_newprice"/>
+            android:textColor="@color/quantum_googgreen900"
+            android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/foodwaste_item_oldprice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="4pt"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:paddingLeft="0dp"
             android:paddingTop="4dp"
-            android:paddingLeft="6dp"
             android:paddingBottom="4dp"
-            android:textColor="@color/black"
             android:text="Price before blabla"
-            android:id="@+id/foodwaste_item_oldprice"/>
+            android:textColor="@color/quantum_vanillared900"
+            android:textSize="16sp" />
 
     </LinearLayout>
 

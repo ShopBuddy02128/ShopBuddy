@@ -56,7 +56,7 @@ public class FoodWasteStoreAdapter extends BaseAdapter {
         title.setText(getItem(position).getStore().getName());
 
         TextView price = (TextView) vi.findViewById(R.id.offer_store_items);
-        price.setText("Antal nedsatte varer: " + getItem(position).getItems().size());
+        price.setText(String.valueOf(getItem(position).getItems().size()));
 
         return vi;
     }

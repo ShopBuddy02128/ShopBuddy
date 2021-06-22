@@ -36,15 +36,16 @@
 
     <TextView
         android:id="@+id/custom_actionbar_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="338dp"
+        android:layout_height="66dp"
+        android:gravity="center"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
         android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/custom_actionbar_holder"
         app:layout_constraintTop_toTopOf="@+id/custom_actionbar_holder"
-        app:layout_constraintVertical_bias="0.324"
-        tools:layout_editor_absoluteX="72dp" />
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="-3dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
+        android:fontFamily="sans-serif-black"
+        android:gravity="center"
         android:text="shopAddress"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -38,7 +40,9 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Vare på tilbud:" />
+            android:fontFamily="sans-serif-light"
+            android:text="Vare på tilbud:"
+            android:textSize="16sp" />
     </LinearLayout>
 
 </RelativeLayout>

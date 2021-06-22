@@ -1,31 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:textSize="10pt"
-        android:textColor="@color/black"
-        android:padding="6pt"
         android:id="@+id/offers_title_id"
-        android:text="Anti-Food-Waste"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center"
+        android:padding="6pt"
+        android:text="Anti-Food-Waste"
+        android:textColor="@color/black"
+        android:textSize="10pt" />
 
     <TextView
-        android:layout_height="wrap_content"
+        android:id="@+id/offers_title_description_id"
         android:layout_width="match_parent"
-        android:textSize="5pt"
-        android:textColor="@color/black"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center"
         android:paddingLeft="6pt"
         android:paddingRight="6pt"
-        android:id="@+id/offers_title_description_id"
-        android:text="Støt Anti-Food-Waste ved at overveje last-call tilbud fra følgende butikker: "/>
+        android:paddingBottom="3pt"
+        android:text="Støt Anti-Food-Waste ved at overveje last-call tilbud fra følgende butikker"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20sp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/shopNameFood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center|left"
+            android:paddingLeft="6pt"
+            android:text="Butik" />
+
+        <TextView
+            android:id="@+id/nedsatteVarer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center|right"
+            android:paddingRight="6pt"
+            android:text="Antal nedsatte varer" />
+    </LinearLayout>
 
     <ListView
+        android:id="@+id/list_of_offers"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/list_of_offers"/>
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

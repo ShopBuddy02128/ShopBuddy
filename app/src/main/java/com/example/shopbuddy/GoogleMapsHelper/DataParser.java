@@ -23,11 +23,9 @@ public class DataParser {
 
         try{
             if(!googlePlaceJson.isNull("name")){
-
                 placeName = googlePlaceJson.getString("name");
             }
             if (!googlePlaceJson.isNull("vicinity")){
-
                 vicinity = googlePlaceJson.getString("vicinity");
             }
             latitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lat");
@@ -54,7 +52,7 @@ public class DataParser {
 
         List<HashMap<String,String>> placesList = new ArrayList<>();
 
-        //To store each fetched place
+        //To store each place
         HashMap<String,String> placeMap = null;
 
         for (int i = 0; i<count; i++){
@@ -75,7 +73,6 @@ public class DataParser {
         JSONObject jsonObject;
 
         try {
-
             jsonObject = new JSONObject(jsonData);
             jsonArray = jsonObject.getJSONArray("results");
 

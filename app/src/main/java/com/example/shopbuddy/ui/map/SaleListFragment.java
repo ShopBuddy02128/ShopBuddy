@@ -69,21 +69,24 @@ public class SaleListFragment extends Fragment {
         if(shopName.toLowerCase().contains("netto")){
             try {
                 new DiscountForStoreService(this, "Netto", 20).start();
-
+                Toast.makeText(this.getActivity(), "Henter tilbud", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
+                Toast.makeText(getActivity(), "Tilbud kunne ikke hentes", Toast.LENGTH_SHORT).show();
 
             }
         } else if (shopName.toLowerCase().contains("føtex")){
             try {
                 new DiscountForStoreService( this, "Føtex", 20).start();
+                Toast.makeText(this.getContext(), "Henter tilbud", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
-                // Failed to get request, most likely caused by not calling a correct store option
+                Toast.makeText(getActivity(), "Tilbud kunne ikke hentes", Toast.LENGTH_SHORT).show();
             }
         } else if(shopName.toLowerCase().contains("bilka")) {
             try {
                 new DiscountForStoreService(this, "Blika", 20).start();
+                Toast.makeText(this.getContext(), "Henter tilbud", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
-                // Failed to get request, most likely caused by not calling a correct store option
+                Toast.makeText(this.getContext(), "Tilbud kunne ikke hentes", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -110,20 +113,22 @@ public class SaleListFragment extends Fragment {
                     String.valueOf(items.get(i).getPrice()),
                     null,
                     null,
-                    "bruh");
+                    null);
             shopListItemArrayList.add(shopListItem);
             Log.i(TAG, "The following item was created" + shopListItem);
         }
 
         //Get reference for the listview
         listView = binding.saleListview;
+
         // set the list adapter
         adapter = new SaleListAdapter(getActivity(), R.layout.sale_list_item, shopListItemArrayList);
-        //DET ER DET HER DER GIVER PROBLEMER : I/System.out: Only the original thread that created a view hierarchy can touch its views.
         getActivity().runOnUiThread(() -> { listView.setAdapter(adapter);});
-        listView.setClickable(true);
+
         Log.i(TAG, "The adapter was created and set ");
 
+
+        listView.setClickable(true);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
