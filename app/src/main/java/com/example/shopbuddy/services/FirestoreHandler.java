@@ -2,7 +2,6 @@ package com.example.shopbuddy.services;
 
 import android.app.Activity;
 import android.content.Context;
-import android.provider.DocumentsContract;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,10 +11,8 @@ import com.example.shopbuddy.ui.notifications.NotificationsFragment;
 import com.example.shopbuddy.ui.shoplist.AutocompleteAdapter;
 import com.example.shopbuddy.ui.shoplist.ListAdapter;
 import com.example.shopbuddy.ui.shoplist.ShopListFragment;
-import com.example.shopbuddy.utils.DummyData;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.firebase.firestore.CollectionReference;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class FirestoreHandler {
     FirebaseFirestore db;
@@ -51,6 +49,8 @@ public class FirestoreHandler {
     }
 
     public void addItemToShoppingList(String itemId, String shoppingListId, double itemPrice, int orderNo) {
+        AtomicInteger listLength = new AtomicInteger();
+
         db.runTransaction((Transaction.Function<Void>) transaction -> {
             DocumentReference listRef = db.collection("shoppingLists").document(shoppingListId);
             DocumentSnapshot listSnapshot = transaction.get(listRef);
@@ -68,10 +68,12 @@ public class FirestoreHandler {
                 updateVals.put("price", roundToTwoDecimals(totalPrice));
                 transaction.update(listRef, updateVals);
             }
+
+            listLength.set(itemIds.size());
             return null;
         }).addOnSuccessListener(l -> {
             ToastService.makeToast("Tilføjet vare til liste", Toast.LENGTH_SHORT);
-            getShoppingListContentsTransaction(shoppingListId, orderNo);
+            getShoppingListContentsTransaction(shoppingListId, listLength.intValue() - 1);
         }).addOnFailureListener(l -> {
             ToastService.makeToast("Kunne ikke hente indkøbsliste", Toast.LENGTH_SHORT);
             logTransactionError(l);
@@ -163,7 +165,7 @@ public class FirestoreHandler {
                 frag.binding.totalPrice.setText("Total: " + new DecimalFormat("#.##").format(shoppingListPrice));
 
                 // update the adapter
-                ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), (Activity) frag.requireActivity(), list);
+                ListAdapter newAdapter = new ListAdapter(frag.requireActivity(), list);
                 frag.shopListItems = list;
                 frag.binding.list.setAdapter(newAdapter);
                 if (scrollToIndex != -1)

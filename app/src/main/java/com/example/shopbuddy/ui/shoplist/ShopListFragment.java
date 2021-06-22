@@ -72,13 +72,15 @@ public class ShopListFragment extends Fragment {
 
     @Override
     public void onPause() {
-        View c = binding.list.getChildAt(0);
-        scrollToIndex = -c.getTop() + binding.list.getFirstVisiblePosition() * c.getHeight();
+        scrollToIndex = binding.list.getFirstVisiblePosition();
+        Log.i("scroll", "onPause called -> " + scrollToIndex);
         super.onPause();
     }
 
     @Override
     public void onResume() {
+        scrollToIndex = scrollToIndex < 1 ? scrollToIndex : scrollToIndex + 1;
+        Log.i("scroll", "onResume called -> " + scrollToIndex);
         super.onResume();
         binding.totalPrice.setText("Total: " + new DecimalFormat("#.##").format(shoppingListPrice));
         dbHandler.getShoppingListContentsTransaction(shoppingListId, scrollToIndex);
@@ -93,7 +95,7 @@ public class ShopListFragment extends Fragment {
     private void setupListView() {
         shopListItems = new ArrayList<>();
 
-        listAdapter = new ListAdapter(this.requireContext(), this.requireActivity(), shopListItems);
+        listAdapter = new ListAdapter(this.requireContext(), shopListItems);
 
         binding.list.setAdapter(listAdapter);
         binding.list.setClickable(true);
