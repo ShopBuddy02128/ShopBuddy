@@ -73,13 +73,13 @@ public class ShopListFragment extends Fragment {
     @Override
     public void onPause() {
         scrollToIndex = binding.list.getFirstVisiblePosition();
-//        scrollToIndex = scrollToIndex == 0 ? scrollToIndex : scrollToIndex + 1;
         Log.i("scroll", "onPause called -> " + scrollToIndex);
         super.onPause();
     }
 
     @Override
     public void onResume() {
+        scrollToIndex = scrollToIndex < 1 ? scrollToIndex : scrollToIndex + 1;
         Log.i("scroll", "onResume called -> " + scrollToIndex);
         super.onResume();
         binding.totalPrice.setText("Total: " + new DecimalFormat("#.##").format(shoppingListPrice));
