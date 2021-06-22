@@ -275,29 +275,6 @@ public class FirestoreHandler {
                 });
     }
 
-    public void getDiscountAlarmListFromAlarmReceiver(String userId) {
-        db.collection("discountAlarmsForUsers")
-                .document(userId)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()) {
-                        DocumentSnapshot doc = task.getResult();
-                        ArrayList<String> items = (ArrayList<String>) doc.get("items");
-
-                        AlarmService.setCallsToReceive(items.size());
-                        AlarmService.setReceivedCalls(0);
-                        AlarmService.resetListOfItems();
-
-                        for (String item : items) {
-                            new DiscountSearchService(item).start();
-                        }
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    ToastService.makeToast("Kunne ikke hente tilbud", Toast.LENGTH_SHORT);
-                });
-    }
-
     public void updateDiscountList(String userId, ArrayList<String> itemsList) {
         Map<String, Object> itemsMap = new HashMap<>();
         itemsMap.put("items", itemsList);
