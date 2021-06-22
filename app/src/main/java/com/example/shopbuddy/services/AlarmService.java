@@ -41,10 +41,10 @@ public abstract class AlarmService {
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.add(Calendar.SECOND, 20);
 
-        alarmManager.setRepeating(
+        alarmManager.setInexactRepeating(
                 AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(),
-                30*1000,
+                AlarmManager.INTERVAL_DAY,
                 pendingIntent);
         System.out.println("Alarm Created");
     }
