@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class FirestoreHandler {
     FirebaseFirestore db;
@@ -48,6 +49,8 @@ public class FirestoreHandler {
     }
 
     public void addItemToShoppingList(String itemId, String shoppingListId, double itemPrice, int orderNo) {
+        AtomicInteger listLength = new AtomicInteger();
+
         db.runTransaction((Transaction.Function<Void>) transaction -> {
             DocumentReference listRef = db.collection("shoppingLists").document(shoppingListId);
             DocumentSnapshot listSnapshot = transaction.get(listRef);
@@ -65,10 +68,12 @@ public class FirestoreHandler {
                 updateVals.put("price", roundToTwoDecimals(totalPrice));
                 transaction.update(listRef, updateVals);
             }
+
+            listLength.set(itemIds.size());
             return null;
         }).addOnSuccessListener(l -> {
             ToastService.makeToast("Tilføjet vare til liste", Toast.LENGTH_SHORT);
-            getShoppingListContentsTransaction(shoppingListId, orderNo);
+            getShoppingListContentsTransaction(shoppingListId, listLength.intValue() - 1);
         }).addOnFailureListener(l -> {
             ToastService.makeToast("Kunne ikke hente indkøbsliste", Toast.LENGTH_SHORT);
             logTransactionError(l);
